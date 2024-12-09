@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ДКВС</title>
+    <link rel="icon" href="https://i.imgur.com/fQLBeQ9.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Основні стилі */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('https://i.imgur.com/2Kwd6vU.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-family: 'Poppins', sans-serif;
+            color: #538aff;
+        }
+
+        #counter {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: #FFD700;
+        }
+
+        .criteria {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+      
+        .options {
+    display: flex;
+    justify-content: center; /* Центрує кнопки */
+    gap: 10px; /* Відстань між кнопками */
+    margin-top: 20px; /* Простір над кнопками */
+         }
+      
+.submit-btn {
+    background: #4CAF50; /* Зелений */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    transition: background 0.3s, transform 0.2s;
+    text-shadow : 2px  2px  3px  #000000 ;
+  letter-spacing: 4px;
+}
+
+.submit-btn:hover {
+    background: #45a049; /* Трохи темніший зелений */
+    transform: scale(1.02);
+}
+
+/* Стиль для кнопки "ОЧИСТИТИ ФОРМУ" */
+.reset-btn {
+    background: #f44336; /* Червоний */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    transition: background 0.3s, transform 0.2s;
+    text-shadow : 2px  2px  3px  #000000 ;
+    letter-spacing: 4px;
+}
+
+.reset-btn:hover {
+    background: #d32f2f; /* Трохи темніший червоний */
+    transform: scale(1.02);
+}
+
+
+
+        ul {
+            margin-bottom: 20px;
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .question {
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        label i {
+            margin-right: 10px;
+            color: #FFD700;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 96%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 1em;
+            margin-bottom: 15px;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            outline: none;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            cursor: pointer;
+            margin: 10px 5px;
+            width: 45%;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            transition: background 0.3s, transform 0.2s;
+            align-self: center;
+        }
+
+        button:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            button {
+                width: 100%;
+                margin: 5px 0;
+            }
+
+            input[type="text"],
+            input[type="email"],
+            textarea {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>ДЕРЖАВНА КРИМІНАЛЬНА ВИКОНАВЧА СЛУЖБА</h1>
+        <div id="counter">Зроблено конвоювань: 0</div>
+        <div class="criteria">
+            <ul>
+                <li>У цій формі ви заповнюєте всю необхідну інформацію для аудиту конвоювань. Якщо будь-яка з осіб, зазначених у формі, відсутня, просто вкажіть символ «-» у відповідному полі.</li>
+            </ul>
+        </div>
+        <form id="applicationForm">
+            <div class="question">
+                <label for="fullName"><i class="fas fa-user"></i> Nick Name конвоїра №1:</label>
+                <input type="text" id="fullName" placeholder="Данило Шульга" required>
+            </div>
+            <div class="question">
+                <label for="age"><i class="fas fa-user"></i> Nick Name конвоїра №2 (якщо є):</label>
+                <input type="text" id="age" placeholder="Моана Ескобар" required>
+            </div>
+            <div class="question">
+                <label for="telegram"><i class="fas fa-user-friends"></i> Nick Name та ID в'язня №1:</label>
+                <input type="text" id="telegram" placeholder="ID 6826379" required>
+            </div>
+            <div class="question">
+                <label for="discord"><i class="fas fa-user-friends"></i> Nick Name та ID в'язня №2 (якщо є):</label>
+                <input type="text" id="discord" placeholder="ID 6822776" required>
+            </div>
+            <div class="options">
+                <button type="submit" class="submit-btn">ВІДПРАВИТИ В АРХІВ</button>
+                <button type="reset" class="reset-btn">ОЧИСТИТИ ФОРМУ</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Firebase SDK -->
+   <script type="module">
+    // Імпортуємо Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+    // Firebase конфігурація
+    const firebaseConfig = {
+        apiKey: "AIzaSyBzefxFDTHQqXFHg9t08JTiL5EaH8si1oY",
+        authDomain: "dkvs-1ec88.firebaseapp.com",
+        databaseURL: "https://dkvs-1ec88-default-rtdb.firebaseio.com/",
+        projectId: "dkvs-1ec88",
+        storageBucket: "dkvs-1ec88.appspot.com",
+        messagingSenderId: "167430647129",
+        appId: "1:167430647129:web:ab209fec7735f20b597048",
+        measurementId: "G-H6LKMLYD10"
+    };
+
+    // Ініціалізація Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const counterRef = ref(db, 'counter');
+
+    let counter = 0;
+
+    // Отримуємо поточне значення лічильника
+    onValue(counterRef, snapshot => {
+        counter = snapshot.val() || 0;
+        document.getElementById('counter').textContent = `Зроблено конвоювань: ${counter}`;
+    });
+
+    // Функція для відправлення даних до Discord вебхука
+    async function sendToDiscord(data) {
+        const webhookUrl = "https://discord.com/api/webhooks/1315033282663940106/LwG48yjgoZ031k_mjsYGJwPd5TVDH6TZneNQR9-akM7vy9cRfNi28dhL7BdMUvuESmlI"; // Вставте URL вашого вебхука
+        try {
+            await fetch(webhookUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                   username: "UKRAINE GTA | 02", // Ім'я вебхука
+                avatar_url: "https://i.imgur.com/2Kwd6vU.png", // URL аватара
+                    content: `## 📋Нова форма конвоювань:\n**👮‍♂️Конвоїр №1:** ${data.fullName}\n**👮‍♂️Конвоїр №2:** ${data.age}\n\n**⛓️‍💥В'язень №1:** ${data.telegram}\n**⛓️‍💥В'язень №2:** ${data.discord}`
+                }),
+            });
+            console.log("Дані успішно надіслані до Discord!");
+        } catch (error) {
+            console.error("Помилка надсилання до Discord:", error);
+        }
+    }
+
+    // Обробник форми
+    document.getElementById('applicationForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        // Збираємо дані з форми
+        const fullName = document.getElementById('fullName').value;
+        const age = document.getElementById('age').value;
+        const telegram = document.getElementById('telegram').value;
+        const discord = document.getElementById('discord').value;
+
+        // Оновлюємо лічильник
+        counter++;
+
+        // Зберігаємо в Firebase
+        set(counterRef, counter);
+
+        // Надсилаємо дані до Discord
+        await sendToDiscord({ fullName, age, telegram, discord });
+
+        alert('Форма надіслана у архів успішно!');
+        document.getElementById('applicationForm').reset();
+    });
+</script>
