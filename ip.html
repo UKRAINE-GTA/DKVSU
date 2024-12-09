@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ваш пристрій заблоковано</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1e1e1e;
+            color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            background-color: #333;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            width: 80%;
+            max-width: 600px;
+            border: 2px solid #e74c3c;
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #e74c3c;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        p {
+            font-size: 20px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .reason {
+            background-color: #e74c3c;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .ip-address {
+            font-size: 22px;
+            font-weight: bold;
+            color: #f39c12;
+        }
+
+        .alert {
+            color: #e74c3c;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Ваш пристрій заблоковано!</h1>
+        <p>Ви більше не можете отримати доступ до цього пристрою.</p>
+        <div class="reason">
+            Причина блокування: <span>Незаконна активність або порушення безпеки</span>
+        </div>
+        <p>Ваш IP-адреса: <span class="ip-address" id="user-ip">Завантаження...</span></p>
+        <p class="alert">Всі спроби доступу будуть зафіксовані та передані відповідним органам.</p>
+    </div>
+
+    <script>
+        // Отримуємо IP-адресу користувача через API
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('user-ip').textContent = data.ip;
+            })
+            .catch(error => {
+                console.error('Помилка при отриманні IP-адреси:', error);
+                document.getElementById('user-ip').textContent = 'Невідомо';
+            });
+    </script>
+
+</body>
+</html>
