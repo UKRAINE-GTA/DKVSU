@@ -60,28 +60,73 @@
             border-radius: 20px;
         }
       
-    .halery-container {
-    width: 50%; /* Задаємо ширину */
+ /* Контейнер для секції з шаховим порядком */
+.final-photo-section {
+    display: flex;
+    flex-wrap: wrap; /* Дозволяємо перенос фото */
+    gap: 30px; /* Відстань між елементами */
+    justify-content: space-between; /* Простір між блоками */
+    margin-top: 40px;
+}
+
+/* Контейнер для кожного фото */
+.final-photo-box {
+    position: relative;
+    width: 45%; /* 45% ширини */
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease-in-out; /* Плавний перехід для контейнера */
+}
+
+/* Вирівнювання по лівому краю */
+.final-photo-box.left {
+    margin-left: 0;
+    margin-right: auto; /* Зсунемо вправо залишки простору */
+}
+
+/* Вирівнювання по правому краю */
+.final-photo-box.right {
+    margin-left: auto; /* Зсунемо вліво залишки простору */
+    margin-right: 0;
+}
+
+/* Фото всередині */
+.final-photo {
+    width: 100%; /* Займає всю ширину батьківського контейнера */
+    height: auto; /* Висота адаптується під пропорції зображення */
     opacity: 0; /* Початково приховане */
-    transform: translateY(20px); /* Трохи зсунуто вниз */
-    transition: opacity 3s ease, transform 3s ease; /* Плавний перехід */
+    transform: translateY(20px); /* Початково трохи зсунуте вниз */
+    transition: opacity 1s ease, transform 1s ease; /* Плавний перехід */
 }
-      
-       .halery-container img {
-         border-radius: 10px;
-      }
 
-.halery-container.visible {
+/* Активна анімація */
+.final-photo.visible {
     opacity: 1;
-    transform: translateY(0); /* Повертаємо на місце */
+    transform: translateY(0); /* Повернення в початкову позицію */
 }
 
-       .halery-container {
-        display: flex;
-            justify-content: flex-end; /* Розташування фото праворуч */
-            align-items: center;
-
+/* Анімація при наведенні на фото */
+.final-photo-box:hover .final-photo {
+    transform: scale(1.05); /* Збільшуємо зображення на 5% */
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Легка тінь */
 }
+
+/* Адаптивність */
+@media (max-width: 768px) {
+    .final-photo-box {
+        width: 100%; /* На малих екранах фото займають всю ширину */
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+
+
+
+
       
       
       
@@ -111,7 +156,7 @@
             overflow: hidden;
             width: 300px;
             height: 200px;
-          outline: 3px solid #333333;
+          outline: 2px solid #333333;
 outline-offset: 2px;
         }
 
@@ -177,16 +222,6 @@ outline-offset: 2px;
             font-weight: 300;
         }
       
-      footer {
-            background-color: #111; /* Темний фон контитулу */
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-            font-size: 14px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
 
         /* Для адаптивності */
         @media (max-width: 768px) {
@@ -355,40 +390,53 @@ outline-offset: 2px;
         </ul>
     </h3>
 </div>
-            <div class="halery-container">
-            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 5" class="photo">
-        </div>
+            
+            
+<div class="final-photo-section">
+    <div class="final-photo-box left">
+        <img src="https://i.imgur.com/G2SoaPY.png" alt="Фото 1" class="final-photo fade-in">
     </div>
-            
-            
-            
-               <div class="halery-container">
-            <img src="https://kapterka.com.ua/image/cache/catalog/021/shevron-dkvs-max-990.jpg" alt="Фото 5" class="photo">
-        </div>
+    <div class="final-photo-box right">
+        <img src="https://i.imgur.com/XybJwn3.png" alt="Фото 2" class="final-photo fade-in">
     </div>
+    <div class="final-photo-box left">
+        <img src="https://i.imgur.com/LbsKT2r.jpeg" alt="Фото 3" class="final-photo fade-in">
+    </div>
+    <div class="final-photo-box right">
+        <img src="https://i.imgur.com/QWBkdjy.png" alt="Фото 4" class="final-photo fade-in">
+    </div>
+</div>
+
+
+            
             
             
             
 
-                <footer>
-        &copy; 2024 ДКВС | UKRAINE GTA | Всі права захищені.                
-    </footer>
+
   
             
             <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add("visible");
-                    }
-                });
-            });
+       document.addEventListener("DOMContentLoaded", function () {
+    const photos = document.querySelectorAll(".final-photo");
 
-            const targets = document.querySelectorAll(".halery-container");
-            targets.forEach((target) => observer.observe(target));
-        });
+    const observer = new IntersectionObserver(
+        (entries, observer) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                    observer.unobserve(entry.target); // Зупиняємо спостереження після появи
+                }
+            });
+        },
+        { threshold: 0.1 } // Елемент вважається видимим, якщо 10% його площі у вікні
+    );
+
+    photos.forEach((photo) => observer.observe(photo));
+});
+
     </script>
+            
             
             
 </body>
