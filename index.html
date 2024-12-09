@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Галерея Фото</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Comfortaa', sans-serif;
+            margin: 0;
+            padding: 90px;
+            display: flex;
+            flex-direction: column; /* Встановлюємо вертикальне розташування для всіх елементів */
+            background: #000000;
+            background-size: cover;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: space-between; /* Розміщуємо текст зліва, а фото справа */
+            align-items: center;
+            margin-bottom: 40px; /* Відстань між головною частиною і галереєю */
+        }
+
+      .viddil-container {
+         display: flex;
+    justify-content: flex-end; /* Вирівнювання контейнера з текстом до правого краю */
+    align-items: center; /* Центруємо текст по вертикалі */
+            idth: 100%;
+            height: 100%;
+      }
+      
+      
+        .text-container {
+            width: 55%; /* Текст займає 45% ширини */
+        }
+
+        .text-container h1 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .text-container p {
+            font-size: 50px;
+            line-height: 1.5;
+        }
+      
+    
+        .image-container {
+            width: 40%; /* Фото займає 45% ширини */
+          
+        }
+      
+        .image-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+        }
+      
+    .halery-container {
+    width: 50%; /* Задаємо ширину */
+    opacity: 0; /* Початково приховане */
+    transform: translateY(20px); /* Трохи зсунуто вниз */
+    transition: opacity 3s ease, transform 3s ease; /* Плавний перехід */
+}
+      
+       .halery-container img {
+         border-radius: 10px;
+      }
+
+.halery-container.visible {
+    opacity: 1;
+    transform: translateY(0); /* Повертаємо на місце */
+}
+
+       .halery-container {
+        display: flex;
+            justify-content: flex-end; /* Розташування фото праворуч */
+            align-items: center;
+
+}
+      
+      
+      
+
+      
+      
+      .head-children {
+        text-align: center;
+        padding: 0px
+      }
+      
+      .viddil {
+        text-align: left;
+      }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px; /* Відстань між головною частиною і галереєю */
+        }
+
+        .photo-container {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            width: 300px;
+            height: 200px;
+          outline: 3px solid #333333;
+outline-offset: 2px;
+        }
+
+        .photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            transition: background-color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+        }
+
+        .photo-container:hover .photo-overlay {
+            background-color: rgba(0, 0, 0, 0.25);
+        }
+
+        .photo-overlay .inner-border {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border: 3px solid rgba(255, 255, 255, 0);
+            border-radius: 17px;
+            transition: border-color 0.3s ease;
+        }
+
+        .photo-container:hover .inner-border {
+            border-color: rgba(255, 255, 255, 1);
+        }
+
+        .photo-info {
+            color: white;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .photo-container:hover .photo-info {
+            opacity: 1;
+        }
+
+        .photo-info h3 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .photo-info p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            font-weight: 300;
+        }
+      
+      footer {
+            background-color: #111; /* Темний фон контитулу */
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 14px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Для адаптивності */
+        @media (max-width: 768px) {
+            .photo-container {
+                width: 45%; /* 2 фото в рядок */
+            }
+            .main-container {
+                flex-direction: column; /* На малих екранах текст та фото підряд */
+                align-items: center;
+            }
+            .text-container,
+            .image-container {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .photo-container {
+                width: 100%; /* 1 фото в рядок */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Головна частина: текст зліва і фото справа -->
+    <div class="main-container">
+        <div class="text-container">
+            <h2><span style="color: #0079ff;">Державна кримінально-виконавча служба України</span></p></h2>
+          <h3>Державна кримінально-виконавча служба України – на захисті закону та правопорядку!<h3>
+            <h4>Державна кримінально-виконавча служба України забезпечує виконання покарань, призначених судами, і сприяє реабілітації осіб, що відбувають покарання, забезпечуючи їх соціальну адаптацію. Ми боремося з правопорушеннями, відновлюємо справедливість та підтримуємо правопорядок.
+
+<br><br>Обираючи службу в ДКВС, ви стаєте частиною команди, яка виконує важливу місію для забезпечення безпеки та захисту законності. Ваша відданість та відповідальність допоможуть у боротьбі зі злочинністю та відновленні порядку.
+
+<br><br>Приєднуйся до <a href="none">ДКВС</a> 「Клікабельно」— працюй на благо правопорядку та справедливості!<h4>
+        </div>
+        <div class="image-container">
+            <img src="https://oblikbudget.com.ua/webpcache/images/novyny/DKVS.jpg.webp" alt="Фото">
+        </div>
+    </div>
+          
+    <!-- Галерея фото -->
+            <div class="head-children">
+              <br><hr>
+            <h1><span style="color: #009471;">Вище керівництво ДКВС м.Дніпро</span></p></h>
+              
+    <div class="gallery">
+        <div class="photo-container">
+            <div class="photo-overlay">
+                <div class="inner-border"></div>
+                <div class="photo-info">
+                    <h3>Генерал ДКВС</h3>
+                    <p>Роман Борак</p>
+                </div>
+            </div>
+            <img src="https://i.imgur.com/QWBkdjy.png" alt="Фото 1" class="photo">
+        </div>
+
+        <div class="photo-container">
+            <div class="photo-overlay">
+                <div class="inner-border"></div>
+                <div class="photo-info">
+                    <h3>Полковник ДКВС</h3>
+                    <p>Моана Ескобар</p>
+                </div>
+            </div>
+            <img src="https://i.imgur.com/F9GIuIa.png" alt="Фото 4" class="photo">
+        </div>
+
+        <div class="photo-container">
+            <div class="photo-overlay">
+                <div class="inner-border"></div>
+                <div class="photo-info">
+                    <h3>Полковник ДКВС</h3>
+                    <p>Вітто Скалета</p>
+                </div>
+            </div>
+            <img src="https://i.imgur.com/UNdkNdi.png" alt="Фото 5" class="photo">
+        </div>
+
+        <div class="photo-container">
+            <div class="photo-overlay">
+                <div class="inner-border"></div>
+                <div class="photo-info">
+                    <h3>Полковник ДКВС</h3>
+                    <p>Муча Яник</p>
+                </div>
+            </div>
+            <img src="https://i.imgur.com/UNdkNdi.png" alt="Фото 5" class="photo">
+        </div>
+    </div>
+<br><hr>
+             <div class="head-children">
+            <h><span style="color: #009471;">Керівники підрозділів ДКВС м.Дніпро</span></p></h1>
+            
+            
+                <div class="gallery">
+        <div class="photo-container">
+            <div class="photo-overlay">
+                <div class="inner-border"></div>
+                <div class="photo-info">
+                    <h3>Підполковник ДКВС, керівник - ВСПС</h3>
+                    <p>EROR</p>
+                </div>
+            </div>
+            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 1" class="photo">
+        </div>
+
+        <div class="photo-container">
+            <div class="photo-overlay">
+                <div class="inner-border"></div>
+                <div class="photo-info">
+                    <h3>Підполковник ДКВС, керівник - </h3>
+                    <p>EROR</p>
+                </div>
+            </div>
+            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 4" class="photo">
+        </div>
+
+        <div class="photo-container">
+            <div class="photo-overlay">
+                <div class="inner-border"></div>
+                <div class="photo-info">
+                    <h3>Підполковник ДКВС, керівник - </h3>
+                    <p>EROR</p>
+                </div>
+            </div>
+            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 5" class="photo">
+        </div>
+
+        <div class="photo-container">
+            <div class="photo-overlay">
+                <div class="inner-border"></div>
+                <div class="photo-info">
+                    <h3>Підполковник ДКВС, керівник - </h3>
+                    <p>EROR</p>
+                </div>
+            </div>
+            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 5" class="photo">
+        </div>
+            
+            <div class="photo-container">
+            <div class="photo-overlay">
+                <div class="inner-border"></div>
+                <div class="photo-info">
+                    <h3>Підполковник ДКВС, керівник - </h3>
+                    <p>EROR</p>
+                </div>
+            </div>
+            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 5" class="photo">
+        </div>
+    </div>
+            <br><hr>
+            <div class="viddil">
+            <h1><span style="color: #244ea8;">Відділи у лавах ДКВС м.Дніпро</span></p></h1>
+            
+           <div class="viddil-container">
+    <h3> 
+        <ul>
+            <li>ВНБ - Відділ Нагляду Та Безпеки</li>
+            <li>ОВ - Оперативний Відділ</li>
+            <li>ВСПС - Відділ Соціально Психологічної Служби</li>
+            <li>НВ - Навчальний Відділ</li>
+            <li>НК - Навчальний Корпус</li>
+          <br><hr>
+        </ul>
+    </h3>
+</div>
+            <div class="halery-container">
+            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 5" class="photo">
+        </div>
+    </div>
+            
+            
+            
+               <div class="halery-container">
+            <img src="https://kapterka.com.ua/image/cache/catalog/021/shevron-dkvs-max-990.jpg" alt="Фото 5" class="photo">
+        </div>
+    </div>
+            
+            
+            
+
+                <footer>
+        &copy; 2024 ДКВС | UKRAINE GTA | Всі права захищені.                
+    </footer>
+  
+            
+            <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                    }
+                });
+            });
+
+            const targets = document.querySelectorAll(".halery-container");
+            targets.forEach((target) => observer.observe(target));
+        });
+    </script>
+            
+            
+</body>
+</html>
