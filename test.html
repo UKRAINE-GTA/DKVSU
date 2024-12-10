@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ДКВСУ м.Дніпро</title>
+    <link rel="icon" href="https://i.imgur.com/NqMHQv0.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
+  <!-- Підключення Font Awesome з CDN -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <style>
+      body {
+    font-family: 'Comfortaa', sans-serif;
+    margin: 0;
+    padding: 90px;
+    display: flex;
+    flex-direction: column; /* Встановлюємо вертикальне розташування для всіх елементів */
+    background: #000000 url('https://i.imgur.com/8I4wQ0P.png'); /* Заміна на реальний URL */
+    background-size: cover; /* Зображення покриває весь екран */
+    background-position: center center; /* Центрування фото */
+    background-repeat: no-repeat; /* Фото не повторюється */
+    background-attachment: fixed; /* Фон статичний при прокручуванні */
+    color: #fff;
+    line-height: 1.6;
+}
+
+
+        .main-container {
+            display: flex;
+            justify-content: space-between; /* Розміщуємо текст зліва, а фото справа */
+            align-items: center;
+            margin-bottom: 40px; /* Відстань між головною частиною і галереєю */
+        }
+
+      .viddil-container {
+         display: flex;
+    justify-content: flex-end; /* Вирівнювання контейнера з текстом до правого краю */
+    align-items: center; /* Центруємо текст по вертикалі */
+            idth: 100%;
+            height: 100%;
+      }
+      
+      
+        .text-container {
+            width: 55%; /* Текст займає 45% ширини */
+        }
+
+        .text-container h1 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .text-container p {
+            font-size: 50px;
+            line-height: 1.5;
+        }
+      
+    
+        .image-container {
+            width: 40%; /* Фото займає 45% ширини */
+          
+        }
+      
+        .image-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+        }
+      
+ /* Контейнер для секції з шаховим порядком */
+.final-photo-section {
+    display: flex;
+    flex-wrap: wrap; /* Дозволяємо перенос фото */
+    gap: 30px; /* Відстань між елементами */
+    justify-content: space-between; /* Простір між блоками */
+    margin-top: 40px;
+}
+
+/* Контейнер для кожного фото */
+.final-photo-box {
+    position: relative;
+    width: 45%; /* 45% ширини */
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease-in-out; /* Плавний перехід для контейнера */
+}
+
+/* Вирівнювання по лівому краю */
+.final-photo-box.left {
+    margin-left: 0;
+    margin-right: auto; /* Зсунемо вправо залишки простору */
+}
+
+/* Вирівнювання по правому краю */
+.final-photo-box.right {
+    margin-left: auto; /* Зсунемо вліво залишки простору */
+    margin-right: 0;
+}
+
+/* Фото всередині */
+.final-photo {
+    width: 100%; /* Займає всю ширину батьківського контейнера */
+    height: auto; /* Висота адаптується під пропорції зображення */
+    opacity: 0; /* Початково приховане */
+    transform: translateY(20px); /* Початково трохи зсунуте вниз */
+    transition: opacity 1s ease, transform 1s ease; /* Плавний перехід */
+}
+
+/* Активна анімація */
+.final-photo.visible {
+    opacity: 1;
+    transform: translateY(0); /* Повернення в початкову позицію */
+}
+
+/* Анімація при наведенні на фото */
+.final-photo-box:hover .final-photo {
+    transform: scale(1.05); /* Збільшуємо зображення на 5% */
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Легка тінь */
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+    .final-photo-box {
+        width: 100%; /* На малих екранах фото займають всю ширину */
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+
+
+
+
+      
+      
+      
+
+      
+      
+      .head-children {
+        text-align: center;
+        padding: 0px
+      }
+      
+      .viddil {
+        text-align: left;
+      }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px; /* Відстань між головною частиною і галереєю */
+        }
+
+        .photo-container {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            width: 300px;
+            height: 200px;
+          outline: 2px solid #333333;
+outline-offset: 2px;
+        }
+
+        .photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+      
+      
+        .accordion {
+    background-color: #0F0F16;
+    color: #fff;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    font-size: 20px;
+    transition: 0.3s;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.accordion:hover {
+    background-color: #15151D;
+}
+
+.panel {
+    padding: 0 18px;
+    background-color: #15151D;
+    color: #fff;
+    border-radius: 10px;
+    margin-top: 10px;
+    max-height: 0; /* Початково прихована */
+    overflow: hidden; /* Сховати вміст, що не вміщається */
+    opacity: 0; /* Невидима */
+    transition: max-height 0.5s ease, opacity 0.5s ease; /* Плавний перехід */
+}
+
+.panel.show {
+    max-height: 500px; /* Достатньо велике значення, щоб вміст показався */
+    opacity: 1; /* Робимо видимою */
+}
+
+      
+      
+      
+        .photo-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            transition: background-color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+        }
+
+        .photo-container:hover .photo-overlay {
+            background-color: rgba(0, 0, 0, 0.25);
+        }
+
+        .photo-overlay .inner-border {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border: 3px solid rgba(255, 255, 255, 0);
+            border-radius: 17px;
+            transition: border-color 0.3s ease;
+        }
+
+        .photo-container:hover .inner-border {
+            border-color: rgba(255, 255, 255, 1);
+        }
+
+        .photo-info {
+            color: white;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .photo-container:hover .photo-info {
+            opacity: 1;
+        }
+
+        .photo-info h3 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .photo-info p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            font-weight: 300;
+        }
+      .fas {
+    color: #FF6347; /* Помаранчевий колір */
+}
+      .red-icon {
+    color: #13175e; /* Червоний колір */
+}
+      
+      .siry-icon {
+    color: #505050; 
+      }
+      
+      .yelow-icon {
+        color: #ffcb00; /* Червоний колір */
+        font-size: 25px;
+}
+      
+      
+            .zolotoy-icon {
+        color: #FFD900; /* Червоний колір */
+        font-size: 25px;
+}
+      
+      .grin-icon {
+        color: #51FF00; /* Червоний колір */
+        font-size: 10px;
+        opacity:0.4;
+}
+      
+
+        /* Для адаптивності */
+        @media (max-width: 768px) {
+            .photo-container {
+                width: 45%; /* 2 фото в рядок */
+            }
+            .main-container {
+                flex-direction: column; /* На малих екранах текст та фото підряд */
+                align-items: center;
+            }
+            .text-container,
+          
+            .image-container {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .photo-container {
+                width: 100%; /* 1 фото в рядок */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Головна частина: текст зліва і фото справа -->
+    <div class="main-container">
+        <div class="text-container">
+            <h2><span style="color: #0079ff;">Державна кримінально-виконавча служба України</span></p></h2>
+          <h3>Державна кримінально-виконавча служба України – на захисті закону та правопорядку!<h3>
+            <h4>Державна кримінально-виконавча служба України забезпечує виконання покарань, призначених судами, і сприяє реабілітації осіб, що відбувають покарання, забезпечуючи їх соціальну адаптацію. Ми боремося з правопорушеннями, відновлюємо справедливість та підтримуємо правопорядок.
+
+<br><br>Обираючи службу в ДКВС, ви стаєте частиною команди, яка виконує важливу місію для забезпечення безпеки та захисту законності. Ваша відданість та відповідальність допоможуть у боротьбі зі злочинністю та відновленні порядку.
+
+<br><br>Приєднуйся до <a href="https://ukraine-gta.github.io/DKVSU/ip">ДКВС</a> 「Клікабельно」— працюй на благо правопорядку та справедливості!<h4>
+        </div>
+        <div class="image-container">
+            <img src="https://oblikbudget.com.ua/webpcache/images/novyny/DKVS.jpg.webp" alt="Фото">
+        </div>
+    </div>
+           <br>
+           <div><span style="color: #ffcb00;">
+    <i class="fas fa-truck yelow-icon"></i>
+    <span id="counter">0</span>
+</span></p></div>
+            
+            <div><span style="color: #ffcb00;"><i class="fas fa-users yelow-icon"></i> Кількість активних працівників: 21+</span></p>
+            </div>
+     
+    <!-- Галерея фото -->
+            <div class="head-children">
+              <br><hr>
+            <h1><span style="color: #009471;">Вище керівництво ДКВС м.Дніпро</span></p></h>
+              
+    <div class="gallery">
+        <div class="photo-container">
+            <div class="photo-overlay">
+                <div class="inner-border"></div>
+                <div class="photo-info">
+                    <h3>Генерал ДКВС</h3>
+                    <p>Роман Борак</p>
+                </div>
+            </div>
+            <img src="https://i.imgur.com/QWBkdjy.png" alt="Фото 1" class="photo">
+        </div>
+
+        <div class="photo-container">
+            <div class="photo-overlay">
+                <div class="inner-border"></div>
+                <div class="photo-info">
+                    <h3>Полковник ДКВС</h3>
+                    <p>Моана Ескобар</p>
+                </div>
+            </div>
+            <img src="https://i.imgur.com/F9GIuIa.png" alt="Фото 4" class="photo">
+        </div>
+
+        <div class="photo-container">
+            <div class="photo-overlay">
+                <div class="inner-border"></div>
+                <div class="photo-info">
+                    <h3>Полковник ДКВС</h3>
+                    <p>Вітто Скалета</p>
+                </div>
+            </div>
+            <img src="https://i.imgur.com/UNdkNdi.png" alt="Фото 5" class="photo">
+        </div>
+
+        <div class="photo-container">
+            <div class="photo-overlay">
+                <div class="inner-border"></div>
+                <div class="photo-info">
+                    <h3>Полковник ДКВС</h3>
+                    <p>Муча Яник</p>
+                </div>
+            </div>
+            <img src="https://i.imgur.com/UNdkNdi.png" alt="Фото 5" class="photo">
+        </div>
+    </div>
+<br><hr>
+             <div class="head-children">
+            <h><span style="color: #009471;">Керівники підрозділів ДКВС м.Дніпро</span></p></h1>
+            
+            
+                <div class="gallery">
+        <div class="photo-container">
+            <div class="photo-overlay">
+                <div class="inner-border"></div>
+                <div class="photo-info">
+                    <h3>Підполковник ДКВС, керівник - ВСПС</h3>
+                    <p>Ірочка Мельник</p>
+                </div>
+            </div>
+            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 1" class="photo">
+        </div>
+
+        <div class="photo-container">
+            <div class="photo-overlay">
+                <div class="inner-border"></div>
+                <div class="photo-info">
+                    <h3>Підполковник ДКВС, керівник - ВНБ</h3>
+                    <p></p>Артем Лямець</p>
+                </div>
+            </div>
+            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 4" class="photo">
+        </div>
+
+        <div class="photo-container">
+            <div class="photo-overlay">
+                <div class="inner-border"></div>
+                <div class="photo-info">
+                    <h3>Підполковник ДКВС, керівник - НВ</h3>
+                    <p>Вікторія Потужна</p>
+                </div>
+            </div>
+            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 5" class="photo">
+        </div>
+
+        <div class="photo-container">
+            <div class="photo-overlay">
+                <div class="inner-border"></div>
+                <div class="photo-info">
+                    <h3>Майор ДКВС,
+                    <li></li>керівник - ОВ</li></h3>
+                    <p>Назар Казмірук</p>
+                </div>
+            </div>
+            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 5" class="photo">
+        </div>
+                </div>
+            
+            <br><hr>
+            <div class="viddil">
+            <h1><span style="color: #244ea8;">Відділи у лавах ДКВС м.Дніпро</span></p></h1>
+            
+           <div class="viddil-container">
+    <h3> 
+        <ul>
+            <li>ВНБ - Відділ Нагляду Та Безпеки</li>
+            <li>ОВ - Оперативний Відділ</li>
+            <li>ВСПС - Відділ Соціально Психологічної Служби</li>
+            <li>НВ - Навчальний Відділ</li>
+            <li>НК - Навчальний Корпус</li>
+          <br><hr>
+        </ul>
+    </h3>
+</div>
+  
+  
+  <button class="accordion"><i class="fas fa-user-plus siry-icon"></i> Вимоги для вступу в ДКВСУ</button>
+<div class="panel">
+  <ul style="list-style-type: none; padding: 0;">
+    <h2><i class="fas fa-sharp fa-thin fa-user-shield zolotoy-icon"></i> Щоб потрапити:<h2>
+      <h4>
+      <li><i class="fas fa-light fa-circle-check grin-icon"></i></i><span style="color: #8E8C8A;"> Вік</span> 18+<li>
+        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;"><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Проживання в області</span> 2+ роки<li>
+         <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;"><i class="fas fa-light fa-circle-check grin-icon"></i></i><span style="color: #8E8C8A;"> Соціальний рейтинг</span> позитивний<li>
+        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;"><i class="fas fa-light fa-circle-check grin-icon"></i></i><span style="color: #8E8C8A;"> Документація</span> паспорт<li>
+        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;"><i class="fas fa-light fa-circle-check grin-icon"></i></i><span style="color: #8E8C8A;"> Документація</span> трудова книга<li>
+        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;"><i class="fas fa-light fa-circle-check grin-icon"></i></i><span style="color: #8E8C8A;"> Документація</span> мед. книга<li>
+        </ul></h4>
+</div>
+           
+            
+<div class="final-photo-section">
+    <div class="final-photo-box left">
+        <img src="https://i.imgur.com/G2SoaPY.png" alt="Фото 1" class="final-photo fade-in">
+    </div>
+    <div class="final-photo-box right">
+        <img src="https://i.imgur.com/XybJwn3.png" alt="Фото 2" class="final-photo fade-in">
+    </div>
+    <div class="final-photo-box left">
+        <img src="https://i.imgur.com/LbsKT2r.jpeg" alt="Фото 3" class="final-photo fade-in">
+    </div>
+    <div class="final-photo-box right">
+        <img src="https://i.imgur.com/QWBkdjy.png" alt="Фото 4" class="final-photo fade-in">
+    </div>
+</div>
+
+
+             <br><hr>
+            <div class="special-text">
+            <h1><span style="color: #6d5874;">ДКВС м.Дніпро//UKRAINE GTA//02</span></p></h1>
+            <h3><i class="fas fa-user"></i> Зв'язок з керівним складом складом</h3>
+            <li><i class="fas fa-phone red-icon"></i> Discord - EROR
+            <li><i class="fas fa-phone red-icon"></i> Discord - kietenka
+            <li><i class="fas fa-phone red-icon"></i> Discord - EROR
+            <li><i class="fas fa-phone red-icon"></i> Discord - EROR
+            
+
+
+  
+            
+     <script type="module">
+    // Імпортуємо Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+    // Firebase конфігурація
+    const firebaseConfig = {
+        apiKey: "AIzaSyBzefxFDTHQqXFHg9t08JTiL5EaH8si1oY",
+        authDomain: "dkvs-1ec88.firebaseapp.com",
+        databaseURL: "https://dkvs-1ec88-default-rtdb.firebaseio.com/",
+        projectId: "dkvs-1ec88",
+        storageBucket: "dkvs-1ec88.appspot.com",
+        messagingSenderId: "167430647129",
+        appId: "1:167430647129:web:ab209fec7735f20b597048",
+        measurementId: "G-H6LKMLYD10"
+    };
+
+    // Ініціалізація Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const counterRef = ref(db, 'counter');
+
+    let counter = 0;
+
+    // Отримуємо поточне значення лічильника
+    onValue(counterRef, snapshot => {
+        counter = snapshot.val() || 0;
+        document.getElementById('counter').textContent = `Зроблено конвоювань за весь період: ${counter}`;
+    });
+
+
+              
+              
+       
+       
+       
+       
+ document.querySelectorAll(".accordion").forEach((accordion) => {
+    accordion.addEventListener("click", function () {
+        const panel = this.nextElementSibling;
+
+        // Перемикаємо клас "show" для розгортання/згортання
+        if (panel.classList.contains("show")) {
+            panel.classList.remove("show");
+        } else {
+            // Закриваємо всі інші панелі, якщо потрібно
+            document.querySelectorAll(".panel.show").forEach((openPanel) => {
+                openPanel.classList.remove("show");
+            });
+
+            // Відкриваємо поточну панель
+            panel.classList.add("show");
+        }
+    });
+});
+
+       
+       
+              
+              
+              
+       document.addEventListener("DOMContentLoaded", function () {
+    const photos = document.querySelectorAll(".final-photo");
+
+    const observer = new IntersectionObserver(
+        (entries, observer) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                    observer.unobserve(entry.target); // Зупиняємо спостереження після появи
+                }
+            });
+        },
+        { threshold: 0.1 } // Елемент вважається видимим, якщо 10% його площі у вікні
+    );
+
+    photos.forEach((photo) => observer.observe(photo));
+});
+              
+              
+          
+
+    </script>
+            
+            
+            
+</body>
+</html>
