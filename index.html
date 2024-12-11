@@ -65,7 +65,7 @@
         .image-container img {
             width: 100%;
             height: auto;
-            border-radius: 20px;
+            border-radius: 0px;
         }
       
  /* Контейнер для секції з шаховим порядком */
@@ -164,8 +164,8 @@
             overflow: hidden;
             width: 300px;
             height: 200px;
-          outline: 2px solid #333333;
-outline-offset: 2px;
+          outline: 1px solid #959390;
+outline-offset: 0px;
         }
 
         .photo {
@@ -174,6 +174,7 @@ outline-offset: 2px;
             object-fit: cover;
         }
 
+      
       
       
     /* Контейнер для панелей, щоб розташувати кнопки зліва і справа */
@@ -278,6 +279,57 @@ outline-offset: 2px;
 }
 
     
+      
+      
+      
+      
+      /* Контейнер для кнопок */
+.button-container {
+  display: flex;
+  justify-content: center; /* Центрування по горизонталі */
+  align-items: center; /* Центрування по вертикалі */
+  gap: 20px; /* Відстань між кнопками */
+  height: 50px; /* Займає всю висоту сторінки */
+  margin: 0;
+}
+
+/* Кнопка */
+.custom-button {
+  display: flex;
+  flex-direction: left; /* Лого над текстом */
+  align-items: center; /* Центрування вмісту кнопки */
+  justify-content: center;
+  background-color: #15151D;
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 20px;
+  width: 2500px;
+  height: 20px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+  text-align: center;
+}
+
+/* Іконка Telegram */
+.button-icon {
+  font-size: 20px;
+  margin-bottom: 0px;
+  color: #0088cc; /* Колір Telegram */
+}
+
+/* Текст кнопки */
+.button-text {
+  font-size: 14px;
+  color: #fff;
+}
+
+/* Ховер-ефект */
+.custom-button:hover {
+  background-color: #202020;
+}
+
+      
       
       
       
@@ -401,7 +453,7 @@ outline-offset: 2px;
 <br><br>Приєднуйся до <a href="https://ukraine-gta.github.io/DKVSU/ip">ДКВС</a> 「Клікабельно」— працюй на благо правопорядку та справедливості!<h4>
         </div>
         <div class="image-container">
-            <img src="https://oblikbudget.com.ua/webpcache/images/novyny/DKVS.jpg.webp" alt="Фото">
+            <img src="https://i.imgur.com/J00IHJ0.png" alt="Фото">
         </div>
     </div>
            <br>
@@ -415,8 +467,8 @@ outline-offset: 2px;
      
     <!-- Галерея фото -->
             <div class="head-children">
-              <br><hr>
-            <h1><span style="color: #009471;">Вище керівництво ДКВС м.Дніпро</span></p></h>
+              <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
+            <h1><span style="color: #C04422;">Вище керівництво ДКВС м.Дніпро</span></p></h>
               
     <div class="gallery">
         <div class="photo-container">
@@ -463,9 +515,9 @@ outline-offset: 2px;
             <img src="https://i.imgur.com/UNdkNdi.png" alt="Фото 5" class="photo">
         </div>
     </div>
-<br><hr>
+<br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
              <div class="head-children">
-            <h><span style="color: #009471;">Керівники підрозділів ДКВС м.Дніпро</span></p></h1>
+            <h><span style="color: #EE7651;">Керівники підрозділів ДКВС м.Дніпро</span></p></h1>
             
             
                 <div class="gallery">
@@ -515,9 +567,9 @@ outline-offset: 2px;
         </div>
                 </div>
             
-            <br><hr>
+            <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
             <div class="viddil">
-            <h1><span style="color: #244ea8;">Відділи у лавах ДКВС м.Дніпро</span></p></h1>
+            <h1><span style="color: #3D5D52;">Відділи у лавах ДКВС м.Дніпро</span></p></h1>
             
            <div class="viddil-container">
     <h3> 
@@ -527,7 +579,7 @@ outline-offset: 2px;
             <li>ВСПС - Відділ Соціально Психологічної Служби</li>
             <li>НВ - Навчальний Відділ</li>
             <li>НК - Навчальний Корпус</li>
-          <br><hr>
+          <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
         </ul>
     </h3>
 </div>
@@ -588,16 +640,41 @@ outline-offset: 2px;
            <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
               <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 12 |</span> Генерал</li>
           
+          
         </h4>
       </ul>
     </div>
   </div>
 </div> 
 
-
-
-
-
+            <br>
+  
+  <!-- Права панель -->
+  <div class="accordion-container-right">
+    <button class="accordion-right"><i class="fas fa-car siry-icon"></i> Автопарк ДКВСУ</button>
+    <div class="panel-right">
+      <ul style="list-style-type: none; padding: 0;">
+        <h2><i class="fas fa-car zolotoy-icon"></i> Службові авто</h2>
+        <h4>
+          <li><i class="fas fa-light fa-truck-fast grin-icon"></i><span style="color: #8E8C8A;"> КрАЗ АвтоЗАК |</span> Доступний з рангу "Сержант"</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Renault logan |</span> Доступний з рангу "Сержант"</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Peugot Автозак [ДКВС] |</span> Доступний з рангу "Сержант"</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Mitsubishi Lancer X 2.0 |</span> Доступний з рангу "Ст. Прапорщик"</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Renfult Megane [ДКВС] |</span> Доступний з рангу "Сержант"</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-helicopter grin-icon"></i><span style="color: #8E8C8A;">  Robinson R44 |</span> Доступний з рангу "Лейтенант"</li>
+           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+           
+          
+        </h4>
+      </ul>
+    </div>
+  </div>
+</div> 
 
 
 
@@ -628,16 +705,44 @@ outline-offset: 2px;
 </div>
 
 
-             <br><hr>
+             <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
             <div class="special-text">
-            <h1><span style="color: #6d5874;">ДКВС м.Дніпро//UKRAINE GTA//02</span></p></h1>
-            <h3><i class="fas fa-user"></i> Зв'язок з керівним складом складом</h3>
-            <li><i class="fas fa-phone red-icon"></i> Discord - EROR
-            <li><i class="fas fa-phone red-icon"></i> Discord - kietenka
-            <li><i class="fas fa-phone red-icon"></i> Discord - EROR
-            <li><i class="fas fa-phone red-icon"></i> Discord - EROR
-            
+            <h1><span style="color: #0E9843;">ДКВС м.Дніпро//UKRAINE GTA//02</span></p></h1
+              
 
+              <div class="accordion-container-right">
+    <button class="accordion-right"><i class="fas fa-location-dot siry-icon"></i> Як нас знайти?</button>
+    <div class="panel-right">
+      <ul style="list-style-type: none; padding: 0;">
+        <h2><i class="fas fa-route zolotoy-icon"></i> О(Англ.) <i class="fas fa-right-long zolotoy-icon"></i> Навігація <i class="fas fa-right-long zolotoy-icon"></i> Державні установи <i class="fas fa-right-long zolotoy-icon"></i> ДКВС</h2>
+        </div>
+        
+        
+            <h3><i class="fas fa-user"></i> Зв'язок з керівним складом складом</h3>
+      
+      
+      
+      <div class="button-container">
+  <a href="https://t.me/mucha_4" class="custom-button">
+    <i class="fa-brands fa-telegram button-icon"></i>
+    <span class="button-text"> Telegram М. Яник</span>
+  </a>
+  <a href="https://t.me/Vitennko" class="custom-button">
+    <i class="fa-brands fa-telegram button-icon"></i>
+    <span class="button-text"> Telegram В. Скалетта</span>
+  </a>
+  <a href="https://t.me/Kietenka" class="custom-button">
+    <i class="fa-brands fa-telegram button-icon"></i>
+    <span class="button-text"> Telegram М. Ескобар</span>
+  </a>
+  <a href="https://t.me/MR_1one1" class="custom-button">
+    <i class="fa-brands fa-telegram button-icon"></i>
+    <span class="button-text"> Telegram Р. Борак</span>
+  </a>
+</div>
+
+
+     
 
   
             
@@ -682,6 +787,7 @@ outline-offset: 2px;
 // Отримуємо всі кнопки аккордеонів
 var acc = document.getElementsByClassName("accordion");
 var accRight = document.getElementsByClassName("accordion-right");
+var accBottom = document.getElementsByClassName("accordion-bottom"); // Для нижньої панелі
 
 // Для кожної кнопки додаємо обробник події
 for (var i = 0; i < acc.length; i++) {
@@ -713,6 +819,23 @@ for (var i = 0; i < accRight.length; i++) {
     } else {
       panelRight.style.maxHeight = panelRight.scrollHeight + "px";
       panelRight.style.opacity = 1;
+    }
+  });
+}
+
+// Для нижньої панелі
+for (var i = 0; i < accBottom.length; i++) {
+  accBottom[i].addEventListener("click", function() {
+    // Отримуємо відповідну панель
+    var panelBottom = this.nextElementSibling;
+    
+    // Якщо панель відкрито, закриваємо її, інакше відкриваємо
+    if (panelBottom.style.maxHeight) {
+      panelBottom.style.maxHeight = null;
+      panelBottom.style.opacity = 0;
+    } else {
+      panelBottom.style.maxHeight = panelBottom.scrollHeight + "px";
+      panelBottom.style.opacity = 1;
     }
   });
 }
