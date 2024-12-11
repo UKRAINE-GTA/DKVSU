@@ -174,6 +174,167 @@ outline-offset: 2px;
             object-fit: cover;
         }
 
+      
+      
+       .accordion {
+    background-color: #0F0F16;
+    color: #fff;
+    cursor: pointer;
+    padding: 18px;
+    width: 45%; /* Встановлюємо ширину 45% на десктопі */
+    text-align: left;
+    border: none;
+    outline: none;
+    font-size: 20px;
+    transition: 0.3s;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-left: 0; /* Вирівнюємо по лівому краю */
+    box-sizing: border-box; /* Забезпечує, щоб відступи і рамки входили в загальну ширину */
+}
+
+.accordion:hover {
+    background-color: #15151D;
+}
+
+.panel {
+    padding: 0 18px;
+    background-color: #15151D;
+    color: #fff;
+    border-radius: 10px;
+    margin-top: 10px;
+    max-height: 0; /* Початково прихована */
+    overflow: hidden; /* Сховати вміст, що не вміщається */
+    opacity: 0; /* Невидима */
+    transition: max-height 0.5s ease, opacity 0.5s ease; /* Плавний перехід */
+    width: 45%; /* Встановлюємо ширину панелі 45% */
+    box-sizing: border-box; /* Забезпечує, щоб відступи і рамки входили в загальну ширину */
+}
+
+.panel.show {
+    max-height: 500px; /* Достатньо велике значення, щоб вміст показався */
+    opacity: 1; /* Робимо видимою */
+}
+
+/* Медіа-запит для мобільних пристроїв */
+@media (max-width: 930px) {
+    .accordion,
+    .panel {
+        width: 100%; /* Панель і кнопка займають всю ширину на мобільних пристроях */
+        box-sizing: border-box; /* Враховуємо всі відступи та рамки при розрахунку ширини */
+    }
+}
+
+      
+      
+      .accordionr {
+    background-color: #0F0F16;
+    color: #fff;
+    cursor: pointer;
+    padding: 18px;
+    width: 45%; /* Встановлюємо ширину 45% на десктопі */
+    text-align: left;
+    border: none;
+    outline: none;
+    font-size: 20px;
+    transition: 0.3s;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-left: 0; /* Вирівнюємо по лівому краю */
+    box-sizing: border-box; /* Забезпечує, щоб відступи і рамки входили в загальну ширину */
+}
+
+.accordionr:hover {
+    background-color: #15151D;
+}
+
+.panelr {
+    padding: 0 18px;
+    background-color: #15151D;
+    color: #fff;
+    border-radius: 10px;
+    margin-top: 10px;
+    max-height: 0; /* Початково прихована */
+    overflow: hidden; /* Сховати вміст, що не вміщається */
+    opacity: 0; /* Невидима */
+    transition: max-height 0.5s ease, opacity 0.5s ease; /* Плавний перехід */
+    width: 45%; /* Встановлюємо ширину панелі 45% */
+    box-sizing: border-box; /* Забезпечує, щоб відступи і рамки входили в загальну ширину */
+}
+
+.panelr.show {
+    max-height: 500px; /* Достатньо велике значення, щоб вміст показався */
+    opacity: 1; /* Робимо видимою */
+}
+
+/* Медіа-запит для мобільних пристроїв */
+@media (max-width: 930px) {
+    .accordionr,
+    .panelr {
+        width: 100%; /* Панель і кнопка займають всю ширину на мобільних пристроях */
+        box-sizing: border-box; /* Враховуємо всі відступи та рамки при розрахунку ширини */
+    }
+}
+      
+      
+.faq-toggle {
+    background-color: #0F0F16;
+    color: #fff;
+    cursor: pointer;
+    padding: 18px;
+    width: 45%; /* Встановлюємо ширину 45% на десктопі */
+    text-align: left;
+    border: none;
+    outline: none;
+    font-size: 20px;
+    transition: 0.3s;
+    border-radius: 10px;
+    margin-top: 10px;
+    display: block; /* Додаємо display block, щоб забезпечити вирівнювання по правому краю */
+    margin-left: auto; /* Вирівнюємо по правому краю */
+    margin-right: 0;
+    box-sizing: border-box; /* Забезпечує, щоб відступи і рамки входили в загальну ширину */
+}
+
+.faq-toggle:hover {
+    background-color: #15151D;
+}
+
+.faq-content {
+    padding: 0 18px;
+    background-color: #15151D;
+    color: #fff;
+    border-radius: 10px;
+    margin-top: 10px;
+    max-height: 0; /* Початково прихована */
+    overflow: hidden; /* Сховати вміст, що не вміщається */
+    opacity: 0; /* Невидима */
+    transition: max-height 0.5s ease, opacity 0.5s ease; /* Плавний перехід */
+    width: 45%; /* Встановлюємо ширину контенту 45% */
+    margin-left: auto; /* Вирівнюємо по правому краю */
+    margin-right: 0; /* Це забезпечує вирівнювання по правому краю */
+    box-sizing: border-box; /* Забезпечує, щоб відступи і рамки входили в загальну ширину */
+}
+
+.faq-content.show {
+    max-height: 500px; /* Достатньо велике значення, щоб вміст показався */
+    opacity: 1; /* Робимо видимою */
+}
+
+/* Медіа-запит для мобільних пристроїв */
+@media (max-width: 930px) {
+    .faq-toggle,
+    .faq-content {
+        width: 100%; /* Панель і кнопка займають всю ширину на мобільних пристроях */
+        box-sizing: border-box; /* Враховуємо всі відступи та рамки при розрахунку ширини */
+        margin-left: 0; /* Скидаємо відступ з лівого боку */
+        margin-right: 0; /* Скидаємо відступ з правого боку */
+    }
+}
+
+      
+      
+      
         .photo-overlay {
             position: absolute;
             top: 0;
@@ -236,9 +397,25 @@ outline-offset: 2px;
     color: #13175e; /* Червоний колір */
 }
       
+      .siry-icon {
+    color: #505050; 
+      }
+      
       .yelow-icon {
         color: #ffcb00; /* Червоний колір */
         font-size: 25px;
+}
+      
+      
+            .zolotoy-icon {
+        color: #FFD900; /* Червоний колір */
+        font-size: 25px;
+}
+      
+      .grin-icon {
+        color: #51FF00; /* Червоний колір */
+        font-size: 10px;
+        opacity:0.4;
 }
       
 
@@ -266,7 +443,6 @@ outline-offset: 2px;
     </style>
 </head>
 <body>
-
     <!-- Головна частина: текст зліва і фото справа -->
     <div class="main-container">
         <div class="text-container">
@@ -409,20 +585,53 @@ outline-offset: 2px;
         </ul>
     </h3>
 </div>
-            
+  
+  
+  <button class="accordion"><i class="fas fa-user-plus siry-icon"></i> Вимоги для вступу в ДКВСУ</button>
+<div class="panel">
+  <ul style="list-style-type: none; padding: 0;">
+    <h2><i class="fas fa-sharp fa-thin fa-user-shield zolotoy-icon"></i> Щоб потрапити:<h2>
+      <h4>
+      <li><i class="fas fa-light fa-circle-check grin-icon"></i></i><span style="color: #8E8C8A;"> Вік</span> 18+<li>
+        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;"><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Проживання в області</span> 2+ роки<li>
+         <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;"><i class="fas fa-light fa-circle-check grin-icon"></i></i><span style="color: #8E8C8A;"> Соціальний рейтинг</span> позитивний<li>
+        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;"><i class="fas fa-light fa-circle-check grin-icon"></i></i><span style="color: #8E8C8A;"> Документація</span> паспорт<li>
+        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;"><i class="fas fa-light fa-circle-check grin-icon"></i></i><span style="color: #8E8C8A;"> Документація</span> трудова книга<li>
+        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;"><i class="fas fa-light fa-circle-check grin-icon"></i></i><span style="color: #8E8C8A;"> Документація</span> мед. книга<li>
+        </ul></h4>
+</div>
+</div> 
+
+
+
+
+
+
+
+
+
+
+
             
 <div class="final-photo-section">
     <div class="final-photo-box left">
         <img src="https://i.imgur.com/G2SoaPY.png" alt="Фото 1" class="final-photo fade-in">
     </div>
     <div class="final-photo-box right">
-        <img src="https://i.imgur.com/XybJwn3.png" alt="Фото 2" class="final-photo fade-in">
-    </div>
+    <video class="final-photo fade-in" autoplay loop muted>
+        <source src="https://i.imgur.com/TOEG6hZ.mp4" type="video/mp4">
+        Ваш браузер не підтримує відтворення відео.
+    </video>
+</div>
+
     <div class="final-photo-box left">
         <img src="https://i.imgur.com/LbsKT2r.jpeg" alt="Фото 3" class="final-photo fade-in">
     </div>
     <div class="final-photo-box right">
-        <img src="https://i.imgur.com/QWBkdjy.png" alt="Фото 4" class="final-photo fade-in">
+        <img src="https://i.imgur.com/NgYoZ0B.png" alt="Фото 4" class="final-photo fade-in">
+    </div>
+      <div class="final-photo-box left">
+        <img src="https://i.imgur.com/CAtaHJy.png" alt="Фото 3" class="final-photo fade-in">
     </div>
 </div>
 
@@ -474,6 +683,31 @@ outline-offset: 2px;
 
               
               
+       
+       
+       
+       
+ document.querySelectorAll(".accordion").forEach((accordion) => {
+    accordion.addEventListener("click", function () {
+        const panel = this.nextElementSibling;
+
+        // Перемикаємо клас "show" для розгортання/згортання
+        if (panel.classList.contains("show")) {
+            panel.classList.remove("show");
+        } else {
+            // Закриваємо всі інші панелі, якщо потрібно
+            document.querySelectorAll(".panel.show").forEach((openPanel) => {
+                openPanel.classList.remove("show");
+            });
+
+            // Відкриваємо поточну панель
+            panel.classList.add("show");
+        }
+    });
+});
+
+       
+       
               
               
               
