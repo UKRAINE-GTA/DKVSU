@@ -176,6 +176,7 @@ outline-offset: 0px;
 
       
       
+      
     /* Контейнер для панелей, щоб розташувати кнопки зліва і справа */
 .container {
   display: flex;
@@ -278,6 +279,57 @@ outline-offset: 0px;
 }
 
     
+      
+      
+      
+      
+      /* Контейнер для кнопок */
+.button-container {
+  display: flex;
+  justify-content: center; /* Центрування по горизонталі */
+  align-items: center; /* Центрування по вертикалі */
+  gap: 20px; /* Відстань між кнопками */
+  height: 50px; /* Займає всю висоту сторінки */
+  margin: 0;
+}
+
+/* Кнопка */
+.custom-button {
+  display: flex;
+  flex-direction: left; /* Лого над текстом */
+  align-items: center; /* Центрування вмісту кнопки */
+  justify-content: center;
+  background-color: #15151D;
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 20px;
+  width: 2500px;
+  height: 20px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+  text-align: center;
+}
+
+/* Іконка Telegram */
+.button-icon {
+  font-size: 20px;
+  margin-bottom: 0px;
+  color: #0088cc; /* Колір Telegram */
+}
+
+/* Текст кнопки */
+.button-text {
+  font-size: 14px;
+  color: #fff;
+}
+
+/* Ховер-ефект */
+.custom-button:hover {
+  background-color: #202020;
+}
+
+      
       
       
       
@@ -599,11 +651,6 @@ outline-offset: 0px;
 
 
 
-
-
-
-
-
             
 <div class="final-photo-section">
     <div class="final-photo-box left">
@@ -642,12 +689,30 @@ outline-offset: 0px;
         
         
             <h3><i class="fas fa-user"></i> Зв'язок з керівним складом складом</h3>
-            <li><i class="fas fa-phone red-icon"></i> Discord - EROR
-            <li><i class="fas fa-phone red-icon"></i> Discord - kietenka
-            <li><i class="fas fa-phone red-icon"></i> Discord - EROR
-            <li><i class="fas fa-phone red-icon"></i> Discord - EROR
-            
+      
+      
+      
+      <div class="button-container">
+  <a href="https://t.me/mucha_4" class="custom-button">
+    <i class="fa-brands fa-telegram button-icon"></i>
+    <span class="button-text"> Telegram М. Яник</span>
+  </a>
+  <a href="https://t.me/Vitennko" class="custom-button">
+    <i class="fa-brands fa-telegram button-icon"></i>
+    <span class="button-text"> Telegram В. Скалетта</span>
+  </a>
+  <a href="https://t.me/Kietenka" class="custom-button">
+    <i class="fa-brands fa-telegram button-icon"></i>
+    <span class="button-text"> Telegram М. Ескобар</span>
+  </a>
+  <a href="https://t.me/MR_1one1" class="custom-button">
+    <i class="fa-brands fa-telegram button-icon"></i>
+    <span class="button-text"> Telegram Р. Борак</span>
+  </a>
+</div>
 
+
+     
 
   
             
