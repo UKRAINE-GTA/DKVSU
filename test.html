@@ -176,42 +176,108 @@ outline-offset: 2px;
 
       
       
-        .accordion {
-    background-color: #0F0F16;
-    color: #fff;
-    cursor: pointer;
-    padding: 18px;
-    width: 100%;
-    text-align: left;
-    border: none;
-    outline: none;
-    font-size: 20px;
-    transition: 0.3s;
-    border-radius: 10px;
-    margin-top: 10px;
+    /* Контейнер для панелей, щоб розташувати кнопки зліва і справа */
+.container {
+  display: flex;
+  justify-content: space-between; /* Розставляє контейнери зліва і справа */
+  gap: 20px; /* Відстань між панелями */
+  flex-wrap: wrap; /* Замість того щоб стискати, панелі переходять на новий рядок при маленькій ширині */
+  width: 100%;
 }
 
-.accordion:hover {
-    background-color: #15151D;
+/* Ліва панель */
+.accordion-container-left {
+  width: 45%; /* Задаємо ширину для лівої панелі */
+  box-sizing: border-box;
 }
 
+/* Права панель */
+.accordion-container-right {
+  width: 45%; /* Задаємо ширину для правої панелі */
+  box-sizing: border-box;
+  text-align: right; /* Вирівнювання кнопки праворуч */
+}
+
+/* Кнопки аккордеону */
+.accordion,
+.accordion-right {
+  background-color: #0F0F16;
+  color: #fff;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%; /* Кнопки займають всю ширину контейнера */
+  text-align: left;
+  border: none;
+  outline: none;
+  font-size: 20px;
+  transition: 0.3s;
+  border-radius: 10px;
+}
+
+.accordion:hover,
+.accordion-right:hover {
+  background-color: #15151D;
+}
+
+/* Панелі (ліва і права) */
+.panel,
+.panel-right {
+  padding: 0 18px;
+  background-color: #15151D;
+  color: #fff;
+  border-radius: 10px;
+  margin-top: 10px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+  width: 100%; /* Панель займає всю ширину контейнера */
+  box-sizing: border-box;
+}
+
+/* Ліва панель: текст вирівнюється по лівому краю */
 .panel {
-    padding: 0 18px;
-    background-color: #15151D;
-    color: #fff;
-    border-radius: 10px;
-    margin-top: 10px;
-    max-height: 0; /* Початково прихована */
-    overflow: hidden; /* Сховати вміст, що не вміщається */
-    opacity: 0; /* Невидима */
-    transition: max-height 0.5s ease, opacity 0.5s ease; /* Плавний перехід */
+  text-align: left;
 }
 
-.panel.show {
-    max-height: 500px; /* Достатньо велике значення, щоб вміст показався */
-    opacity: 1; /* Робимо видимою */
+/* Права панель: текст вирівнюється по лівому краю */
+.panel-right {
+  text-align: left; /* Змінено для вирівнювання тексту в правій панелі по лівому краю */
 }
 
+.panel.show,
+.panel-right.show {
+  max-height: 500px;
+  opacity: 1;
+}
+
+/* Іконки */
+.siry-icon {
+  margin-right: 10px;
+}
+
+.zolotoy-icon {
+  color: gold;
+}
+
+.grin-icon {
+  color: #4CAF50;
+}
+
+/* Медіа-запит для мобільних пристроїв */
+@media (max-width: 930px) {
+  .accordion-container-left,
+  .accordion-container-right {
+    width: 100%; /* Панелі займають всю ширину на мобільних пристроях */
+    text-align: left; /* Вирівнювання кнопок на мобільних пристроях */
+  }
+  .panel,
+  .panel-right {
+    width: 100%; /* Панелі займають всю ширину на мобільних пристроях */
+  }
+}
+
+    
       
       
       
@@ -323,7 +389,6 @@ outline-offset: 2px;
     </style>
 </head>
 <body>
-
     <!-- Головна частина: текст зліва і фото справа -->
     <div class="main-container">
         <div class="text-container">
@@ -468,33 +533,97 @@ outline-offset: 2px;
 </div>
   
   
-  <button class="accordion"><i class="fas fa-user-plus siry-icon"></i> Вимоги для вступу в ДКВСУ</button>
-<div class="panel">
-  <ul style="list-style-type: none; padding: 0;">
-    <h2><i class="fas fa-sharp fa-thin fa-user-shield zolotoy-icon"></i> Щоб потрапити:<h2>
-      <h4>
-      <li><i class="fas fa-light fa-circle-check grin-icon"></i></i><span style="color: #8E8C8A;"> Вік</span> 18+<li>
-        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;"><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Проживання в області</span> 2+ роки<li>
-         <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;"><i class="fas fa-light fa-circle-check grin-icon"></i></i><span style="color: #8E8C8A;"> Соціальний рейтинг</span> позитивний<li>
-        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;"><i class="fas fa-light fa-circle-check grin-icon"></i></i><span style="color: #8E8C8A;"> Документація</span> паспорт<li>
-        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;"><i class="fas fa-light fa-circle-check grin-icon"></i></i><span style="color: #8E8C8A;"> Документація</span> трудова книга<li>
-        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;"><i class="fas fa-light fa-circle-check grin-icon"></i></i><span style="color: #8E8C8A;"> Документація</span> мед. книга<li>
-        </ul></h4>
-</div>
-           
+  <div class="container">
+  <!-- Ліва панель -->
+  <div class="accordion-container-left">
+    <button class="accordion"><i class="fas fa-user-plus siry-icon"></i> Вимоги для вступу в ДКВСУ</button>
+    <div class="panel">
+      <ul style="list-style-type: none; padding: 0;">
+        <h2><i class="fas fa-sharp fa-thin fa-user-shield zolotoy-icon"></i> Щоб потрапити:</h2>
+        <h4>
+          <li><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Вік</span> 18+</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Проживання в області</span> 2+ роки</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Соціальний рейтинг</span> позитивний</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Документація</span> паспорт</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Документація</span> трудова книга</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Документація</span> мед. книга</li>
+        </h4>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Права панель -->
+  <div class="accordion-container-right">
+    <button class="accordion-right"><i class="fas fa-address-book siry-icon"></i> Звання у фракції ДКВСУ</button>
+    <div class="panel-right">
+      <ul style="list-style-type: none; padding: 0;">
+        <h2><i class="fas fa-sharp fa-thin fa-user-shield zolotoy-icon"></i> Звання</h2>
+        <h4>
+          <li><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Ранг - 1 |</span> Сержант</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 2 |</span> Старший сержант</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 3 |</span> Старшина</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 4 |</span> Прапорщик</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 5 |</span> Старший прапорщик</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 6 |</span> Лейтенант</li>
+           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 7 |</span> Старший лейтенант</li>
+           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 8 |</span> Капітан</li>
+           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 9 |</span> Майор</li>
+           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 10 |</span> Підполковник</li>
+           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 11 |</span> Полковник</li>
+           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 12 |</span> Генерал</li>
+          
+        </h4>
+      </ul>
+    </div>
+  </div>
+</div> 
+
+
+
+
+
+
+
+
+
+
+
             
 <div class="final-photo-section">
     <div class="final-photo-box left">
         <img src="https://i.imgur.com/G2SoaPY.png" alt="Фото 1" class="final-photo fade-in">
     </div>
     <div class="final-photo-box right">
-        <img src="https://i.imgur.com/XybJwn3.png" alt="Фото 2" class="final-photo fade-in">
-    </div>
+    <video class="final-photo fade-in" autoplay loop muted>
+        <source src="https://i.imgur.com/TOEG6hZ.mp4" type="video/mp4">
+        Ваш браузер не підтримує відтворення відео.
+    </video>
+</div>
+
     <div class="final-photo-box left">
         <img src="https://i.imgur.com/LbsKT2r.jpeg" alt="Фото 3" class="final-photo fade-in">
     </div>
     <div class="final-photo-box right">
-        <img src="https://i.imgur.com/QWBkdjy.png" alt="Фото 4" class="final-photo fade-in">
+        <img src="https://i.imgur.com/NgYoZ0B.png" alt="Фото 4" class="final-photo fade-in">
+    </div>
+      <div class="final-photo-box left">
+        <img src="https://i.imgur.com/CAtaHJy.png" alt="Фото 3" class="final-photo fade-in">
     </div>
 </div>
 
@@ -550,24 +679,43 @@ outline-offset: 2px;
        
        
        
- document.querySelectorAll(".accordion").forEach((accordion) => {
-    accordion.addEventListener("click", function () {
-        const panel = this.nextElementSibling;
+// Отримуємо всі кнопки аккордеонів
+var acc = document.getElementsByClassName("accordion");
+var accRight = document.getElementsByClassName("accordion-right");
 
-        // Перемикаємо клас "show" для розгортання/згортання
-        if (panel.classList.contains("show")) {
-            panel.classList.remove("show");
-        } else {
-            // Закриваємо всі інші панелі, якщо потрібно
-            document.querySelectorAll(".panel.show").forEach((openPanel) => {
-                openPanel.classList.remove("show");
-            });
+// Для кожної кнопки додаємо обробник події
+for (var i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    // Отримуємо відповідну панель
+    var panel = this.nextElementSibling;
+    
+    // Якщо панель відкрито, закриваємо її, інакше відкриваємо
+    if (panel.style.maxHeight) {
+      panel.style.maxHeight = null;
+      panel.style.opacity = 0;
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + "px";
+      panel.style.opacity = 1;
+    }
+  });
+}
 
-            // Відкриваємо поточну панель
-            panel.classList.add("show");
-        }
-    });
-});
+// Для правої панелі
+for (var i = 0; i < accRight.length; i++) {
+  accRight[i].addEventListener("click", function() {
+    // Отримуємо відповідну панель
+    var panelRight = this.nextElementSibling;
+    
+    // Якщо панель відкрито, закриваємо її, інакше відкриваємо
+    if (panelRight.style.maxHeight) {
+      panelRight.style.maxHeight = null;
+      panelRight.style.opacity = 0;
+    } else {
+      panelRight.style.maxHeight = panelRight.scrollHeight + "px";
+      panelRight.style.opacity = 1;
+    }
+  });
+}
 
        
        
