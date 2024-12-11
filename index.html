@@ -331,6 +331,26 @@ outline-offset: 0px;
 
       
       
+      .animate-on-scroll {
+  opacity: 0; /* Початково невидимий */
+  transform: translateY(50px); /* Початкове положення нижче */
+  transition: opacity 2s ease-out, transform 2s ease-out; /* Плавна анімація */
+}
+
+.animate-on-scroll.visible {
+  opacity: 1; /* Робимо видимим */
+  transform: translateY(0); /* Переміщуємо на початкову позицію */
+}
+
+
+      
+      
+      
+      
+      
+      
+      
+      
       
       
         .photo-overlay {
@@ -444,8 +464,8 @@ outline-offset: 0px;
     <!-- Головна частина: текст зліва і фото справа -->
     <div class="main-container">
         <div class="text-container">
-            <h2><span style="color: #0079ff;">Державна кримінально-виконавча служба України</span></p></h2>
-          <h3>Державна кримінально-виконавча служба України – на захисті закону та правопорядку!<h3>
+            <h2 class="animate-on-scroll"><span style="color: #0079ff;">Державна кримінально-виконавча служба України</span></p></h2>
+          <h3 class="animate-on-scroll">Державна кримінально-виконавча служба України – на захисті закону та правопорядку!<h3>
             <h4>Державна кримінально-виконавча служба України забезпечує виконання покарань, призначених судами, і сприяє реабілітації осіб, що відбувають покарання, забезпечуючи їх соціальну адаптацію. Ми боремося з правопорушеннями, відновлюємо справедливість та підтримуємо правопорядок.
 
 <br><br>Обираючи службу в ДКВС, ви стаєте частиною команди, яка виконує важливу місію для забезпечення безпеки та захисту законності. Ваша відданість та відповідальність допоможуть у боротьбі зі злочинністю та відновленні порядку.
@@ -453,6 +473,7 @@ outline-offset: 0px;
 <br><br>Приєднуйся до <a href="https://ukraine-gta.github.io/DKVSU/ip">ДКВС</a> 「Клікабельно」— працюй на благо правопорядку та справедливості!<h4>
         </div>
         <div class="image-container">
+          
             <img src="https://i.imgur.com/J00IHJ0.png" alt="Фото">
         </div>
     </div>
@@ -462,13 +483,18 @@ outline-offset: 0px;
     <span id="counter">0</span>
 </span></p></div>
             
+          
+            
+            
             <div><span style="color: #ffcb00;"><i class="fas fa-users yelow-icon"></i> Кількість активних працівників: 21+</span></p>
             </div>
+      
      
     <!-- Галерея фото -->
             <div class="head-children">
               <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
-            <h1><span style="color: #C04422;">Вище керівництво ДКВС м.Дніпро</span></p></h>
+            <h1 class="animate-on-scroll"><span style="color: #C04422;">Вище керівництво ДКВС м.Дніпро</span></p></h>
+  </div>
               
     <div class="gallery">
         <div class="photo-container">
@@ -517,9 +543,9 @@ outline-offset: 0px;
     </div>
 <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
              <div class="head-children">
-            <h><span style="color: #EE7651;">Керівники підрозділів ДКВС м.Дніпро</span></p></h1>
+            <h1 class="animate-on-scroll"><span style="color: #EE7651;">Керівники підрозділів ДКВС м.Дніпро</span></p></h1>
             
-            
+  </div>
                 <div class="gallery">
         <div class="photo-container">
             <div class="photo-overlay">
@@ -569,7 +595,9 @@ outline-offset: 0px;
             
             <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
             <div class="viddil">
-            <h1><span style="color: #3D5D52;">Відділи у лавах ДКВС м.Дніпро</span></p></h1>
+            <h1 class="animate-on-scroll"><span style="color: #3D5D52;">Відділи у лавах ДКВС м.Дніпро</span></p></h1>
+
+
             
            <div class="viddil-container">
     <h3> 
@@ -647,6 +675,8 @@ outline-offset: 0px;
   </div>
 </div> 
 
+
+
             <br>
   
   <!-- Права панель -->
@@ -702,19 +732,22 @@ outline-offset: 0px;
       <div class="final-photo-box left">
         <img src="https://i.imgur.com/CAtaHJy.png" alt="Фото 3" class="final-photo fade-in">
     </div>
+  <div class="final-photo-box right">
+        <img src="https://i.imgur.com/cwO09E0.png" alt="Фото 4" class="final-photo fade-in">
+    </div>
 </div>
 
 
              <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
             <div class="special-text">
-            <h1><span style="color: #0E9843;">ДКВС м.Дніпро//UKRAINE GTA//02</span></p></h1
+            <h1 class="animate-on-scroll"><span style="color: #0E9843;">ДКВС м.Дніпро//UKRAINE GTA//02</span></p></h1
               
 
               <div class="accordion-container-right">
     <button class="accordion-right"><i class="fas fa-location-dot siry-icon"></i> Як нас знайти?</button>
     <div class="panel-right">
       <ul style="list-style-type: none; padding: 0;">
-        <h2><i class="fas fa-route zolotoy-icon"></i> О(Англ.) <i class="fas fa-right-long zolotoy-icon"></i> Навігація <i class="fas fa-right-long zolotoy-icon"></i> Державні установи <i class="fas fa-right-long zolotoy-icon"></i> ДКВС</h2>
+        <h3><i class="fas fa-route zolotoy-icon"></i> О(Англ.) <i class="fas fa-right-long zolotoy-icon"></i> Навігація <i class="fas fa-right-long zolotoy-icon"></i> Державні установи <i class="fas fa-right-long zolotoy-icon"></i> ДКВС</h3>
         </div>
         
         
@@ -777,6 +810,34 @@ outline-offset: 0px;
         document.getElementById('counter').textContent = `Зроблено конвоювань за весь період: ${counter}`;
     });
 
+
+       
+       
+       
+       // Функція для перевірки, чи знаходиться елемент у полі зору
+function isInViewport(element) {
+  const rect = element.getBoundingClientRect();
+  return (
+    rect.top >= 0 &&
+    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+  );
+}
+
+// Додаємо клас "visible" при появі елемента на екрані
+function handleScroll() {
+  const elements = document.querySelectorAll('.animate-on-scroll');
+  elements.forEach((el) => {
+    if (isInViewport(el)) {
+      el.classList.add('visible');
+    }
+  });
+}
+
+// Додаємо обробник події scroll
+window.addEventListener('scroll', handleScroll);
+
+// Запускаємо перевірку одразу, щоб врахувати початкову позицію
+handleScroll();
 
               
               
