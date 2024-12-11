@@ -640,13 +640,51 @@ outline-offset: 0px;
            <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
               <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 12 |</span> Генерал</li>
           
+          
         </h4>
       </ul>
     </div>
   </div>
 </div> 
 
-
+            <br>
+  
+  <!-- Права панель -->
+  <div class="accordion-container-right">
+    <button class="accordion-right"><i class="fas fa-car siry-icon"></i> Автопарк ДКВСУ</button>
+    <div class="panel-right">
+      <ul style="list-style-type: none; padding: 0;">
+        <h2><i class="fas fa-sharp fa-thin fa-user-shield zolotoy-icon"></i> Службові авто</h2>
+        <h4>
+          <li><i class="fas fa-light fa-truck-fast grin-icon"></i><span style="color: #8E8C8A;"> КрАЗ АвтоЗАК |</span> Доступний з рангу "Сержант"</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 2 |</span> Старший сержант</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 3 |</span> Старшина</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 4 |</span> Прапорщик</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 5 |</span> Старший прапорщик</li>
+          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 6 |</span> Лейтенант</li>
+           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 7 |</span> Старший лейтенант</li>
+           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 8 |</span> Капітан</li>
+           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 9 |</span> Майор</li>
+           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 10 |</span> Підполковник</li>
+           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 11 |</span> Полковник</li>
+           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 12 |</span> Генерал</li>
+          
+        </h4>
+      </ul>
+    </div>
+  </div>
+</div> 
 
 
 
@@ -757,6 +795,7 @@ outline-offset: 0px;
 // Отримуємо всі кнопки аккордеонів
 var acc = document.getElementsByClassName("accordion");
 var accRight = document.getElementsByClassName("accordion-right");
+var accBottom = document.getElementsByClassName("accordion-bottom"); // Для нижньої панелі
 
 // Для кожної кнопки додаємо обробник події
 for (var i = 0; i < acc.length; i++) {
@@ -788,6 +827,23 @@ for (var i = 0; i < accRight.length; i++) {
     } else {
       panelRight.style.maxHeight = panelRight.scrollHeight + "px";
       panelRight.style.opacity = 1;
+    }
+  });
+}
+
+// Для нижньої панелі
+for (var i = 0; i < accBottom.length; i++) {
+  accBottom[i].addEventListener("click", function() {
+    // Отримуємо відповідну панель
+    var panelBottom = this.nextElementSibling;
+    
+    // Якщо панель відкрито, закриваємо її, інакше відкриваємо
+    if (panelBottom.style.maxHeight) {
+      panelBottom.style.maxHeight = null;
+      panelBottom.style.opacity = 0;
+    } else {
+      panelBottom.style.maxHeight = panelBottom.scrollHeight + "px";
+      panelBottom.style.opacity = 1;
     }
   });
 }
