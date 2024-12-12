@@ -3,24 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
   <title>Чорний Список</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #0F0F16;
-      color: white;
+      font-family: 'Comfortaa', sans-serif;
       margin: 0;
-      padding: 0;
+      padding: 20px;
       display: flex;
-      justify-content: flex-start; /* Вирівнює вміст до верхнього краю */
-      align-items: flex-start; /* Вирівнює вміст по вертикалі */
-      height: 100vh;
+      flex-direction: column; /* Встановлюємо вертикальне розташування для всіх елементів */
+      background: #000000 url('https://i.imgur.com/8I4wQ0P.png'); /* Заміна на реальний URL */
+      background-size: cover; /* Зображення покриває весь екран */
+      background-position: center center; /* Центрування фото */
+      background-repeat: no-repeat; /* Фото не повторюється */
+      background-attachment: fixed; /* Фон статичний при прокручуванні */
+      color: #fff;
+      line-height: 1.6;
     }
 
     .container {
       width: 100%;
       background-color: #15151D;
-      padding: 20px;
+      padding: 10px;
       border-radius: 10px;
       box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
       overflow-x: auto;
@@ -41,8 +45,13 @@
     th, td {
       padding: 12px;
       text-align: left;
-      border: 1px solid #ddd;
+      border: 1px solid #fff;
       background-color: #2D2D34;
+      background: #000000 url('https://i.imgur.com/8I4wQ0P.png'); /* Заміна на реальний URL */
+      background-size: cover; /* Зображення покриває весь екран */
+      background-position: center center; /* Центрування фото */
+      background-repeat: no-repeat; /* Фото не повторюється */
+      background-attachment: fixed; /* Фон статичний при прокручуванні */
     }
 
     th {
@@ -60,7 +69,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Чорний Список</h1>
+    <h1>Заборонені до випуску: чорний список</h1>
     <table id="blacklistTable">
       <thead>
         <tr>
@@ -79,7 +88,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+    import { getDatabase, ref, get, remove, update } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBzefxFDTHQqXFHg9t08JTiL5EaH8si1oY",
@@ -121,11 +130,14 @@
               <td>${item.nickname}</td>
               <td>${item.clan || "Не вказано"}</td>
               <td>${item.reason}</td>
-              <td>${item.days}</td>
+              <td id="days-${key}">${item.days}</td>
             `;
 
             tableBody.appendChild(row);
           });
+
+          // Перевірка на відлік часу та видалення, якщо потрібно
+          checkAndRemoveExpiredEntries();
         } else {
           console.log("Дані не знайдено.");
         }
@@ -134,8 +146,43 @@
       }
     }
 
+    // Функція для перевірки та видалення учасників після досягнення 0
+    async function checkAndRemoveExpiredEntries() {
+      const blacklistRef = ref(database, "blacklist");
+
+      try {
+        const snapshot = await get(blacklistRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          const keys = Object.keys(data);
+
+          keys.forEach(key => {
+            const item = data[key];
+            const remainingDays = item.days;
+
+            if (remainingDays <= 0) {
+              // Видалення запису з Firebase, якщо дні = 0
+              remove(ref(database, `blacklist/${key}`));
+              // Видалення рядка з таблиці
+              const row = document.querySelector(`#days-${key}`).parentElement;
+              row.remove();
+            } else {
+              // Зменшення днів на 1 та оновлення в Firebase
+              const updatedDays = remainingDays - 1;
+              update(ref(database, `blacklist/${key}`), { days: updatedDays });
+            }
+          });
+        }
+      } catch (error) {
+        console.error("Помилка при перевірці та видаленні:", error);
+      }
+    }
+
     // Завантажуємо дані при завантаженні сторінки
     fetchBlacklistData();
+
+    // Оновлюємо таблицю кожну хвилину для відліку днів
+    setInterval(fetchBlacklistData, 60000); // Оновлення кожну хвилину
   </script>
 </body>
 </html>
