@@ -6,28 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://i.imgur.com/PRjTNqr.png" type="image/png">
     <title>ДКВС</title>
+   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="https://i.imgur.com/fQLBeQ9.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
         /* Основні стилі */
         body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: url('https://i.imgur.com/2Kwd6vU.png') no-repeat center center fixed;
-            background-size: cover;
-            color: #fff;
-            line-height: 1.6;
-        }
+    font-family: 'Comfortaa', sans-serif;
+    margin: 0;
+    padding: 90px;
+    display: flex;
+    flex-direction: column; /* Встановлюємо вертикальне розташування для всіх елементів */
+    background: #000000 url('https://i.imgur.com/ezSjQn5.png'); /* Заміна на реальний URL */
+    background-size: cover; /* Зображення покриває весь екран */
+    background-position: center center; /* Центрування фото */
+    background-repeat: no-repeat; /* Фото не повторюється */
+    background-attachment: fixed; /* Фон статичний при прокручуванні */
+    color: #fff;
+    line-height: 1.6;
+}
 
         .container {
             max-width: 600px;
             margin: 50px auto;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 30px;
+            background: rgba(21, 21, 29, 0.9);
+            padding: 10px;
             border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
         }
 
         h1 {
@@ -61,7 +67,7 @@
          }
       
 .submit-btn {
-    background: #4CAF50; /* Зелений */
+    background: #007BFF; /* Зелений */
     color: white;
     border: none;
     border-radius: 5px;
@@ -70,12 +76,10 @@
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
     transition: background 0.3s, transform 0.2s;
-    text-shadow : 2px  2px  3px  #000000 ;
-  letter-spacing: 4px;
 }
 
 .submit-btn:hover {
-    background: #45a049; /* Трохи темніший зелений */
+    background: #0056b3; /* Трохи темніший зелений */
     transform: scale(1.02);
 }
 
@@ -90,8 +94,6 @@
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
     transition: background 0.3s, transform 0.2s;
-    text-shadow : 2px  2px  3px  #000000 ;
-    letter-spacing: 4px;
 }
 
 .reset-btn:hover {
@@ -123,7 +125,7 @@
 
         label i {
             margin-right: 10px;
-            color: #FFD700;
+            color: #fff;
         }
 
         input[type="text"],
