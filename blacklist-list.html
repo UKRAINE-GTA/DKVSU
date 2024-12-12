@@ -1,92 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
-  <title>Чорний Список</title>
-  <style>
-    body {
-      font-family: 'Comfortaa', sans-serif;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      flex-direction: column; /* Встановлюємо вертикальне розташування для всіх елементів */
-      background: #000000 url('https://i.imgur.com/8I4wQ0P.png'); /* Заміна на реальний URL */
-      background-size: cover; /* Зображення покриває весь екран */
-      background-position: center center; /* Центрування фото */
-      background-repeat: no-repeat; /* Фото не повторюється */
-      background-attachment: fixed; /* Фон статичний при прокручуванні */
-      color: #fff;
-      line-height: 1.6;
-    }
-
-    .container {
-      width: 100%;
-      background-color: #15151D;
-      padding: 10px;
-      border-radius: 10px;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
-      overflow-x: auto;
-      margin-top: 10px; /* Відступ від верху сторінки */
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    th, td {
-      padding: 12px;
-      text-align: left;
-      border: 1px solid #fff;
-      background-color: #2D2D34;
-      background: #000000 url('https://i.imgur.com/8I4wQ0P.png'); /* Заміна на реальний URL */
-      background-size: cover; /* Зображення покриває весь екран */
-      background-position: center center; /* Центрування фото */
-      background-repeat: no-repeat; /* Фото не повторюється */
-      background-attachment: fixed; /* Фон статичний при прокручуванні */
-    }
-
-    th {
-      background-color: #007BFF;
-    }
-
-    tr:nth-child(even) {
-      background-color: #15151D;
-    }
-
-    tr:hover {
-      background-color: #444;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Заборонені до випуску: чорний список</h1>
-    <table id="blacklistTable">
-      <thead>
-        <tr>
-          <th>ID Гравця</th>
-          <th>Нікнейм</th>
-          <th>Клан</th>
-          <th>Причина</th>
-          <th>Кількість днів</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Дані будуть додані сюди -->
-      </tbody>
-    </table>
-  </div>
-
-  <script type="module">
+ <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
     import { getDatabase, ref, get, remove, update } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 
@@ -125,7 +37,7 @@
             const item = data[key];
             const row = document.createElement("tr");
 
-            row.innerHTML = ` 
+            row.innerHTML = `
               <td>${item.playerId}</td>
               <td>${item.nickname}</td>
               <td>${item.clan || "Не вказано"}</td>
@@ -158,31 +70,36 @@
 
           keys.forEach(key => {
             const item = data[key];
-            const remainingDays = item.days;
+            const currentTime = Date.now();
+            const timeElapsed = currentTime - item.createdAt; // Час, що пройшов з моменту додавання
 
-            if (remainingDays <= 0) {
-              // Видалення запису з Firebase, якщо дні = 0
-              remove(ref(database, `blacklist/${key}`));
-              // Видалення рядка з таблиці
-              const row = document.querySelector(`#days-${key}`).parentElement;
-              row.remove();
-            } else {
-              // Зменшення днів на 1 та оновлення в Firebase
-              const updatedDays = remainingDays - 1;
-              update(ref(database, `blacklist/${key}`), { days: updatedDays });
+            // Перевіряємо, чи пройшло більше ніж 24 години (1 доба)
+            const hoursPassed = timeElapsed / (1000 * 60 * 60); // перетворюємо мілісекунди на години
+
+            if (hoursPassed >= 24) {
+              // Зменшуємо кількість днів
+              const updatedDays = item.days - Math.floor(hoursPassed / 24);
+              
+              if (updatedDays <= 0) {
+                // Видалення запису, якщо дні = 0
+                remove(ref(database, `blacklist/${key}`));
+                // Видалення рядка з таблиці
+                const row = document.querySelector(`#days-${key}`).parentElement;
+                row.remove();
+              } else {
+                // Оновлюємо кількість днів
+                update(ref(database, `blacklist/${key}`), { days: updatedDays });
+              }
             }
           });
         }
       } catch (error) {
-        console.error("Помилка при перевірці та видаленні:", error);
+        console.error("Помилка при перевірці та оновленні відліку:", error);
       }
     }
 
-    // Завантажуємо дані при завантаженні сторінки
-    fetchBlacklistData();
-
-    // Оновлюємо таблицю кожну хвилину для відліку днів
-    setInterval(fetchBlacklistData, 60000); // Оновлення кожну хвилину
+    // Ініціалізація відображення таблиці при завантаженні сторінки
+    window.onload = fetchBlacklistData;
   </script>
 </body>
 </html>
