@@ -1,1 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://i.imgur.com/PRjTNqr.png" type="image/png">
+  <title>Форма для Чорного Списку</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Comfortaa', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #000000 url('https://i.imgur.com/ezSjQn5.png'); /* Фон */
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
 
+    /* Стилі для панелі авторизації */
+    .auth-container {
+      width: 400px;
+      background-color: rgba(21, 21, 29, 0.9); /* Полупрозорий фон */
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+      color: #fff;
+      text-align: center;
+    }
+
+    .auth-container h1 {
+      margin-bottom: 20px;
+    }
+
+    .auth-container input {
+      margin-bottom: 15px;
+      padding: 10px;
+      width: 94%;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      background-color: #2D2D34;
+      color: white;
+      font-size: 16px;
+    }
+
+    .auth-container button {
+      background-color: #007BFF;
+      color: white;
+      padding: 12px;
+      width: 100%;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+    }
+
+    .auth-container button:hover {
+      background-color: #0056b3;
+    }
+
+    .alert {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .alert.success {
+      background-color: #28a745;
+    }
+
+    .alert.error {
+      background-color: #dc3545;
+    }
+
+    /* Стилі для форми чорного списку */
+    .container {
+      width: 500px; 
+      background-color: rgba(21, 21, 29, 0.9);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+      color: #fff;
+      display: none;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    label {
+      margin-top: 10px;
+      width: 100%;
+      text-align: left;
+    }
+
+    input, select, textarea, button {
+      margin-top: 10px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      width: 95%;
+    }
+
+    input, select, textarea {
+      background-color: #2D2D34;
+      color: white;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+      margin-top: 20px;
+      width: 99%;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    
+     /* Приховуємо стрілочки в полі вводу чисел */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield; /* Для Firefox */
+  }
+    
+    
+    textarea {
+      height: 20px;
+      resize: none;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Панель авторизації -->
+  <div id="authContainer" class="auth-container">
+    <h1>Авторизація</h1>
+    <form id="loginForm">
+      <label for="username">Логін:</label>
+      <input type="text" id="username" required>
+      <label for="password">Пароль:</label>
+      <input type="password" id="password" required>
+      <button type="submit">Увійти</button>
+    </form>
+    <div id="alertMessage" class="alert"></div>
+  </div>
+
+  <!-- Форма чорного списку -->
+  <div id="formContainer" class="container">
+    <h1>Додати до Чорного Списку</h1>
+    <form id="blacklistForm">
+      <label for="playerId"><i class="fas fa-id-card"></i> ID Гравця:</label>
+      <input type="text" id="playerId" required>
+      
+      <label for="nickname"><i class="fas fa-user"></i> Нікнейм:</label>
+      <input type="text" id="nickname">
+      
+      <label for="clan"><i class="fas fa-users"></i> Клан (якщо є):</label>
+      <input type="text" id="clan">
+      
+      <label for="reason"><i class="fas fa-file-alt"></i> Причина (макс. 50 символів):</label>
+      <textarea id="reason" required maxlength="50"></textarea>
+      
+      <label for="days"><i class="fas fa-calendar-day"></i> Кількість днів:</label>
+      <input type="number" id="days" required>
+      
+      <button type="submit">Додати</button>
+    </form>
+    <div id="alertMessage" class="alert"></div>
+  </div>
+
+  <script type="module">
+    // Firebase конфігурація
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBzefxFDTHQqXFHg9t08JTiL5EaH8si1oY",
+      authDomain: "dkvs-1ec88.firebaseapp.com",
+      databaseURL: "https://dkvs-1ec88-default-rtdb.firebaseio.com",
+      projectId: "dkvs-1ec88",
+      storageBucket: "dkvs-1ec88.firebaseapp.com",
+      messagingSenderId: "167430647129",
+      appId: "1:167430647129:web:ab209fec7735f20b597048",
+      measurementId: "G-H6LKMLYD10",
+    };
+
+    // Ініціалізація Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    const authContainer = document.getElementById('authContainer');
+    const formContainer = document.getElementById('formContainer');
+    const loginForm = document.getElementById('loginForm');
+    const blacklistForm = document.getElementById('blacklistForm');
+    const alertMessage = document.getElementById("alertMessage");
+
+    // Перевірка, чи є дані для автоматичного входу
+    const checkLogin = () => {
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        const parsedData = JSON.parse(userData);
+        const currentDate = new Date().getTime();
+
+        if (currentDate - parsedData.timestamp <259200000) {
+          // Якщо минуло менше 7 днів, пропустити авторизацію
+          authContainer.style.display = 'none';
+          formContainer.style.display = 'block';
+        } else {
+          localStorage.removeItem('user'); // Якщо час вийшов - видаляємо
+          authContainer.style.display = 'block';
+          formContainer.style.display = 'none';
+        }
+      } else {
+        authContainer.style.display = 'block';
+        formContainer.style.display = 'none';
+      }
+    }
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (username === "admin" && password === "password123") {
+        const userData = {
+          username,
+          timestamp: new Date().getTime(),
+        };
+
+        localStorage.setItem('user', JSON.stringify(userData));
+        authContainer.style.display = 'none';
+        formContainer.style.display = 'block';
+      } else {
+        alertMessage.textContent = 'Невірний логін або пароль';
+        alertMessage.className = "alert error";
+        alertMessage.style.display = "block";
+      }
+    });
+
+    // Форма чорного списку
+    blacklistForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const playerId = document.getElementById("playerId").value.trim();
+      const nickname = document.getElementById("nickname").value.trim();
+      const clan = document.getElementById("clan").value.trim();
+      const reason = document.getElementById("reason").value.trim();
+      const days = document.getElementById("days").value.trim();
+
+      try {
+        const blacklistRef = ref(database, "blacklist");
+        await push(blacklistRef, { playerId, nickname, clan, reason, days });
+
+        alertMessage.textContent = `Гравця з ID ${playerId} успішно додано до чорного списку.`;
+        alertMessage.className = "alert success";
+        alertMessage.style.display = "block";
+        blacklistForm.reset();
+      } catch (error) {
+        alertMessage.textContent = `Помилка: ${error.message}`;
+        alertMessage.className = "alert error";
+        alertMessage.style.display = "block";
+      }
+    });
+
+    checkLogin(); // Перевірка авторизації при завантаженні сторінки
+  </script>
+</body>
+</html>
