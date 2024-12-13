@@ -132,9 +132,8 @@
     button:hover {
       background-color: #0056b3;
     }
-
     
-     /* Приховуємо стрілочки в полі вводу чисел */
+         /* Приховуємо стрілочки в полі вводу чисел */
   input[type="number"]::-webkit-outer-spin-button,
   input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -145,12 +144,11 @@
     -moz-appearance: textfield; /* Для Firefox */
   }
     
-    
+
     textarea {
       height: 20px;
       resize: none;
     }
-
   </style>
 </head>
 <body>
@@ -195,7 +193,7 @@
   <script type="module">
     // Firebase конфігурація
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+    import { getDatabase, ref, push, update, remove, onValue } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBzefxFDTHQqXFHg9t08JTiL5EaH8si1oY",
@@ -225,7 +223,7 @@
         const parsedData = JSON.parse(userData);
         const currentDate = new Date().getTime();
 
-        if (currentDate - parsedData.timestamp <259200000) {
+        if (currentDate - parsedData.timestamp < 259200000) {
           // Якщо минуло менше 7 днів, пропустити авторизацію
           authContainer.style.display = 'none';
           formContainer.style.display = 'block';
@@ -238,7 +236,7 @@
         authContainer.style.display = 'block';
         formContainer.style.display = 'none';
       }
-    }
+    };
 
     loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -272,14 +270,37 @@
       const reason = document.getElementById("reason").value.trim();
       const days = document.getElementById("days").value.trim();
 
+      const currentTime = new Date().getTime();
+      const expirationTime = currentTime + (days * 24 * 60 * 60 * 1000); // Час в кінці дії
+
       try {
         const blacklistRef = ref(database, "blacklist");
-        await push(blacklistRef, { playerId, nickname, clan, reason, days });
+        const newBlacklistEntry = push(blacklistRef);
+        await update(newBlacklistEntry, {
+          playerId, 
+          nickname, 
+          clan, 
+          reason, 
+          days,
+          expirationTime
+        });
 
         alertMessage.textContent = `Гравця з ID ${playerId} успішно додано до чорного списку.`;
         alertMessage.className = "alert success";
         alertMessage.style.display = "block";
         blacklistForm.reset();
+
+        // Перевірка часу і видалення записів
+        setInterval(async () => {
+          const snapshot = await onValue(blacklistRef, snapshot => {
+            snapshot.forEach(childSnapshot => {
+              const childData = childSnapshot.val();
+              if (childData.expirationTime && childData.expirationTime < new Date().getTime()) {
+                remove(childSnapshot.ref); // Видалення за часом
+              }
+            });
+          });
+        }, 60000); // Перевірка кожну хвилину
       } catch (error) {
         alertMessage.textContent = `Помилка: ${error.message}`;
         alertMessage.className = "alert error";
