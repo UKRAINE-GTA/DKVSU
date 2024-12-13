@@ -128,8 +128,8 @@
 
             row.innerHTML = `
               <td>${item.playerId}</td>
-              <td>${item.nickname}</td>
-              <td>${item.clan || "Не вказано"}</td>
+              <td>${item.nickname || "Помилка NICK #121"}</td>
+              <td>${item.clan || "Помилка GK #404"}</td>
               <td>${item.reason}</td>
               <td id="days-${key}">${item.days}</td>
             `;
