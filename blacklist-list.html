@@ -87,7 +87,7 @@
     </table>
   </div>
 
-    <script type="module">
+      <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
     import { getDatabase, ref, get, push, remove, update } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 
@@ -104,21 +104,23 @@
 
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
-
     const tableBody = document.querySelector("#blacklistTable tbody");
 
     // Функція для додавання запису в чорний список
     async function addToBlacklist(playerId, nickname, clan, reason, days) {
       const blacklistRef = ref(database, "blacklist");
       const newBlacklistRef = push(blacklistRef);
-      
+
+      const expirationTime = Date.now() + days * 24 * 60 * 60 * 1000; // Обчислюємо час закінчення за допомогою днів
+
       await update(newBlacklistRef, {
         playerId,
         nickname,
         clan,
         reason,
         days,
-        createdAt: Date.now() // додаємо час створення запису
+        createdAt: Date.now(),
+        expirationTime,  // Додаємо час закінчення
       });
     }
 
@@ -139,12 +141,24 @@
             const item = data[key];
             const row = document.createElement("tr");
 
+            // Рахуємо залишковий час до видалення
+            const currentTime = Date.now();
+            const timeLeft = item.expirationTime - currentTime;
+
+            let timeString = "Час вичерпано";
+            if (timeLeft > 0) {
+              const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+              const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+              const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+              timeString = `${hours} год. ${minutes} хв. ${seconds} сек.`;
+            }
+
             row.innerHTML = `
               <td>${item.playerId}</td>
               <td>${item.nickname || "Помилка NICK #121"}</td>
               <td>${item.clan || "Помилка CLAN #404"}</td>
               <td>${item.reason}</td>
-              <td id="days-${key}">${item.days}</td>
+              <td class="time-left" id="time-${key}">${timeString}</td>
             `;
 
             tableBody.appendChild(row);
@@ -173,23 +187,14 @@
           keys.forEach(key => {
             const item = data[key];
             const currentTime = Date.now();
-            const timeElapsed = currentTime - item.createdAt;
 
-            // Перевіряємо, чи пройшло більше ніж 24 години (1 доба)
-            const hoursPassed = timeElapsed / (1000 * 60 * 60);
-
-            if (hoursPassed >= 24) {
-              const updatedDays = item.days - Math.floor(hoursPassed / 24);
-              
-              if (updatedDays <= 0) {
-                // Видалення запису, якщо дні = 0
-                remove(ref(database, `blacklist/${key}`));
-                // Видалення рядка з таблиці
-                const row = document.querySelector(`#days-${key}`).parentElement;
+            if (currentTime >= item.expirationTime) {
+              // Видалення запису після закінчення часу
+              remove(ref(database, `blacklist/${key}`));
+              // Видалення рядка з таблиці
+              const row = document.querySelector(`#time-${key}`).parentElement;
+              if (row) {
                 row.remove();
-              } else {
-                // Оновлюємо кількість днів
-                update(ref(database, `blacklist/${key}`), { days: updatedDays });
               }
             }
           });
@@ -199,9 +204,39 @@
       }
     }
 
+    // Оновлення часу до видалення кожну секунду
+    function updateTimeLeft() {
+      const rows = document.querySelectorAll("tbody tr");
+      rows.forEach(row => {
+        const timeCell = row.querySelector(".time-left");
+        const timeLeftText = timeCell.textContent.trim();
+
+        if (timeLeftText !== "Час вичерпано") {
+          const timeParts = timeLeftText.split(" ");
+          const hours = parseInt(timeParts[0]);
+          const minutes = parseInt(timeParts[2]);
+          const seconds = parseInt(timeParts[4]);
+
+          let totalSeconds = (hours * 60 * 60) + (minutes * 60) + seconds - 1;
+
+          if (totalSeconds <= 0) {
+            timeCell.textContent = "Час вичерпано";
+          } else {
+            const newHours = Math.floor(totalSeconds / 3600);
+            const newMinutes = Math.floor((totalSeconds % 3600) / 60);
+            const newSeconds = totalSeconds % 60;
+            timeCell.textContent = `${newHours} год. ${newMinutes} хв. ${newSeconds} сек.`;
+          }
+        }
+      });
+    }
+
     // Ініціалізація: завантаження даних і встановлення інтервалу
     window.onload = () => {
       fetchBlacklistData();
       setInterval(fetchBlacklistData, 3000); // Оновлюємо список кожні 3 секунди
+      setInterval(updateTimeLeft, 1000); // Оновлюємо час кожну секунду
     };
-    </script>
+  </script>
+</body>
+</html>
