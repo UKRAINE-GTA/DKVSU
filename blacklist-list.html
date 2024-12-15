@@ -87,9 +87,9 @@
     </table>
   </div>
 
-   <script type="module">
+    <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-    import { getDatabase, ref, get, remove, update } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+    import { getDatabase, ref, get, push, remove, update } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBzefxFDTHQqXFHg9t08JTiL5EaH8si1oY",
@@ -107,6 +107,21 @@
 
     const tableBody = document.querySelector("#blacklistTable tbody");
 
+    // Функція для додавання запису в чорний список
+    async function addToBlacklist(playerId, nickname, clan, reason, days) {
+      const blacklistRef = ref(database, "blacklist");
+      const newBlacklistRef = push(blacklistRef);
+      
+      await update(newBlacklistRef, {
+        playerId,
+        nickname,
+        clan,
+        reason,
+        days,
+        createdAt: Date.now() // додаємо час створення запису
+      });
+    }
+
     // Функція для отримання та відображення даних
     async function fetchBlacklistData() {
       const blacklistRef = ref(database, "blacklist");
@@ -116,12 +131,10 @@
 
         if (snapshot.exists()) {
           const data = snapshot.val();
-          const keys = Object.keys(data); // Отримуємо всі ключі записів
+          const keys = Object.keys(data);
 
-          // Очищаємо таблицю перед додаванням нових записів
           tableBody.innerHTML = "";
 
-          // Проходимо через кожен запис і додаємо його в таблицю
           keys.forEach(key => {
             const item = data[key];
             const row = document.createElement("tr");
@@ -129,7 +142,7 @@
             row.innerHTML = `
               <td>${item.playerId}</td>
               <td>${item.nickname || "Помилка NICK #121"}</td>
-              <td>${item.clan || "Помилка GK #404"}</td>
+              <td>${item.clan || "Помилка CLAN #404"}</td>
               <td>${item.reason}</td>
               <td id="days-${key}">${item.days}</td>
             `;
@@ -160,13 +173,12 @@
           keys.forEach(key => {
             const item = data[key];
             const currentTime = Date.now();
-            const timeElapsed = currentTime - item.createdAt; // Час, що пройшов з моменту додавання
+            const timeElapsed = currentTime - item.createdAt;
 
             // Перевіряємо, чи пройшло більше ніж 24 години (1 доба)
-            const hoursPassed = timeElapsed / (1000 * 60 * 60); // перетворюємо мілісекунди на години
+            const hoursPassed = timeElapsed / (1000 * 60 * 60);
 
             if (hoursPassed >= 24) {
-              // Зменшуємо кількість днів
               const updatedDays = item.days - Math.floor(hoursPassed / 24);
               
               if (updatedDays <= 0) {
@@ -187,8 +199,9 @@
       }
     }
 
-    // Ініціалізація відображення таблиці при завантаженні сторінки
-    window.onload = fetchBlacklistData;
-  </script>
-</body>
-</html>
+    // Ініціалізація: завантаження даних і встановлення інтервалу
+    window.onload = () => {
+      fetchBlacklistData();
+      setInterval(fetchBlacklistData, 3000); // Оновлюємо список кожні 3 секунди
+    };
+    </script>
