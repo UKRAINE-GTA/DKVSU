@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ДКВС - Система управління</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comfortaa', sans-serif;
+            background: #000000;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .tablet {
+            width: 1024px;
+            height: 768px;
+            background: #15151D;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 12px solid #000;
+            box-shadow: 0 0 0 2px #333;
+        }
+
+        .tablet::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -8px;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 60px;
+            background: #333;
+            border-radius: 2px;
+        }
+
+        .tablet::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 12px;
+            background: #333;
+            border-radius: 50%;
+            border: 2px solid #555;
+        }
+
+        .auth-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 30px;
+        }
+
+        .auth-title {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.4;
+        }
+
+        .fingerprint-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .fingerprint-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .fingerprint-icon i {
+            font-size: 40px;
+            color: #fff;
+        }
+
+        .main-interface {
+            display: none;
+            width: 100%;
+            height: 100%;
+            grid-template-columns: 250px 1fr;
+        }
+
+        .sidebar {
+            background: #15151D;
+            border-right: 1px solid #2a2a3a;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .logo-section img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            background: #2a2a3a;
+        }
+
+        .nav-item:hover {
+            background: #2a2a3a;
+        }
+
+        .content {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .blacklist-form {
+            display: none;
+            background: #1A1A23;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: #2D2D34;
+            border: 1px solid #3a3a4a;
+            border-radius: 6px;
+            color: #fff;
+            font-family: 'Comfortaa', sans-serif;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn {
+            background: #1a237e;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Comfortaa', sans-serif;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #0d47a1;
+        }
+
+        .blacklist-table {
+            background: #1A1A23;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 20px;
+            border-bottom: 1px solid #2a2a3a;
+        }
+
+        .table-header h2 {
+            margin: 0;
+        }
+
+        .search-container {
+            position: relative;
+            margin: 20px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 12px 40px 12px 12px;
+            background: #2D2D34;
+            border: 1px solid #3a3a4a;
+            border-radius: 6px;
+            color: #fff;
+            font-family: 'Comfortaa', sans-serif;
+        }
+
+        .search-container i {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b6b7b;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid #2a2a3a;
+        }
+
+        th {
+            background: #2D2D34;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #2a2a3a;
+        }
+
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1A1A23;
+            padding: 20px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            z-index: 1000;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 999;
+        }
+
+        .highlight {
+            background-color: #1a237e;
+            color: #fff;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #15151D;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2a2a3a;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3a3a4a;
+        }
+
+        .main-content {
+            background: #1A1A23;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .main-content h2 {
+            margin-bottom: 15px;
+        }
+
+        .info-card {
+            background: #2D2D34;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .info-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .music-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1A1A23;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .music-controls button {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .logout-btn {
+            margin-top: auto;
+            background: #1a237e;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .logout-btn:hover {
+            background: #0d47a1;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .modal-buttons .btn {
+            width: 48%;
+        }
+    </style>
+</head>
+<body>
+    <div class="tablet">
+        <div class="auth-screen" id="authScreen">
+            <img src="https://i.imgur.com/PRjTNqr.png" alt="ДКВС Лого" class="auth-logo">
+            <h1 class="auth-title">ДЕРЖАВНА КРИМІНАЛЬНО-<br>ВИКОНАВЧА СЛУЖБА</h1>
+            <div class="fingerprint-icon" id="fingerprintAuth">
+                <i class="fas fa-fingerprint"></i>
+            </div>
+        </div>
+
+        <div class="main-interface" id="mainInterface">
+            <div class="sidebar">
+                <div class="logo-section">
+                    <img src="https://i.imgur.com/PRjTNqr.png" alt="ДКВС Лого">
+                    <span>ДКВС</span>
+                </div>
+                <nav>
+                    <div class="nav-item active" data-view="main">
+                        <i class="fas fa-home"></i>
+                        Головна
+                    </div>
+                    <div class="nav-item" data-view="blacklist">
+                        <i class="fas fa-users"></i>
+                        Чорний список
+                    </div>
+                    <div class="nav-item" data-view="add-blacklist">
+                        <i class="fas fa-user-plus"></i>
+                        Додати до ЧС
+                    </div>
+                </nav>
+                <div class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Вийти
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="main-content" id="mainContent">
+                    <h2>Інформація для працівників</h2>
+                    <div class="info-card">
+                        <h3>Останні новини</h3>
+                        <p>Оновлено систему безпеки в блоці B. Всім співробітникам пройти інструктаж до кінця тижня.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Графік чергувань</h3>
+                        <p>Новий графік чергувань на наступний місяць доступний у відділі кадрів.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Важливе повідомлення</h3>
+                        <p>Завтра о 10:00 відбудеться загальні збори всіх співробітників у конференц-залі.</p>
+                    </div>
+                </div>
+
+                <div class="blacklist-table" style="display: none;">
+                    <div class="table-header">
+                        <h2>Чорний список</h2>
+                    </div>
+                    <div class="search-container">
+                        <input type="text" id="searchInput" placeholder="Пошук за ID, нікнеймом або кланом...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID Гравця</th>
+                                <th>Нікнейм</th>
+                                <th>Клан</th>
+                                <th>Причина</th>
+                                <th>Залишилось часу</th>
+                            </tr>
+                        </thead>
+                        <tbody id="blacklistTableBody">
+                            <!-- Вміст таблиці буде додано динамічно -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="blacklist-form" id="blacklistForm" style="display: none;">
+                    <h2>Додати до Чорного Списку</h2>
+                    <form id="addToBlacklistForm">
+                        <div class="form-group">
+                            <label>ID Гравця</label>
+                            <input type="text" id="playerId" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Нікнейм</label>
+                            <input type="text" id="nickname" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Клан</label>
+                            <input type="text" id="clan">
+                        </div>
+                        <div class="form-group">
+                            <label>Причина</label>
+                            <textarea id="reason" maxlength="50" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Кількість днів</label>
+                            <input type="number" id="days" required>
+                        </div>
+                        <button type="submit" class="btn">Додати</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="login-modal" id="loginModal">
+            <h2>Авторизація</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Логін</label>
+                    <input type="text" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn">Увійти</button>
+                    <button type="button" class="btn" id="closeLoginModal">На головну</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="music-controls">
+        <button id="toggleMusic"><i class="fas fa-play"></i></button>
+        <button id="toggleSound"><i class="fas fa-volume-up"></i></button>
+    </div>
+
+    <audio id="backgroundMusic" loop>
+        <source src="https://example.com/background-music.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="clickSound" src="data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" preload="auto"></audio>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+        import { getDatabase, ref, get, push, remove, update } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBzefxFDTHQqXFHg9t08JTiL5EaH8si1oY",
+            authDomain: "dkvs-1ec88.firebaseapp.com",
+            databaseURL: "https://dkvs-1ec88-default-rtdb.firebaseio.com",
+            projectId: "dkvs-1ec88",
+            storageBucket: "dkvs-1ec88.appspot.com",
+            messagingSenderId: "167430647129",
+            appId: "1:167430647129:web:ab209fec7735f20b597048",
+            measurementId: "G-H6LKMLYD10"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        const authScreen = document.getElementById('authScreen');
+        const mainInterface = document.getElementById('mainInterface');
+        const fingerprintAuth = document.getElementById('fingerprintAuth');
+        const loginModal = document.getElementById('loginModal');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const loginForm = document.getElementById('loginForm');
+        const addToBlacklistForm = document.getElementById('addToBlacklistForm');
+        const blacklistTableBody = document.getElementById('blacklistTableBody');
+        const searchInput = document.getElementById('searchInput');
+        const navItems = document.querySelectorAll('.nav-item');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const clickSound = document.getElementById('clickSound');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const toggleMusic = document.getElementById('toggleMusic');
+        const toggleSound = document.getElementById('toggleSound');
+        const closeLoginModal = document.getElementById('closeLoginModal');
+
+        let isSoundEnabled = true;
+        let isMusicPlaying = false;
+
+        function playClickSound() {
+            if (isSoundEnabled) {
+                clickSound.currentTime = 0;
+                clickSound.play();
+            }
+        }
+
+        function toggleBackgroundMusic() {
+            if (isMusicPlaying) {
+                backgroundMusic.pause();
+                toggleMusic.innerHTML = '<i class="fas fa-play"></i>';
+            } else {
+                backgroundMusic.play();
+                toggleMusic.innerHTML = '<i class="fas fa-pause"></i>';
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        toggleMusic.addEventListener('click', () => {
+            playClickSound();
+            toggleBackgroundMusic();
+        });
+
+        toggleSound.addEventListener('click', () => {
+            playClickSound();
+            isSoundEnabled = !isSoundEnabled;
+            toggleSound.innerHTML = isSoundEnabled ? '<i class="fas fa-volume-up"></i>' : '<i class="fas fa-volume-mute"></i>';
+        });
+
+        function showView(viewName) {
+            document.getElementById('mainContent').style.display = viewName === 'main' ? 'block' : 'none';
+            document.querySelector('.blacklist-table').style.display = viewName === 'blacklist' ? 'block' : 'none';
+            document.getElementById('blacklistForm').style.display = viewName === 'add-blacklist' ? 'block' : 'none';
+
+            if (viewName === 'add-blacklist' && !isAuthenticated()) {
+                showLoginModal();
+            }
+        }
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                playClickSound();
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                showView(item.dataset.view);
+            });
+        });
+
+        fingerprintAuth.addEventListener('click', () => {
+            playClickSound();
+            authScreen.style.display = 'none';
+            mainInterface.style.display = 'grid';
+            fetchBlacklistData();
+        });
+
+        function showLoginModal() {
+            loginModal.style.display = 'block';
+            modalOverlay.style.display = 'block';
+        }
+
+        function hideLoginModal() {
+            loginModal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+        }
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            playClickSound();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (username === 'admin' && password === 'password123') {
+                localStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('authExpiration', Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+                hideLoginModal();
+                showView('add-blacklist');
+            } else {
+                alert('Невірний логін або пароль');
+            }
+        });
+
+        closeLoginModal.addEventListener('click', () => {
+            playClickSound();
+            hideLoginModal();
+            showView('main');
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            playClickSound();
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('authExpiration');
+            authScreen.style.display = 'flex';
+            mainInterface.style.display = 'none';
+        });
+
+        addToBlacklistForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            playClickSound();
+            const playerId = document.getElementById('playerId').value;
+            const nickname = document.getElementById('nickname').value;
+            const clan = document.getElementById('clan').value;
+            const reason = document.getElementById('reason').value;
+            const days = document.getElementById('days').value;
+
+            await addToBlacklist(playerId, nickname, clan, reason, days);
+            addToBlacklistForm.reset();
+        });
+
+        async function addToBlacklist(playerId, nickname, clan, reason, days) {
+            const blacklistRef = ref(database, "blacklist");
+            const newBlacklistRef = push(blacklistRef);
+
+            const expirationTime = Date.now() + days * 24 * 60 * 60 * 1000;
+
+            await update(newBlacklistRef, {
+                playerId,
+                nickname,
+                clan,
+                reason,
+                days,
+                createdAt: Date.now(),
+                expirationTime,
+            });
+
+            fetchBlacklistData();
+        }
+
+        async function fetchBlacklistData() {
+            const blacklistRef = ref(database, "blacklist");
+
+            try {
+                const snapshot = await get(blacklistRef);
+
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    const keys = Object.keys(data);
+
+                    blacklistTableBody.innerHTML = "";
+
+                    keys.forEach(key => {
+                        const item = data[key];
+                        const row = createTableRow(item, key);
+                        blacklistTableBody.appendChild(row);
+                    });
+
+                    checkAndRemoveExpiredEntries();
+                    filterTable();
+                }
+            } catch (error) {
+                console.error("Помилка при отриманні даних:", error);
+            }
+        }
+
+        function createTableRow(item, key) {
+            const row = document.createElement("tr");
+            const currentTime = Date.now();
+            const timeLeft = item.expirationTime - currentTime;
+
+            let timeString = "Час вичерпано";
+            if (timeLeft > 0) {
+                timeString = formatTimeLeft(timeLeft);
+            }
+
+            row.innerHTML = `
+                <td>${item.playerId || "Помилка ID"}</td>
+                <td>${item.nickname || "Помилка NICK"}</td>
+                <td>${item.clan || "Немає"}</td>
+                <td>${item.reason}</td>
+                <td class="time-left" data-key="${key}">${timeString}</td>
+            `;
+
+            return row;
+        }
+
+        function formatTimeLeft(timeLeft) {
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+
+            let timeString = "";
+            if (days > 0) {
+                timeString += `${days} ${days === 1 ? 'день' : days < 5 ? 'дні' : 'днів'}`;
+            }
+            if (hours > 0 || days > 0) timeString += ` ${hours} год.`;
+            timeString += ` ${minutes} хв.`;
+
+            return timeString.trim();
+        }
+
+        async function checkAndRemoveExpiredEntries() {
+            const blacklistRef = ref(database, "blacklist");
+
+            try {
+                const snapshot = await get(blacklistRef);
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    const keys = Object.keys(data);
+
+                    keys.forEach(key => {
+                        const item = data[key];
+                        if (Date.now() >= item.expirationTime) {
+                            remove(ref(database, `blacklist/${key}`));
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error("Помилка при видаленні записів:", error);
+            }
+        }
+
+        function filterTable() {
+            const filter = searchInput.value.toLowerCase();
+            const rows = blacklistTableBody.getElementsByTagName("tr");
+
+            for (let row of rows) {
+                const cells = row.getElementsByTagName("td");
+                let shouldShow = false;
+
+                for (let cell of cells) {
+                    const text = cell.textContent || cell.innerText;
+                    if (text.toLowerCase().includes(filter)) {
+                        shouldShow = true;
+                        highlightText(cell, filter);
+                    } else {
+                        removeHighlight(cell);
+                    }
+                }
+
+                row.style.display = shouldShow ? "" : "none";
+            }
+        }
+
+        function highlightText(element, filter) {
+            const text = element.textContent;
+            const regex = new RegExp(`(${filter})`, 'gi');
+            element.innerHTML = text.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        function removeHighlight(element) {
+            element.innerHTML = element.textContent;
+        }
+
+        function isAuthenticated() {
+            const isAuth = localStorage.getItem('isAuthenticated');
+            const authExpiration = localStorage.getItem('authExpiration');
+            return isAuth && authExpiration && Date.now() < parseInt(authExpiration);
+        }
+
+        searchInput.addEventListener('input', filterTable);
+
+        setInterval(() => {
+            const timeElements = document.querySelectorAll('.time-left');
+            timeElements.forEach(element => {
+                const key = element.dataset.key;
+                const blacklistRef = ref(database, `blacklist/${key}`);
+                get(blacklistRef).then(snapshot => {
+                    if (snapshot.exists()) {
+                        const item = snapshot.val();
+                        const timeLeft = item.expirationTime - Date.now();
+                        if (timeLeft > 0) {
+                            element.textContent = formatTimeLeft(timeLeft);
+                        } else {
+                            element.textContent = "Час вичерпано";
+                        }
+                    }
+                });
+            });
+        }, 60000);
+
+        setInterval(fetchBlacklistData, 300000);
+
+        window.addEventListener('load', () => {
+            if (isAuthenticated()) {
+                authScreen.style.display = 'none';
+                mainInterface.style.display = 'grid';
+                fetchBlacklistData();
+            } else {
+                authScreen.style.display = 'flex';
+                mainInterface.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
