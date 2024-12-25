@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ДКВС - Система управління</title>
+    <title>ДКВС - Ipad</title>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="https://i.imgur.com/PRjTNqr.png" type="image/png">
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
     <style>
         * {
             margin: 0;
@@ -15,18 +17,21 @@
 
         body {
             font-family: 'Comfortaa', sans-serif;
-            background: #000000;
+            background: #000000 url('https://i.imgur.com/ezSjQn5.png') no-repeat center center fixed;
+            background-size: cover;
             color: #fff;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
         .tablet {
-            width: 1024px;
-            height: 768px;
+            width: 100%;
+            max-width: 1024px;
+            height: 100vh;
+            max-height: 768px;
             background: #15151D;
             border-radius: 20px;
             position: relative;
@@ -50,11 +55,11 @@
         .tablet::after {
             content: '';
             position: absolute;
-            top: 10px;
+            top: 3px;
             left: 50%;
             transform: translateX(-50%);
-            width: 12px;
-            height: 12px;
+            width: 9px;
+            height: 9px;
             background: #333;
             border-radius: 50%;
             border: 2px solid #555;
@@ -63,7 +68,7 @@
         .auth-screen {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+            background: #007BFF;
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -157,12 +162,12 @@
             overflow-y: auto;
         }
 
-        .blacklist-form {
+        .section {
             display: none;
-            background: #1A1A23;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
+        }
+
+        .section.active {
+            display: block;
         }
 
         .form-group {
@@ -192,7 +197,7 @@
         }
 
         .btn {
-            background: #1a237e;
+            background: #007BFF;
             color: #fff;
             border: none;
             padding: 12px 24px;
@@ -203,10 +208,10 @@
         }
 
         .btn:hover {
-            background: #0d47a1;
+            background: #0056b3;
         }
 
-        .blacklist-table {
+        .table-container {
             background: #1A1A23;
             border-radius: 12px;
             overflow: hidden;
@@ -291,7 +296,7 @@
         }
 
         .highlight {
-            background-color: #1a237e;
+            background-color: #007BFF;
             color: #fff;
         }
 
@@ -334,6 +339,33 @@
             margin-bottom: 10px;
         }
 
+        .chart-container {
+            height: 300px;
+            margin-bottom: 20px;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #2D2D34;
+            border-radius: 8px;
+            padding: 15px;
+            width: 48%;
+        }
+
+        .stat-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
         .music-controls {
             position: fixed;
             bottom: 20px;
@@ -356,7 +388,7 @@
 
         .logout-btn {
             margin-top: auto;
-            background: #1a237e;
+            background: #007BFF;
             color: #fff;
             border: none;
             padding: 12px;
@@ -366,7 +398,7 @@
         }
 
         .logout-btn:hover {
-            background: #0d47a1;
+            background: #0056b3;
         }
 
         .modal-buttons {
@@ -378,22 +410,92 @@
         .modal-buttons .btn {
             width: 48%;
         }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        textarea {
+            height: 80px;
+            resize: vertical;
+        }
+
+        @media (max-width: 768px) {
+            .tablet {
+                border: none;
+                border-radius: 0;
+            }
+
+            .main-interface {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: -250px;
+                height: 100%;
+                z-index: 1000;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .content {
+                padding: 10px;
+            }
+
+            .auth-title {
+                font-size: 20px;
+            }
+
+            .fingerprint-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .fingerprint-icon i {
+                font-size: 30px;
+            }
+
+            .music-controls {
+                bottom: 10px;
+                right: 10px;
+            }
+
+            .stats-container {
+                flex-direction: column;
+            }
+
+            .stat-card {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="tablet">
         <div class="auth-screen" id="authScreen">
-            <img src="https://i.imgur.com/PRjTNqr.png" alt="ДКВС Лого" class="auth-logo">
-            <h1 class="auth-title">ДЕРЖАВНА КРИМІНАЛЬНО-<br>ВИКОНАВЧА СЛУЖБА</h1>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/KVS_logo.svg" alt="ДКВС Лого" class="auth-logo">
+            <h1 class="auth-title">ДЕРЖАВНА КРИМІНАЛЬНО-<br>ВИКОНАВЧА СЛУЖБА УКРАЇНИ</h1>
             <div class="fingerprint-icon" id="fingerprintAuth">
                 <i class="fas fa-fingerprint"></i>
             </div>
         </div>
 
         <div class="main-interface" id="mainInterface">
-            <div class="sidebar">
+            <div class="sidebar" id="sidebar">
                 <div class="logo-section">
-                    <img src="https://i.imgur.com/PRjTNqr.png" alt="ДКВС Лого">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/KVS_logo.svg" alt="ДКВС Лого">
                     <span>ДКВС</span>
                 </div>
                 <nav>
@@ -401,9 +503,17 @@
                         <i class="fas fa-home"></i>
                         Головна
                     </div>
+                    <div class="nav-item" data-view="convoy-form">
+                        <i class="fas fa-clipboard-list"></i>
+                        Форма конвою
+                    </div>
+                    <div class="nav-item" data-view="convoy-archive">
+                        <i class="fas fa-archive"></i>
+                        Архів конвоїв
+                    </div>
                     <div class="nav-item" data-view="blacklist">
                         <i class="fas fa-users"></i>
-                        Чорний список
+                        ЧС в'язнів
                     </div>
                     <div class="nav-item" data-view="add-blacklist">
                         <i class="fas fa-user-plus"></i>
@@ -417,71 +527,130 @@
             </div>
 
             <div class="content">
-                <div class="main-content" id="mainContent">
-                    <h2>Інформація для працівників</h2>
-                    <div class="info-card">
-                        <h3>Останні новини</h3>
-                        <p>Оновлено систему безпеки в блоці B. Всім співробітникам пройти інструктаж до кінця тижня.</p>
-                    </div>
-                    <div class="info-card">
-                        <h3>Графік чергувань</h3>
-                        <p>Новий графік чергувань на наступний місяць доступний у відділі кадрів.</p>
-                    </div>
-                    <div class="info-card">
-                        <h3>Важливе повідомлення</h3>
-                        <p>Завтра о 10:00 відбудеться загальні збори всіх співробітників у конференц-залі.</p>
+                <div id="main" class="section active">
+                    <div class="main-content">
+                        <h2>Інформація для працівників</h2>
+                        <div class="stats-container">
+                            <div class="stat-card">
+                                <h3>Кількість конвоїв</h3>
+                                <div class="stat-value" id="convoyCount">0</div>
+                            </div>
+                            <div class="stat-card">
+                                <h3>Особливо небезпечних в'язнів</h3>
+                                <div class="stat-value" id="blacklistCount">0</div>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <h3>Останні новини</h3>
+                            <p>На посаду підполковника призначено: Паша Зеленюк, Максим Чекатіло. На посаду майора стає Вадім Зозуля.</p>
+                        </div>
+                        <div class="info-card">
+                            <h3><p style="color: #ff0000;">ERORR #404</h3>
+                            <p><p style="color: #00ff00;">ERORR_INFO #127</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="blacklist-table" style="display: none;">
-                    <div class="table-header">
-                        <h2>Чорний список</h2>
+                <div id="convoy-form" class="section">
+                    <div class="main-content">
+                        <h2>Форма конвою</h2>
+                        <form id="convoyForm">
+                            <div class="form-group">
+                                <label for="convoy1">Nick Name конвоїра №1:</label>
+                                <input type="text" id="convoy1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="convoy2">Nick Name конвоїра №2 (якщо є):</label>
+                                <input type="text" id="convoy2">
+                            </div>
+                            <div class="form-group">
+                                <label for="prisoner1">Nick Name та ID в'язня №1:</label>
+                                <input type="text" id="prisoner1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prisoner2">Nick Name та ID в'язня №2 (якщо є):</label>
+                                <input type="text" id="prisoner2">
+                            </div>
+                            <button type="submit" class="btn">Зареєструвати конвой</button>
+                        </form>
                     </div>
-                    <div class="search-container">
-                        <input type="text" id="searchInput" placeholder="Пошук за ID, нікнеймом або кланом...">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID Гравця</th>
-                                <th>Нікнейм</th>
-                                <th>Клан</th>
-                                <th>Причина</th>
-                                <th>Залишилось часу</th>
-                            </tr>
-                        </thead>
-                        <tbody id="blacklistTableBody">
-                            <!-- Вміст таблиці буде додано динамічно -->
-                        </tbody>
-                    </table>
                 </div>
 
-                <div class="blacklist-form" id="blacklistForm" style="display: none;">
-                    <h2>Додати до Чорного Списку</h2>
-                    <form id="addToBlacklistForm">
-                        <div class="form-group">
-                            <label>ID Гравця</label>
-                            <input type="text" id="playerId" required>
+                <div id="convoy-archive" class="section">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h2>Архів конвоїв</h2>
                         </div>
-                        <div class="form-group">
-                            <label>Нікнейм</label>
-                            <input type="text" id="nickname" required>
+                        <div class="search-container">
+                            <input type="text" id="convoySearchInput" placeholder="Пошук за нікнеймом конвоїра або в'язня...">
+                            <i class="fas fa-search"></i>
                         </div>
-                        <div class="form-group">
-                            <label>Клан</label>
-                            <input type="text" id="clan">
+                        <table id="convoyArchiveTable">
+                            <thead>
+                                <tr>
+                                    <th>Дата</th>
+                                    <th>Конвоїр №1</th>
+                                    <th>Конвоїр №2</th>
+                                    <th>В'язень №1</th>
+                                    <th>В'язень №2</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="blacklist" class="section">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h2>Чорний список в'язнів</h2>
                         </div>
-                        <div class="form-group">
-                            <label>Причина</label>
-                            <textarea id="reason" maxlength="50" required></textarea>
+                        <div class="search-container">
+                            <input type="text" id="blacklistSearchInput" placeholder="Пошук за ID, нікнеймом або кланом...">
+                            <i class="fas fa-search"></i>
                         </div>
-                        <div class="form-group">
-                            <label>Кількість днів</label>
-                            <input type="number" id="days" required>
-                        </div>
-                        <button type="submit" class="btn">Додати</button>
-                    </form>
+                        <table id="blacklistTable">
+                            <thead>
+                                <tr>
+                                    <th>ID Гравця</th>
+                                    <th>Нікнейм</th>
+                                    <th>Клан</th>
+                                    <th>Причина</th>
+                                    <th>Залишилось часу</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="add-blacklist" class="section">
+                    <div class="main-content">
+                        <h2>Додати до Чорного Списку</h2>
+                        <form id="addToBlacklistForm">
+                            <div class="form-group">
+                                <label for="playerId">ID Гравця</label>
+                                <input type="text" id="playerId" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="nickname">Нікнейм</label>
+                                <input type="text" id="nickname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="clan">Клан</label>
+                                <input type="text" id="clan">
+                            </div>
+                            <div class="form-group">
+                                <label for="reason">Причина</label>
+                                <textarea id="reason" maxlength="50" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="days">Кількість днів</label>
+                                <input type="number" id="days" required>
+                            </div>
+                            <button type="submit" class="btn">Додати</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -491,11 +660,11 @@
             <h2>Авторизація</h2>
             <form id="loginForm">
                 <div class="form-group">
-                    <label>Логін</label>
+                    <label for="loginUsername">Логін</label>
                     <input type="text" id="loginUsername" required>
                 </div>
                 <div class="form-group">
-                    <label>Пароль</label>
+                    <label for="loginPassword">Пароль</label>
                     <input type="password" id="loginPassword" required>
                 </div>
                 <div class="modal-buttons">
@@ -511,15 +680,9 @@
         <button id="toggleSound"><i class="fas fa-volume-up"></i></button>
     </div>
 
-    <audio id="backgroundMusic" loop>
-        <source src="https://example.com/background-music.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="clickSound" src="data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" preload="auto"></audio>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-        import { getDatabase, ref, get, push, remove, update } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
-
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script>
         const firebaseConfig = {
             apiKey: "AIzaSyBzefxFDTHQqXFHg9t08JTiL5EaH8si1oY",
             authDomain: "dkvs-1ec88.firebaseapp.com",
@@ -531,8 +694,8 @@
             measurementId: "G-H6LKMLYD10"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
         const authScreen = document.getElementById('authScreen');
         const mainInterface = document.getElementById('mainInterface');
@@ -541,35 +704,43 @@
         const modalOverlay = document.getElementById('modalOverlay');
         const loginForm = document.getElementById('loginForm');
         const addToBlacklistForm = document.getElementById('addToBlacklistForm');
-        const blacklistTableBody = document.getElementById('blacklistTableBody');
-        const searchInput = document.getElementById('searchInput');
+        const convoyForm = document.getElementById('convoyForm');
+        const blacklistTableBody = document.getElementById('blacklistTable').getElementsByTagName('tbody')[0];
+        const convoyArchiveTableBody = document.getElementById('convoyArchiveTable').getElementsByTagName('tbody')[0];
+        const blacklistSearchInput = document.getElementById('blacklistSearchInput');
+        const convoySearchInput = document.getElementById('convoySearchInput');
         const navItems = document.querySelectorAll('.nav-item');
         const logoutBtn = document.getElementById('logoutBtn');
-        const clickSound = document.getElementById('clickSound');
-        const backgroundMusic = document.getElementById('backgroundMusic');
         const toggleMusic = document.getElementById('toggleMusic');
         const toggleSound = document.getElementById('toggleSound');
         const closeLoginModal = document.getElementById('closeLoginModal');
+        const sidebar = document.getElementById('sidebar');
 
         let isSoundEnabled = true;
         let isMusicPlaying = false;
+        let backgroundMusic;
 
         function playClickSound() {
             if (isSoundEnabled) {
-                clickSound.currentTime = 0;
-                clickSound.play();
+                const audio = new Audio('data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
+                audio.play();
             }
         }
 
         function toggleBackgroundMusic() {
+            if (!backgroundMusic) {
+                backgroundMusic = new Audio('https://example.com/background-music.mp3');
+                backgroundMusic.loop = true;
+            }
+
             if (isMusicPlaying) {
                 backgroundMusic.pause();
-                toggleMusic.innerHTML = '<i class="fas fa-play"></i>';
             } else {
-                backgroundMusic.play();
-                toggleMusic.innerHTML = '<i class="fas fa-pause"></i>';
+                backgroundMusic.play().catch(error => console.error("Помилка відтворення музики:", error));
             }
+
             isMusicPlaying = !isMusicPlaying;
+            toggleMusic.innerHTML = isMusicPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
         }
 
         toggleMusic.addEventListener('click', () => {
@@ -584,9 +755,8 @@
         });
 
         function showView(viewName) {
-            document.getElementById('mainContent').style.display = viewName === 'main' ? 'block' : 'none';
-            document.querySelector('.blacklist-table').style.display = viewName === 'blacklist' ? 'block' : 'none';
-            document.getElementById('blacklistForm').style.display = viewName === 'add-blacklist' ? 'block' : 'none';
+            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+            document.getElementById(viewName).classList.add('active');
 
             if (viewName === 'add-blacklist' && !isAuthenticated()) {
                 showLoginModal();
@@ -599,6 +769,9 @@
                 navItems.forEach(nav => nav.classList.remove('active'));
                 item.classList.add('active');
                 showView(item.dataset.view);
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
+                }
             });
         });
 
@@ -607,6 +780,8 @@
             authScreen.style.display = 'none';
             mainInterface.style.display = 'grid';
             fetchBlacklistData();
+            fetchConvoyData();
+            updateStats();
         });
 
         function showLoginModal() {
@@ -660,15 +835,29 @@
 
             await addToBlacklist(playerId, nickname, clan, reason, days);
             addToBlacklistForm.reset();
+            alert('Запис успішно додано до чорного списку!');
+        });
+
+        convoyForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            playClickSound();
+            const convoy1 = document.getElementById('convoy1').value;
+            const convoy2 = document.getElementById('convoy2').value;
+            const prisoner1 = document.getElementById('prisoner1').value;
+            const prisoner2 = document.getElementById('prisoner2').value;
+
+            await addConvoy(convoy1, convoy2, prisoner1, prisoner2);
+            convoyForm.reset();
+            alert('Конвой успішно зареєстровано!');
         });
 
         async function addToBlacklist(playerId, nickname, clan, reason, days) {
-            const blacklistRef = ref(database, "blacklist");
-            const newBlacklistRef = push(blacklistRef);
+            const blacklistRef = database.ref("blacklist");
+            const newBlacklistRef = blacklistRef.push();
 
             const expirationTime = Date.now() + days * 24 * 60 * 60 * 1000;
 
-            await update(newBlacklistRef, {
+            await newBlacklistRef.set({
                 playerId,
                 nickname,
                 clan,
@@ -681,11 +870,52 @@
             fetchBlacklistData();
         }
 
+        async function addConvoy(convoy1, convoy2, prisoner1, prisoner2) {
+            const convoyRef = database.ref("convoys");
+            const newConvoyRef = convoyRef.push();
+
+            await newConvoyRef.set({
+                convoy1,
+                convoy2,
+                prisoner1,
+                prisoner2,
+                timestamp: Date.now()
+            });
+
+            // Оновлюємо лічильник конвоїв
+            const counterRef = database.ref('counter');
+            const currentCount = (await counterRef.once('value')).val() || 0;
+            await counterRef.set(currentCount + 1);
+
+            // Відправка даних на Discord webhook
+            await sendToDiscord({ convoy1, convoy2, prisoner1, prisoner2 });
+
+            fetchConvoyData();
+            updateStats();
+        }
+
+        async function sendToDiscord(data) {
+            const webhookUrl = "https://discord.com/api/webhooks/1315033282663940106/LwG48yjgoZ031k_mjsYGJwPd5TVDH6TZneNQR9-akM7vy9cRfNi28dhL7BdMUvuESmlI";
+            try {
+                await fetch(webhookUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        username: "UKRAINE GTA | 02",
+                        avatar_url: "https://i.imgur.com/2Kwd6vU.png",
+                        content: `# <a:alert:1214621954187731015> Зроблено новий конвой!\n## <:policepanda:1073299171999764591>Конвоїр №1: ${data.convoy1}\n## <:policepanda:1073299171999764591>Конвоїр №2: ${data.convoy2 || "—"}\n\n## <:Group7:1317828933189898320>В'язень №1: ${data.prisoner1}\n## <:Group7:1317828933189898320>В'язень №2: ${data.prisoner2 || "—"}`
+                    }),
+                });
+            } catch (error) {
+                console.error("Помилка відправки на Discord:", error);
+            }
+        }
+
         async function fetchBlacklistData() {
-            const blacklistRef = ref(database, "blacklist");
+            const blacklistRef = database.ref("blacklist");
 
             try {
-                const snapshot = await get(blacklistRef);
+                const snapshot = await blacklistRef.once('value');
 
                 if (snapshot.exists()) {
                     const data = snapshot.val();
@@ -695,19 +925,44 @@
 
                     keys.forEach(key => {
                         const item = data[key];
-                        const row = createTableRow(item, key);
+                        const row = createBlacklistTableRow(item, key);
                         blacklistTableBody.appendChild(row);
                     });
 
                     checkAndRemoveExpiredEntries();
-                    filterTable();
+                    filterBlacklistTable();
                 }
             } catch (error) {
-                console.error("Помилка при отриманні даних:", error);
+                console.error("Помилка при отриманні даних чорного списку:", error);
             }
         }
 
-        function createTableRow(item, key) {
+        async function fetchConvoyData() {
+            const convoyRef = database.ref("convoys");
+
+            try {
+                const snapshot = await convoyRef.once('value');
+
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    const keys = Object.keys(data);
+
+                    convoyArchiveTableBody.innerHTML = "";
+
+                    keys.sort((a, b) => data[b].timestamp - data[a].timestamp).forEach(key => {
+                        const item = data[key];
+                        const row = createConvoyTableRow(item);
+                        convoyArchiveTableBody.appendChild(row);
+                    });
+
+                    filterConvoyTable();
+                }
+            } catch (error) {
+                console.error("Помилка при отриманні даних конвоїв:", error);
+            }
+        }
+
+        function createBlacklistTableRow(item, key) {
             const row = document.createElement("tr");
             const currentTime = Date.now();
             const timeLeft = item.expirationTime - currentTime;
@@ -728,6 +983,18 @@
             return row;
         }
 
+        function createConvoyTableRow(item) {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${new Date(item.timestamp).toLocaleString('uk-UA')}</td>
+                <td>${item.convoy1}</td>
+                <td>${item.convoy2 || "—"}</td>
+                <td>${item.prisoner1}</td>
+                <td>${item.prisoner2 || "—"}</td>
+            `;
+            return row;
+        }
+
         function formatTimeLeft(timeLeft) {
             const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
             const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -744,10 +1011,10 @@
         }
 
         async function checkAndRemoveExpiredEntries() {
-            const blacklistRef = ref(database, "blacklist");
+            const blacklistRef = database.ref("blacklist");
 
             try {
-                const snapshot = await get(blacklistRef);
+                const snapshot = await blacklistRef.once('value');
                 if (snapshot.exists()) {
                     const data = snapshot.val();
                     const keys = Object.keys(data);
@@ -755,7 +1022,7 @@
                     keys.forEach(key => {
                         const item = data[key];
                         if (Date.now() >= item.expirationTime) {
-                            remove(ref(database, `blacklist/${key}`));
+                            blacklistRef.child(key).remove();
                         }
                     });
                 }
@@ -764,9 +1031,31 @@
             }
         }
 
-        function filterTable() {
-            const filter = searchInput.value.toLowerCase();
+        function filterBlacklistTable() {
+            const filter = blacklistSearchInput.value.toLowerCase();
             const rows = blacklistTableBody.getElementsByTagName("tr");
+
+            for (let row of rows) {
+                const cells = row.getElementsByTagName("td");
+                let shouldShow = false;
+
+                for (let cell of cells) {
+                    const text = cell.textContent || cell.innerText;
+                    if (text.toLowerCase().includes(filter)) {
+                        shouldShow = true;
+                        highlightText(cell, filter);
+                    } else {
+                        removeHighlight(cell);
+                    }
+                }
+
+                row.style.display = shouldShow ? "" : "none";
+            }
+        }
+
+        function filterConvoyTable() {
+            const filter = convoySearchInput.value.toLowerCase();
+            const rows = convoyArchiveTableBody.getElementsByTagName("tr");
 
             for (let row of rows) {
                 const cells = row.getElementsByTagName("td");
@@ -802,14 +1091,14 @@
             return isAuth && authExpiration && Date.now() < parseInt(authExpiration);
         }
 
-        searchInput.addEventListener('input', filterTable);
+        blacklistSearchInput.addEventListener('input', filterBlacklistTable);
+        convoySearchInput.addEventListener('input', filterConvoyTable);
 
         setInterval(() => {
             const timeElements = document.querySelectorAll('.time-left');
             timeElements.forEach(element => {
                 const key = element.dataset.key;
-                const blacklistRef = ref(database, `blacklist/${key}`);
-                get(blacklistRef).then(snapshot => {
+                database.ref(`blacklist/${key}`).once('value').then(snapshot => {
                     if (snapshot.exists()) {
                         const item = snapshot.val();
                         const timeLeft = item.expirationTime - Date.now();
@@ -824,17 +1113,111 @@
         }, 60000);
 
         setInterval(fetchBlacklistData, 300000);
+        setInterval(fetchConvoyData, 300000);
+
+        function updateStats() {
+            database.ref('counter').once('value').then(snapshot => {
+                const convoyCount = snapshot.val() || 0;
+                document.getElementById('convoyCount').textContent = convoyCount;
+            });
+
+            database.ref('blacklist').once('value').then(snapshot => {
+                const blacklistCount = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+                document.getElementById('blacklistCount').textContent = blacklistCount;
+            });
+
+            updateConvoyChart();
+        }
+
+        function updateConvoyChart() {
+            database.ref('convoys').once('value').then(snapshot => {
+                if (snapshot.exists()) {
+                    const convoys = snapshot.val();
+                    const convoyDates = Object.values(convoys).map(convoy => new Date(convoy.timestamp).toLocaleDateString('uk-UA'));
+                    const convoyCountByDate = convoyDates.reduce((acc, date) => {
+                        acc[date] = (acc[date] || 0) + 1;
+                        return acc;
+                    }, {});
+
+                    const chartData = Object.entries(convoyCountByDate).map(([date, count]) => [date, count]);
+                    chartData.unshift(['Дата', 'Кількість конвоїв']);
+
+                    google.charts.load('current', {'packages':['corechart']});
+                    google.charts.setOnLoadCallback(() => {
+                        const data = google.visualization.arrayToDataTable(chartData);
+                        const options = {
+                            title: 'Кількість конвоїв за датами',
+                            curveType: 'function',
+                            legend: { position: 'bottom' },
+                            backgroundColor: { fill:'transparent' },
+                            colors: ['#007BFF'],
+                            titleTextStyle: { color: '#FFF' },
+                            hAxis: { textStyle: { color: '#FFF' } },
+                            vAxis: { textStyle: { color: '#FFF' } },
+                            legend: { textStyle: { color: '#FFF' } }
+                        };
+                        const chart = new google.visualization.LineChart(document.getElementById('convoyChart'));
+                        chart.draw(data, options);
+                    });
+                }
+            });
+        }
 
         window.addEventListener('load', () => {
             if (isAuthenticated()) {
                 authScreen.style.display = 'none';
                 mainInterface.style.display = 'grid';
                 fetchBlacklistData();
+                fetchConvoyData();
+                updateStats();
             } else {
                 authScreen.style.display = 'flex';
                 mainInterface.style.display = 'none';
             }
         });
+
+        // Додаємо обробник для відкриття/закриття бічної панелі на мобільних пристроях
+        const menuToggle = document.createElement('button');
+        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+        menuToggle.classList.add('menu-toggle');
+        menuToggle.style.cssText = `
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1001;
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        `;
+        document.body.appendChild(menuToggle);
+
+        menuToggle.addEventListener('click', () => {
+            playClickSound();
+            sidebar.classList.toggle('active');
+        });
+
+        function handleResize() {
+            if (window.innerWidth <= 768) {
+                menuToggle.style.display = 'block';
+                sidebar.classList.remove('active');
+            } else {
+                menuToggle.style.display = 'none';
+                sidebar.classList.remove('active');
+            }
+        }
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+      
+          window.onload = () => {
+      fetchBlacklistData();
+      setInterval(fetchBlacklistData, 3000);
+      setInterval(updateTimeLeft, 60000);
+    };
     </script>
 </body>
 </html>
