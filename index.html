@@ -4,46 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ДКВСУ м.Дніпро</title>
-   <link rel="icon" href="https://i.imgur.com/PRjTNqr.png" type="image/png">
+    <link rel="icon" href="https://i.imgur.com/PRjTNqr.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
-  <!-- Підключення Font Awesome з CDN -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-      body {
-    font-family: 'Comfortaa', sans-serif;
-    margin: 0;
-    padding: 90px;
-    display: flex;
-    flex-direction: column; /* Встановлюємо вертикальне розташування для всіх елементів */
-    background: #000000 url('https://i.imgur.com/8I4wQ0P.png'); /* Заміна на реальний URL */
-    background-size: cover; /* Зображення покриває весь екран */
-    background-position: center center; /* Центрування фото */
-    background-repeat: no-repeat; /* Фото не повторюється */
-    background-attachment: fixed; /* Фон статичний при прокручуванні */
-    color: #fff;
-    line-height: 1.6;
-}
-
+        body {
+            font-family: 'Comfortaa', sans-serif;
+            margin: 0;
+            padding: 90px;
+            display: flex;
+            flex-direction: column;
+            background: #000000 url('https://i.imgur.com/8I4wQ0P.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            line-height: 1.6;
+        }
 
         .main-container {
             display: flex;
-            justify-content: space-between; /* Розміщуємо текст зліва, а фото справа */
+            justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px; /* Відстань між головною частиною і галереєю */
+            margin-bottom: 40px;
         }
 
-      .viddil-container {
-         display: flex;
-    justify-content: flex-end; /* Вирівнювання контейнера з текстом до правого краю */
-    align-items: center; /* Центруємо текст по вертикалі */
-            idth: 100%;
+        .viddil-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            width: 100%;
             height: 100%;
-      }
-      
-      
+        }
+
         .text-container {
-            width: 55%; /* Текст займає 45% ширини */
+            width: 55%;
         }
 
         .text-container h1 {
@@ -55,99 +48,79 @@
             font-size: 50px;
             line-height: 1.5;
         }
-      
-    
+
         .image-container {
-            width: 40%; /* Фото займає 45% ширини */
-          
+            width: 40%;
         }
-      
+
         .image-container img {
             width: 100%;
             height: auto;
             border-radius: 0px;
         }
-      
- /* Контейнер для секції з шаховим порядком */
-.final-photo-section {
-    display: flex;
-    flex-wrap: wrap; /* Дозволяємо перенос фото */
-    gap: 30px; /* Відстань між елементами */
-    justify-content: space-between; /* Простір між блоками */
-    margin-top: 40px;
-}
 
-/* Контейнер для кожного фото */
-.final-photo-box {
-    position: relative;
-    width: 45%; /* 45% ширини */
-    border-radius: 10px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.3s ease-in-out; /* Плавний перехід для контейнера */
-}
+        .final-photo-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
 
-/* Вирівнювання по лівому краю */
-.final-photo-box.left {
-    margin-left: 0;
-    margin-right: auto; /* Зсунемо вправо залишки простору */
-}
+        .final-photo-box {
+            position: relative;
+            width: 45%;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease-in-out;
+        }
 
-/* Вирівнювання по правому краю */
-.final-photo-box.right {
-    margin-left: auto; /* Зсунемо вліво залишки простору */
-    margin-right: 0;
-}
+        .final-photo-box.left {
+            margin-left: 0;
+            margin-right: auto;
+        }
 
-/* Фото всередині */
-.final-photo {
-    width: 100%; /* Займає всю ширину батьківського контейнера */
-    height: auto; /* Висота адаптується під пропорції зображення */
-    opacity: 0; /* Початково приховане */
-    transform: translateY(20px); /* Початково трохи зсунуте вниз */
-    transition: opacity 1s ease, transform 1s ease; /* Плавний перехід */
-}
+        .final-photo-box.right {
+            margin-left: auto;
+            margin-right: 0;
+        }
 
-/* Активна анімація */
-.final-photo.visible {
-    opacity: 1;
-    transform: translateY(0); /* Повернення в початкову позицію */
-}
+        .final-photo {
+            width: 100%;
+            height: auto;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
 
-/* Анімація при наведенні на фото */
-.final-photo-box:hover .final-photo {
-    transform: scale(1.05); /* Збільшуємо зображення на 5% */
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Легка тінь */
-}
+        .final-photo.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-/* Адаптивність */
-@media (max-width: 768px) {
-    .final-photo-box {
-        width: 100%; /* На малих екранах фото займають всю ширину */
-        margin-left: 0;
-        margin-right: 0;
-    }
-}
+        .final-photo-box:hover .final-photo {
+            transform: scale(1.05);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+        }
 
-      
-      
-      .head-children {
-        text-align: center;
-        padding: 0px
-      }
-      
-      .viddil {
-        text-align: left;
-      }
+        .head-children {
+            text-align: center;
+            padding: 0px;
+        }
+
+        .viddil {
+            text-align: left;
+        }
 
         .gallery {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
             justify-content: center;
-            margin-top: 40px; /* Відстань між головною частиною і галереєю */
+            margin-top: 40px;
         }
 
         .photo-container {
@@ -156,8 +129,8 @@
             overflow: hidden;
             width: 300px;
             height: 200px;
-          outline: 1px solid #959390;
-outline-offset: 0px;
+            outline: 1px solid #959390;
+            outline-offset: 0px;
         }
 
         .photo {
@@ -166,198 +139,155 @@ outline-offset: 0px;
             object-fit: cover;
         }
 
-      
-      
-      
-    /* Контейнер для панелей, щоб розташувати кнопки зліва і справа */
-.container {
-  display: flex;
-  justify-content: space-between; /* Розставляє контейнери зліва і справа */
-  gap: 20px; /* Відстань між панелями */
-  flex-wrap: wrap; /* Замість того щоб стискати, панелі переходять на новий рядок при маленькій ширині */
-  width: 100%;
-}
+        .container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
 
-/* Ліва панель */
-.accordion-container-left {
-  width: 45%; /* Задаємо ширину для лівої панелі */
-  box-sizing: border-box;
-}
+        .accordion-container-left, .accordion-container-right {
+            width: 45%;
+            box-sizing: border-box;
+        }
 
-/* Права панель */
-.accordion-container-right {
-  width: 45%; /* Задаємо ширину для правої панелі */
-  box-sizing: border-box;
-  text-align: right; /* Вирівнювання кнопки праворуч */
-}
+        .accordion-container-right {
+            text-align: right;
+        }
 
-/* Кнопки аккордеону */
-.accordion,
-.accordion-right {
-  background-color: #0F0F16;
-  color: #fff;
-  cursor: pointer;
-  padding: 18px;
-  width: 100%; /* Кнопки займають всю ширину контейнера */
-  text-align: left;
-  border: none;
-  outline: none;
-  font-size: 20px;
-  transition: 0.3s;
-  border-radius: 10px;
-}
+        .accordion, .accordion-right {
+            background-color: #0F0F16;
+            color: #fff;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            text-align: left;
+            border: none;
+            outline: none;
+            font-size: 20px;
+            transition: 0.3s;
+            border-radius: 10px;
+        }
 
-.accordion:hover,
-.accordion-right:hover {
-  background-color: #15151D;
-}
+        .accordion:hover, .accordion-right:hover {
+            background-color: #15151D;
+        }
 
-/* Панелі (ліва і права) */
-.panel,
-.panel-right {
-  padding: 0 18px;
-  background-color: #15151D;
-  color: #fff;
-  border-radius: 10px;
-  margin-top: 10px;
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: max-height 0.5s ease, opacity 0.5s ease;
-  width: 100%; /* Панель займає всю ширину контейнера */
-  box-sizing: border-box;
-}
+        .panel, .panel-right {
+            padding: 0 18px;
+            background-color: #15151D;
+            color: #fff;
+            border-radius: 10px;
+            margin-top: 10px;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.5s ease, opacity 0.5s ease;
+            width: 100%;
+            box-sizing: border-box;
+        }
 
-/* Ліва панель: текст вирівнюється по лівому краю */
-.panel {
-  text-align: left;
-}
+        .panel {
+            text-align: left;
+        }
 
-/* Права панель: текст вирівнюється по лівому краю */
-.panel-right {
-  text-align: left; /* Змінено для вирівнювання тексту в правій панелі по лівому краю */
-}
+        .panel-right {
+            text-align: left;
+        }
 
-.panel.show,
-.panel-right.show {
-  max-height: 500px;
-  opacity: 1;
-}
+        .panel.show, .panel-right.show {
+            max-height: 500px;
+            opacity: 1;
+        }
 
-/* Іконки */
-.siry-icon {
-  margin-right: 10px;
-}
+        .siry-icon {
+            margin-right: 10px;
+        }
 
-.zolotoy-icon {
-  color: gold;
-}
+        .zolotoy-icon {
+            color: gold;
+        }
 
-.grin-icon {
-  color: #4CAF50;
-}
+        .grin-icon {
+            color: #4CAF50;
+        }
 
-/* Медіа-запит для мобільних пристроїв */
-@media (max-width: 930px) {
-  .accordion-container-left,
-  .accordion-container-right {
-    width: 100%; /* Панелі займають всю ширину на мобільних пристроях */
-    text-align: left; /* Вирівнювання кнопок на мобільних пристроях */
-  }
-  .panel,
-  .panel-right {
-    width: 100%; /* Панелі займають всю ширину на мобільних пристроях */
-  }
-}
-    
-.custombl-button {
-  display: inline-flex; /* Відображення кнопки як компактного блоку */
-  align-items: center; /* Центрування вмісту кнопки по вертикалі */
-  justify-content: center; /* Центрування по горизонталі */
-  background-color: #15151D; /* Фон кнопки */
-  color: #fff; /* Колір тексту */
-  text-decoration: none; /* Заборона підкреслення для тексту */
-  font-size: 16px; /* Розмір тексту */
-  padding: 10px 20px; /* Внутрішні відступи кнопки */
-  border-radius: 10px; /* Заокруглення куточків */
-  border: 2px solid transparent; /* Рамка кнопки */
-  transition: background-color 0.3s ease, border-color 0.3s ease; /* Анімація переходу кольору */
-  cursor: pointer; /* Вказівник миші */
-  width: 250px; /* Автоматична ширина кнопки, або задайте конкретне значення */
-  height: auto; /* Автоматична висота */
-}
+        .custombl-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #15151D;
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            cursor: pointer;
+            width: 250px;
+            height: auto;
+        }
 
-.custombl-button:hover {
-  background-color: #007BFF; /* Фон кнопки при наведенні */
-  color: #fff; /* Колір тексту при наведенні */
-  border-color: #007BFF; /* Рамка змінюється на синю */
-}
+        .custombl-button:hover {
+            background-color: #007BFF;
+            color: #fff;
+            border-color: #007BFF;
+        }
 
-      
-      
-      
-      /* Контейнер для кнопок */
-.button-container {
-  display: flex;
-  justify-content: center; /* Центрування по горизонталі */
-  align-items: center; /* Центрування по вертикалі */
-  gap: 20px; /* Відстань між кнопками */
-  height: 50px; /* Займає всю висоту сторінки */
-  margin: 0;
-}
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            height: 50px;
+            margin: 0;
+        }
 
-/* Кнопка */
-.custom-button {
-  display: flex;
-  flex-direction: left; /* Лого над текстом */
-  align-items: center; /* Центрування вмісту кнопки */
-  justify-content: center;
-  background-color: #15151D;
-  color: #fff;
-  text-decoration: none;
-  font-size: 16px;
-  padding: 20px;
-  width: 2500px;
-  height: 20px;
-  border-radius: 10px;
-  transition: background-color 0.3s ease;
-  text-align: center;
-}
+        .custom-button {
+            display: flex;
+            flex-direction: left;
+            align-items: center;
+            justify-content: center;
+            background-color: #15151D;
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 20px;
+            width: 250px;
+            height: 20px;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+            text-align: center;
+        }
 
-/* Іконка Telegram */
-.button-icon {
-  font-size: 20px;
-  margin-bottom: 0px;
-  color: #0088cc; /* Колір Telegram */
-}
+        .button-icon {
+            font-size: 20px;
+            margin-bottom: 0px;
+            color: #0088cc;
+        }
 
-/* Текст кнопки */
-.button-text {
-  font-size: 14px;
-  color: #fff;
-}
+        .button-text {
+            font-size: 14px;
+            color: #fff;
+        }
 
-/* Ховер-ефект */
-.custom-button:hover {
-  background-color: #202020;
-}
+        .custom-button:hover {
+            background-color: #202020;
+        }
 
-      
-      
-      .animate-on-scroll {
-  opacity: 0; /* Початково невидимий */
-  transform: translateY(50px); /* Початкове положення нижче */
-  transition: opacity 2s ease-out, transform 2s ease-out; /* Плавна анімація */
-}
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 2s ease-out, transform 2s ease-out;
+        }
 
-.animate-on-scroll.visible {
-  opacity: 1; /* Робимо видимим */
-  transform: translateY(0); /* Переміщуємо на початкову позицію */
-}
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-
-
-          
         .photo-overlay {
             position: absolute;
             top: 0;
@@ -413,131 +343,147 @@ outline-offset: 0px;
             font-size: 14px;
             font-weight: 300;
         }
-      .fas {
-    color: #FF6347; /* Помаранчевий колір */
-}
-      .red-icon {
-    color: #13175e; /* Червоний колір */
-}
-      
-      .siry-icon {
-    color: #505050; 
-      }
-      
-      .yelow-icon {
-        color: #ffcb00; /* Червоний колір */
-        font-size: 25px;
-}
-      
-      
-            .zolotoy-icon {
-        color: #FFD900; /* Червоний колір */
-        font-size: 25px;
-}
-      
-      .grin-icon {
-        color: #51FF00; /* Червоний колір */
-        font-size: 10px;
-        opacity:0.4;
-}
-      
-.blacklist-icon {
-  color: #505050; /* Жовтий колір */
-  font-size: 25px; /* Розмір іконки */
-  display: inline-block; /* Забезпечує універсальне позиціонування */
-  vertical-align: middle; /* Для вирівнювання по текстовій лінії, якщо потрібно */
-  margin-right: 10px; /* Додає відступ, якщо поруч є текст */
-}
 
+        .fas {
+            color: #FF6347;
+        }
 
-      
+        .red-icon {
+            color: #13175e;
+        }
 
-        /* Для адаптивності */
+        .siry-icon {
+            color: #505050;
+        }
+
+        .yelow-icon {
+            color: #ffcb00;
+            font-size: 25px;
+        }
+
+        .zolotoy-icon {
+            color: #FFD900;
+            font-size: 25px;
+        }
+
+        .grin-icon {
+            color: #51FF00;
+            font-size: 10px;
+            opacity: 0.4;
+        }
+
+        .blacklist-icon {
+            color: #505050;
+            font-size: 25px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #007BFF;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #0056b3;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #15151D;
+            border-radius: 4px;
+        }
+
         @media (max-width: 768px) {
-            .photo-container {
-                width: 45%; /* 2 фото в рядок */
+            body {
+                padding: 20px;
             }
+
             .main-container {
-                flex-direction: column; /* На малих екранах текст та фото підряд */
-                align-items: center;
+                flex-direction: column;
             }
-            .text-container,
-          
-            .image-container {
+
+            .text-container, .image-container {
                 width: 100%;
+            }
+
+            .photo-container {
+                width: 45%;
+            }
+
+            .accordion-container-left, .accordion-container-right {
+                width: 100%;
+                text-align: left;
+            }
+
+            .panel, .panel-right {
+                width: 100%;
+            }
+
+            .button-container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .custom-button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .final-photo-box {
+                width: 100%;
+                margin-left: 0;
+                margin-right: 0;
             }
         }
 
         @media (max-width: 480px) {
             .photo-container {
-                width: 100%; /* 1 фото в рядок */
+                width: 100%;
             }
         }
-
-            /* Кастомний стиль для вертикального і горизонтального повзунка */
-    ::-webkit-scrollbar {
-      width: 8px; /* Товщина вертикального повзунка */
-      height: 8px; /* Товщина горизонтального повзунка */
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background-color: #007BFF; /* Синій колір для повзунка */
-      border-radius: 4px; /* Округлені кути */
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background-color: #0056b3; /* Темніший синій при наведенні */
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #15151D; /* Колір фону треку (області для повзунка) */
-      border-radius: 4px; /* Округлені кути треку */
-    }
-        
     </style>
 </head>
 <body>
-    <!-- Головна частина: текст зліва і фото справа -->
     <div class="main-container">
         <div class="text-container">
-            <h2 class="animate-on-scroll"><span style="color: #0079ff;">Державна кримінально-виконавча служба України</span></p></h2>
-          <h3 class="animate-on-scroll">Державна кримінально-виконавча служба України – на захисті закону та правопорядку!<h3>
+            <h2 class="animate-on-scroll"><span style="color: #0079ff;">Державна кримінально-виконавча служба України</span></h2>
+            <h3 class="animate-on-scroll">Державна кримінально-виконавча служба України – на захисті закону та правопорядку!</h3>
             <h4>Державна кримінально-виконавча служба України забезпечує виконання покарань, призначених судами, і сприяє реабілітації осіб, що відбувають покарання, забезпечуючи їх соціальну адаптацію. Ми боремося з правопорушеннями, відновлюємо справедливість та підтримуємо правопорядок.
 
-<br><br>Обираючи службу в ДКВС, ви стаєте частиною команди, яка виконує важливу місію для забезпечення безпеки та захисту законності. Ваша відданість та відповідальність допоможуть у боротьбі зі злочинністю та відновленні порядку.
+            <br><br>Обираючи службу в ДКВС, ви стаєте частиною команди, яка виконує важливу місію для забезпечення безпеки та захисту законності. Ваша відданість та відповідальність допоможуть у боротьбі зі злочинністю та відновленні порядку.
 
-<br><br>Приєднуйся до <a href="https://ukraine-gta.github.io/DKVSU/ip">ДКВС</a> 「Клікабельно」— працюй на благо правопорядку та справедливості!<h4>
+            <br><br>Приєднуйся до <a href="https://ukraine-gta.github.io/DKVSU/ip">ДКВС</a> 「Клікабельно」— працюй на благо правопорядку та справедливості!</h4>
         </div>
         <div class="image-container">
-          
             <img src="https://i.imgur.com/J00IHJ0.png" alt="Фото">
         </div>
     </div>
-           <br>
-           <div><span style="color: #ffcb00;">
-    <i class="fas fa-truck yelow-icon"></i>
-    <span id="counter">0</span>
-</span></p></div>
-            
-                     
-            
-            <div><span style="color: #ffcb00;"><i class="fas fa-users yelow-icon"></i> Кількість активних працівників: 21+</span></p>
-            </div>
-      
-        <a href="https://ukraine-gta.github.io/DKVSU/blacklist-list" class="custombl-button">
-    <span class="button-text"><i class="fas fa-address-book blacklist-icon"></i>Чорний список в'язнів</span>
-  </a>
-      <br>
-       <a href="https://ukraine-gta.github.io/DKVSU/blacklist-form" class="custombl-button">
-    <span class="button-text"><i class="fas fa-shield blacklist-icon"></i> Реєстрація в'язнів у ЧС</span>
-  </a>
-      
-     
-    <!-- Галерея фото -->
-            <div class="head-children">
-              <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
-            <h1 class="animate-on-scroll"><span style="color: #C04422;">Вище керівництво ДКВС м.Дніпро</span></p></h>
-  </div>
+    <br>
+    <div><span style="color: #ffcb00;">
+        <i class="fas fa-truck yelow-icon"></i>
+        <span id="counter">0</span>
+    </span></div>
+    
+    <div><span style="color: #ffcb00;"><i class="fas fa-users yelow-icon"></i> Кількість активних працівників: 21+</span></div>
+    
+    <a href="https://ukraine-gta.github.io/DKVSU/blacklist-list" class="custombl-button">
+        <span class="button-text"><i class="fas fa-address-book blacklist-icon"></i>Чорний список в'язнів</span>
+    </a>
+    <br>
+    <a href="https://ukraine-gta.github.io/DKVSU/blacklist-form" class="custombl-button">
+        <span class="button-text"><i class="fas fa-shield blacklist-icon"></i> Реєстрація в'язнів у ЧС</span>
+    </a>
+    
+    <div class="head-children">
+        <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
+        <h1 class="animate-on-scroll"><span style="color: #C04422;">Вище керівництво ДКВС м.Дніпро</span></h1>
+    </div>
               
     <div class="gallery">
         <div class="photo-container">
@@ -559,7 +505,7 @@ outline-offset: 0px;
                     <p>Моана Ескобар</p>
                 </div>
             </div>
-            <img src="https://i.imgur.com/F9GIuIa.png" alt="Фото 4" class="photo">
+            <img src="https://i.imgur.com/F9GIuIa.png" alt="Фото 2" class="photo">
         </div>
 
         <div class="photo-container">
@@ -570,7 +516,7 @@ outline-offset: 0px;
                     <p>Вітто Скалета</p>
                 </div>
             </div>
-            <img src="https://i.imgur.com/UNdkNdi.png" alt="Фото 5" class="photo">
+            <img src="https://i.imgur.com/UNdkNdi.png" alt="Фото 3" class="photo">
         </div>
 
         <div class="photo-container">
@@ -581,15 +527,14 @@ outline-offset: 0px;
                     <p>Муча Яник</p>
                 </div>
             </div>
-            <img src="https://i.imgur.com/UNdkNdi.png" alt="Фото 5" class="photo">
+            <img src="https://i.imgur.com/UNdkNdi.png" alt="Фото 4" class="photo">
         </div>
     </div>
-<br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
-             <div class="head-children">
-            <h1 class="animate-on-scroll"><span style="color: #EE7651;">Керівники підрозділів ДКВС м.Дніпро</span></p></h1>
-            
-  </div>
-                <div class="gallery">
+    <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
+    <div class="head-children">
+        <h1 class="animate-on-scroll"><span style="color: #EE7651;">Керівники підрозділів ДКВС м.Дніпро</span></h1>
+    </div>
+    <div class="gallery">
         <div class="photo-container">
             <div class="photo-overlay">
                 <div class="inner-border"></div>
@@ -598,7 +543,7 @@ outline-offset: 0px;
                     <p>Ірочка Мельник</p>
                 </div>
             </div>
-            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 1" class="photo">
+            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 5" class="photo">
         </div>
 
         <div class="photo-container">
@@ -606,10 +551,10 @@ outline-offset: 0px;
                 <div class="inner-border"></div>
                 <div class="photo-info">
                     <h3>Підполковник ДКВС, керівник - ВНБ</h3>
-                    <p></p>Артем Лямець</p>
+                    <p>Артем Лямець</p>
                 </div>
             </div>
-            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 4" class="photo">
+            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 6" class="photo">
         </div>
 
         <div class="photo-container">
@@ -620,141 +565,121 @@ outline-offset: 0px;
                     <p>Вікторія Потужна</p>
                 </div>
             </div>
-            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 5" class="photo">
+            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 7" class="photo">
         </div>
 
         <div class="photo-container">
             <div class="photo-overlay">
                 <div class="inner-border"></div>
                 <div class="photo-info">
-                    <h3>Майор ДКВС,
-                    <li></li>керівник - ОВ</li></h3>
+                    <h3>Майор ДКВС, керівник - ОВ</h3>
                     <p>Назар Казмірук</p>
                 </div>
             </div>
-            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 5" class="photo">
+            <img src="https://i.imgur.com/doTqduR.png" alt="Фото 8" class="photo">
         </div>
-                </div>
-            
-            <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
-            <div class="viddil">
-            <h1 class="animate-on-scroll"><span style="color: #3D5D52;">Відділи у лавах ДКВС м.Дніпро</span></p></h1>
-
-
-            
-           <div class="viddil-container">
-    <h3> 
-        <ul>
-            <li>ВНБ - Відділ Нагляду Та Безпеки</li>
-            <li>ОВ - Оперативний Відділ</li>
-            <li>ВСПС - Відділ Соціально Психологічної Служби</li>
-            <li>НВ - Навчальний Відділ</li>
-            <li>НК - Навчальний Корпус</li>
-          <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
-        </ul>
-    </h3>
-</div>
-  
-  
-  <div class="container">
-  <!-- Ліва панель -->
-  <div class="accordion-container-left">
-    <button class="accordion"><i class="fas fa-user-plus siry-icon"></i> Вимоги для вступу в ДКВСУ</button>
-    <div class="panel">
-      <ul style="list-style-type: none; padding: 0;">
-        <h2><i class="fas fa-sharp fa-thin fa-user-shield zolotoy-icon"></i> Щоб потрапити:</h2>
-        <h4>
-          <li><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Вік</span> 18+</li>
-          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Проживання в області</span> 2+ роки</li>
-          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Соціальний рейтинг</span> позитивний</li>
-          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Документація</span> паспорт</li>
-          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Документація</span> трудова книга</li>
-          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Документація</span> мед. книга</li>
-        </h4>
-      </ul>
     </div>
-  </div>
-
-  <!-- Права панель -->
-  <div class="accordion-container-right">
-    <button class="accordion-right"><i class="fas fa-address-book siry-icon"></i> Звання у фракції ДКВСУ</button>
-    <div class="panel-right">
-      <ul style="list-style-type: none; padding: 0;">
-        <h2><i class="fas fa-sharp fa-thin fa-user-shield zolotoy-icon"></i> Звання</h2>
-        <h4>
-          <li><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Ранг - 1 |</span> Сержант</li>
-          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 2 |</span> Старший сержант</li>
-          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 3 |</span> Старшина</li>
-          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 4 |</span> Прапорщик</li>
-          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 5 |</span> Старший прапорщик</li>
-          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 6 |</span> Лейтенант</li>
-           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 7 |</span> Старший лейтенант</li>
-           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 8 |</span> Капітан</li>
-           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 9 |</span> Майор</li>
-           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 10 |</span> Підполковник</li>
-           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 11 |</span> Полковник</li>
-           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 12 |</span> Генерал</li>
-          
-          
-        </h4>
-      </ul>
+            
+    <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
+    <div class="viddil">
+        <h1 class="animate-on-scroll"><span style="color: #3D5D52;">Відділи у лавах ДКВС м.Дніпро</span></h1>
+        <div class="viddil-container">
+            <h3> 
+                <ul>
+                    <li>ВНБ - Відділ Нагляду Та Безпеки</li>
+                    <li>ОВ - Оперативний Відділ</li>
+                    <li>ВСПС - Відділ Соціально Психологічної Служби</li>
+                    <li>НВ - Навчальний Відділ</li>
+                    <li>НК - Навчальний Корпус</li>
+                </ul>
+            </h3>
+        </div>
     </div>
-  </div>
+    <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
+  
+    <div class="container">
+        <div class="accordion-container-left">
+            <button class="accordion"><i class="fas fa-user-plus siry-icon"></i> Вимоги для вступу в ДКВСУ</button>
+            <div class="panel">
+                <ul style="list-style-type: none; padding: 0;">
+                    <h2><i class="fas fa-sharp fa-thin fa-user-shield zolotoy-icon"></i> Щоб потрапити:</h2>
+                    <h4>
+                        <li><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Вік</span> 18+</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Проживання в області</span> 2+ роки</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Соціальний рейтинг</span> позитивний</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Документація</span> паспорт</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Документація</span> трудова книга</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Документація</span> мед. книга</li>
+                    </h4>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion-container-right">
+            <button class="accordion-right"><i class="fas fa-address-book siry-icon"></i> Звання у фракції ДКВСУ</button>
+            <div class="panel-right">
+                <ul style="list-style-type: none; padding: 0;">
+                    <h2><i class="fas fa-sharp fa-thin fa-user-shield zolotoy-icon"></i> Звання</h2>
+                    <h4>
+                        <li><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Ранг - 1 |</span> Сержант</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 2 |</span> Старший сержант</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 3 |</span> Старшина</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 4 |</span> Прапорщик</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 5 |</span> Старший прапорщик</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 6 |</span> Лейтенант</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 7 |</span> Старший лейтенант</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 8 |</span> Капітан</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 9 |</span> Майор</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 10 |</span> Підполковник</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 11 |</span> Полковник</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 12 |</span> Генерал</li>
+                    </h4>
+                </ul>
+            </div>
+        </div>
+    </div> 
+
+    <br>
+  
+    <div class="accordion-container-right">
+        <button class="accordion-right"><i class="fas fa-car siry-icon"></i> Автопарк ДКВСУ</button>
+        <div class="panel-right">
+            <ul style="list-style-type: none; padding: 0;">
+                <h2><i class="fas fa-car zolotoy-icon"></i> Службові авто</h2>
+                <h4>
+                    <li><i class="fas fa-light fa-truck-fast grin-icon"></i><span style="color: #8E8C8A;"> КрАЗ АвтоЗАК |</span> Доступний з рангу "Сержант"</li>
+                    <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                        <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Renault logan |</span> Доступний з рангу "Сержант"</li>
+                    <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                        <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Peugot Автозак [ДКВС] |</span> Доступний з рангу "Сержант"</li>
+                    <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                        <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Mitsubishi Lancer X 2.0 |</span> Доступний з рангу "Ст. Прапорщик"</li>
+                    <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                        <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Renfult Megane [ДКВС] |</span> Доступний з рангу "Сержант"</li>
+                    <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                        <i class="fas fa-light fa-helicopter grin-icon"></i><span style="color: #8E8C8A;">  Robinson R44 |</span> Доступний з рангу "Лейтенант"</li>
+                </h4>
+            </ul>
+        </div>
+    </div>
 </div> 
 
-
-
-            <br>
-  
-  <!-- Права панель -->
-  <div class="accordion-container-right">
-    <button class="accordion-right"><i class="fas fa-car siry-icon"></i> Автопарк ДКВСУ</button>
-    <div class="panel-right">
-      <ul style="list-style-type: none; padding: 0;">
-        <h2><i class="fas fa-car zolotoy-icon"></i> Службові авто</h2>
-        <h4>
-          <li><i class="fas fa-light fa-truck-fast grin-icon"></i><span style="color: #8E8C8A;"> КрАЗ АвтоЗАК |</span> Доступний з рангу "Сержант"</li>
-          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Renault logan |</span> Доступний з рангу "Сержант"</li>
-          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Peugot Автозак [ДКВС] |</span> Доступний з рангу "Сержант"</li>
-          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Mitsubishi Lancer X 2.0 |</span> Доступний з рангу "Ст. Прапорщик"</li>
-          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Renfult Megane [ДКВС] |</span> Доступний з рангу "Сержант"</li>
-          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-              <i class="fas fa-light fa-helicopter grin-icon"></i><span style="color: #8E8C8A;">  Robinson R44 |</span> Доступний з рангу "Лейтенант"</li>
-           <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-           
-          
-        </h4>
-      </ul>
-    </div>
-  </div>
-</div> 
-
-
-
-
-
-
-            
 <div class="final-photo-section">
     <div class="final-photo-box left">
         <img src="https://i.imgur.com/G2SoaPY.png" alt="Фото 1" class="final-photo fade-in">
@@ -772,62 +697,53 @@ outline-offset: 0px;
     <div class="final-photo-box right">
         <img src="https://i.imgur.com/NgYoZ0B.png" alt="Фото 4" class="final-photo fade-in">
     </div>
-      <div class="final-photo-box left">
-        <img src="https://i.imgur.com/CAtaHJy.png" alt="Фото 3" class="final-photo fade-in">
+    <div class="final-photo-box left">
+        <img src="https://i.imgur.com/CAtaHJy.png" alt="Фото 5" class="final-photo fade-in">
     </div>
-  <div class="final-photo-box right">
-        <img src="https://i.imgur.com/cwO09E0.png" alt="Фото 4" class="final-photo fade-in">
+    <div class="final-photo-box right">
+        <img src="https://i.imgur.com/cwO09E0.png" alt="Фото 6" class="final-photo fade-in">
     </div>
 </div>
 
+<br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
+<div class="special-text">
+    <h1 class="animate-on-scroll"><span style="color: #0E9843;">ДКВС м.Дніпро//UKRAINE GTA//02</span></h1>
 
-             <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
-            <div class="special-text">
-            <h1 class="animate-on-scroll"><span style="color: #0E9843;">ДКВС м.Дніпро//UKRAINE GTA//02</span></p></h1
-              
-
-              <div class="accordion-container-right">
-    <button class="accordion-right"><i class="fas fa-location-dot siry-icon"></i> Як нас знайти?</button>
-    <div class="panel-right">
-      <ul style="list-style-type: none; padding: 0;">
-        <h3><i class="fas fa-route zolotoy-icon"></i> О(Англ.) <i class="fas fa-right-long zolotoy-icon"></i> Навігація <i class="fas fa-right-long zolotoy-icon"></i> Державні установи <i class="fas fa-right-long zolotoy-icon"></i> ДКВС</h3>
+    <div class="accordion-container-right">
+        <button class="accordion-right"><i class="fas fa-location-dot siry-icon"></i> Як нас знайти?</button>
+        <div class="panel-right">
+            <ul style="list-style-type: none; padding: 0;">
+                <h3><i class="fas fa-route zolotoy-icon"></i> О(Англ.) <i class="fas fa-right-long zolotoy-icon"></i> Навігація <i class="fas fa-right-long zolotoy-icon"></i> Державні установи <i class="fas fa-right-long zolotoy-icon"></i> ДКВС</h3>
+            </ul>
         </div>
+    </div>
         
-        
-            <h3><i class="fas fa-user"></i> Зв'язок з керівним складом складом</h3>
+    <h3><i class="fas fa-user"></i> Зв'язок з керівним складом</h3>
       
-      
-      
-      <div class="button-container">
-  <a href="https://t.me/mucha_4" class="custom-button">
-    <i class="fa-brands fa-telegram button-icon"></i>
-    <span class="button-text"> Telegram М. Яник</span>
-  </a>
-  <a href="https://t.me/Vitennko" class="custom-button">
-    <i class="fa-brands fa-telegram button-icon"></i>
-    <span class="button-text"> Telegram В. Скалетта</span>
-  </a>
-  <a href="https://t.me/Kietenka" class="custom-button">
-    <i class="fa-brands fa-telegram button-icon"></i>
-    <span class="button-text"> Telegram М. Ескобар</span>
-  </a>
-  <a href="https://t.me/MR_1one1" class="custom-button">
-    <i class="fa-brands fa-telegram button-icon"></i>
-    <span class="button-text"> Telegram Р. Борак</span>
-  </a>
+    <div class="button-container">
+        <a href="https://t.me/mucha_4" class="custom-button">
+            <i class="fa-brands fa-telegram button-icon"></i>
+            <span class="button-text"> Telegram М. Яник</span>
+        </a>
+        <a href="https://t.me/Vitennko" class="custom-button">
+            <i class="fa-brands fa-telegram button-icon"></i>
+            <span class="button-text"> Telegram В. Скалетта</span>
+        </a>
+        <a href="https://t.me/Kietenka" class="custom-button">
+            <i class="fa-brands fa-telegram button-icon"></i>
+            <span class="button-text"> Telegram М. Ескобар</span>
+        </a>
+        <a href="https://t.me/MR_1one1" class="custom-button">
+            <i class="fa-brands fa-telegram button-icon"></i>
+            <span class="button-text"> Telegram Р. Борак</span>
+        </a>
+    </div>
 </div>
 
-
-     
-
-  
-            
-     <script type="module">
-    // Імпортуємо Firebase
+<script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
     import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-    // Firebase конфігурація
     const firebaseConfig = {
         apiKey: "AIzaSyBzefxFDTHQqXFHg9t08JTiL5EaH8si1oY",
         authDomain: "dkvs-1ec88.firebaseapp.com",
@@ -839,7 +755,6 @@ outline-offset: 0px;
         measurementId: "G-H6LKMLYD10"
     };
 
-    // Ініціалізація Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
@@ -847,132 +762,90 @@ outline-offset: 0px;
 
     let counter = 0;
 
-    // Отримуємо поточне значення лічильника
     onValue(counterRef, snapshot => {
         counter = snapshot.val() || 0;
         document.getElementById('counter').textContent = `Зроблено конвоювань за весь період: ${counter}`;
     });
 
-
-       
-       
-       
-       // Функція для перевірки, чи знаходиться елемент у полі зору
-function isInViewport(element) {
-  const rect = element.getBoundingClientRect();
-  return (
-    rect.top >= 0 &&
-    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
-  );
-}
-
-// Додаємо клас "visible" при появі елемента на екрані
-function handleScroll() {
-  const elements = document.querySelectorAll('.animate-on-scroll');
-  elements.forEach((el) => {
-    if (isInViewport(el)) {
-      el.classList.add('visible');
+    function isInViewport(element) {
+        const rect = element.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+        );
     }
-  });
-}
 
-// Додаємо обробник події scroll
-window.addEventListener('scroll', handleScroll);
-
-// Запускаємо перевірку одразу, щоб врахувати початкову позицію
-handleScroll();
-
-              
-              
-       
-       
-       
-       
-// Отримуємо всі кнопки аккордеонів
-var acc = document.getElementsByClassName("accordion");
-var accRight = document.getElementsByClassName("accordion-right");
-var accBottom = document.getElementsByClassName("accordion-bottom"); // Для нижньої панелі
-
-// Для кожної кнопки додаємо обробник події
-for (var i = 0; i < acc.length; i++) {
-  acc[i].addEventListener("click", function() {
-    // Отримуємо відповідну панель
-    var panel = this.nextElementSibling;
-    
-    // Якщо панель відкрито, закриваємо її, інакше відкриваємо
-    if (panel.style.maxHeight) {
-      panel.style.maxHeight = null;
-      panel.style.opacity = 0;
-    } else {
-      panel.style.maxHeight = panel.scrollHeight + "px";
-      panel.style.opacity = 1;
+    function handleScroll() {
+        const elements = document.querySelectorAll('.animate-on-scroll');
+        elements.forEach((el) => {
+            if (isInViewport(el)) {
+                el.classList.add('visible');
+            }
+        });
     }
-  });
-}
 
-// Для правої панелі
-for (var i = 0; i < accRight.length; i++) {
-  accRight[i].addEventListener("click", function() {
-    // Отримуємо відповідну панель
-    var panelRight = this.nextElementSibling;
-    
-    // Якщо панель відкрито, закриваємо її, інакше відкриваємо
-    if (panelRight.style.maxHeight) {
-      panelRight.style.maxHeight = null;
-      panelRight.style.opacity = 0;
-    } else {
-      panelRight.style.maxHeight = panelRight.scrollHeight + "px";
-      panelRight.style.opacity = 1;
-    }
-  });
-}
-
-// Для нижньої панелі
-for (var i = 0; i < accBottom.length; i++) {
-  accBottom[i].addEventListener("click", function() {
-    // Отримуємо відповідну панель
-    var panelBottom = this.nextElementSibling;
-    
-    // Якщо панель відкрито, закриваємо її, інакше відкриваємо
-    if (panelBottom.style.maxHeight) {
-      panelBottom.style.maxHeight = null;
-      panelBottom.style.opacity = 0;
-    } else {
-      panelBottom.style.maxHeight = panelBottom.scrollHeight + "px";
-      panelBottom.style.opacity = 1;
-    }
-  });
-}
-
-       
-       
-              
-              
-              
-       document.addEventListener("DOMContentLoaded", function () {
-    const photos = document.querySelectorAll(".final-photo");
-
-    const observer = new IntersectionObserver(
-        (entries, observer) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add("visible");
-                    observer.unobserve(entry.target); // Зупиняємо спостереження після появи
-                }
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                handleScroll();
+                ticking = false;
             });
-        },
-        { threshold: 0.1 } // Елемент вважається видимим, якщо 10% його площі у вікні
-    );
+            ticking = true;
+        }
+    });
 
-    photos.forEach((photo) => observer.observe(photo));
-});
-              
-              
-          
+    document.addEventListener('DOMContentLoaded', handleScroll);
 
-    </script>
-            
-            
-            
+    var acc = document.getElementsByClassName("accordion");
+    var accRight = document.getElementsByClassName("accordion-right");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.maxHeight) {
+                panel.style.maxHeight = null;
+                panel.style.opacity = 0;
+            } else {
+                panel.style.maxHeight = panel.scrollHeight + "px";
+                panel.style.opacity = 1;
+            }
+        });
+    }
+
+    for (i = 0; i < accRight.length; i++) {
+        accRight[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var panelRight = this.nextElementSibling;
+            if (panelRight.style.maxHeight) {
+                panelRight.style.maxHeight = null;
+                panelRight.style.opacity = 0;
+            } else {
+                panelRight.style.maxHeight = panelRight.scrollHeight + "px";
+                panelRight.style.opacity = 1;
+            }
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const photos = document.querySelectorAll(".final-photo");
+
+        const observer = new IntersectionObserver(
+            (entries, observer) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        );
+
+        photos.forEach((photo) => observer.observe(photo));
+    });
+</script>
 </body>
 </html>
