@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ДКВС - Ipad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="https://i.imgur.com/PRjTNqr.png" type="image/png">
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comfortaa', sans-serif;
+            background: #000000 url('https://i.imgur.com/ezSjQn5.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .tablet {
+            width: 100%;
+            max-width: 1024px;
+            height: 100vh;
+            max-height: 768px;
+            background: #15151D;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 12px solid #000;
+            box-shadow: 0 0 0 2px #333;
+        }
+
+        .tablet::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -8px;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 60px;
+            background: #333;
+            border-radius: 2px;
+        }
+
+        .tablet::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 9px;
+            height: 9px;
+            background: #333;
+            border-radius: 50%;
+            border: 2px solid #555;
+        }
+
+        .auth-screen {
+            width: 100%;
+            height: 100%;
+            background: #007BFF;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 30px;
+        }
+
+        .auth-title {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.4;
+        }
+
+        .fingerprint-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .fingerprint-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .fingerprint-icon i {
+            font-size: 40px;
+            color: #fff;
+        }
+
+        .main-interface {
+            display: none;
+            width: 100%;
+            height: 100%;
+            grid-template-columns: 250px 1fr;
+        }
+
+        .sidebar {
+            background: #15151D;
+            border-right: 1px solid #2a2a3a;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .logo-section img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .nav-item.active {
+            background: #2a2a3a;
+        }
+
+        .nav-item:hover {
+            background: #2a2a3a;
+        }
+
+        .content {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: #2D2D34;
+            border: 1px solid #3a3a4a;
+            border-radius: 6px;
+            color: #fff;
+            font-family: 'Comfortaa', sans-serif;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn {
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Comfortaa', sans-serif;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        .table-container {
+            background: #1A1A23;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 20px;
+            border-bottom: 1px solid #2a2a3a;
+        }
+
+        .table-header h2 {
+            margin: 0;
+        }
+
+        .search-container {
+            position: relative;
+            margin: 20px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 12px 40px 12px 12px;
+            background: #2D2D34;
+            border: 1px solid #3a3a4a;
+            border-radius: 6px;
+            color: #fff;
+            font-family: 'Comfortaa', sans-serif;
+        }
+
+        .search-container i {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b6b7b;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid #2a2a3a;
+        }
+
+        th {
+            background: #2D2D34;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #2a2a3a;
+        }
+
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1A1A23;
+            padding: 20px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            z-index: 1000;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 999;
+        }
+
+        .highlight {
+            background-color: #007BFF;
+            color: #fff;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #15151D;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2a2a3a;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3a3a4a;
+        }
+
+        .main-content {
+            background: #1A1A23;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .main-content h2 {
+            margin-bottom: 15px;
+        }
+
+        .info-card {
+            background: #0F0F16;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .info-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .chart-container {
+            height: 300px;
+            margin-bottom: 20px;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #0F0F16;
+            border-radius: 8px;
+            padding: 15px;
+            width: 48%;
+        }
+
+        .stat-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 15px;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+
+        .logout-btn {
+            margin-top: auto;
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #0056b3;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .modal-buttons .btn {
+            width: 48%;
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        textarea {
+            height: 80px;
+            resize: vertical;
+        }
+
+        .activities-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #2a2a3a;
+        }
+
+        .activity-icon {
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .activity-details {
+            flex-grow: 1;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: #6b6b7b;
+        }
+
+        .convoy {
+            color: #4CAF50;
+        }
+
+        .blacklist {
+            color: #F44336;
+        }
+
+        @media (max-width: 768px) {
+            .tablet {
+                border: none;
+                border-radius: 0;
+            }
+
+            .main-interface {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: -250px;
+                height: 100%;
+                z-index: 1000;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .content {
+                padding: 10px;
+            }
+
+            .auth-title {
+                font-size: 20px;
+            }
+
+            .fingerprint-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .fingerprint-icon i {
+                font-size: 30px;
+            }
+
+            .stats-container {
+                flex-direction: column;
+            }
+
+            .stat-card {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 600px;
+            }
+
+            .activities-list .activity-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .activity-icon {
+                margin-bottom: 5px;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                font-size: 16px;
+            }
+        }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1001;
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        .info-list {
+            margin-top: 20px;
+        }
+        .info-item {
+            background: #2D2D34;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        .info-item h3 {
+            margin-bottom: 10px;
+        }
+        .info-actions {
+            margin-top: 10px;
+        }
+        .info-actions button {
+            margin-right: 10px;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #6b6b7b;
+        }
+        .loading::after {
+            content: '...';
+            animation: dots 1s steps(5, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% {
+                color: rgba(0,0,0,0);
+                text-shadow:
+                    .25em 0 0 rgba(0,0,0,0),
+                    .5em 0 0 rgba(0,0,0,0);
+            }
+            40% {
+                color: #6b6b7b;
+                text-shadow:
+                    .25em 0 0 rgba(0,0,0,0),
+                    .5em 0 0 rgba(0,0,0,0);
+            }
+            60% {
+                text-shadow:
+                    .25em 0 0 #6b6b7b,
+                    .5em 0 0 rgba(0,0,0,0);
+            }
+            80%, 100% {
+                text-shadow:
+                    .25em 0 0 #6b6b7b,
+                    .5em 0 0 #6b6b7b;
+            }
+        }
+
+        .sms-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            background-image: url('https://i.imgur.com/8I4wQ0P.png');
+            background-size: cover;
+            border-radius: 10px;
+            padding: 15px;
+            color: #fff;
+            font-size: 14px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .sms-notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .sms-notification .sms-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .sms-notification .sms-title {
+            font-weight: bold;
+        }
+
+        .sms-notification .sms-close {
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .sms-notification .sms-content {
+            margin-bottom: 10px;
+        }
+
+        .sms-notification .sms-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .sms-notification .sms-action {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 5px 10px;
+            margin-left: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .sms-notification .sms-action:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="tablet">
+        <div class="auth-screen" id="authScreen">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/KVS_logo.svg" alt="ДКВС Лого" class="auth-logo">
+            <h1 class="auth-title">ДЕРЖАВНА КРИМІНАЛЬНО-<br>ВИКОНАВЧА СЛУЖБА УКРАЇНИ</h1>
+            <div class="fingerprint-icon" id="fingerprintAuth">
+                <i class="fas fa-fingerprint"></i>
+            </div>
+        </div>
+
+        <div class="main-interface" id="mainInterface">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="sidebar" id="sidebar">
+                <div class="logo-section">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/KVS_logo.svg" alt="ДКВС Лого">
+                    <span>ДКВС</span>
+                </div>
+                <nav>
+                    <div class="nav-item active" data-view="main">
+                        <i class="fas fa-home"></i>
+                        Головна
+                    </div>
+                    <div class="nav-item" data-view="convoy-form">
+                        <i class="fas fa-clipboard-list"></i>
+                        Форма конвою
+                    </div>
+                    <div class="nav-item" data-view="convoy-archive">
+                        <i class="fas fa-archive"></i>
+                        Архів конвоїв
+                    </div>
+                    <div class="nav-item" data-view="blacklist">
+                        <i class="fas fa-users"></i>
+                        ЧС в'язнів
+                    </div>
+                    <div class="nav-item" data-view="add-blacklist">
+                        <i class="fas fa-user-plus"></i>
+                        Додати до ЧС
+                    </div>
+                    <div class="nav-item" data-view="recent-activities">
+                        <i class="fas fa-history"></i>
+                        Останні дії
+                    </div>
+                    <div class="nav-item admin-only" data-view="admin-panel">
+                        <i class="fas fa-cog"></i>
+                        Адмін панель
+                    </div>
+                </nav>
+                <div class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Вийти
+                </div>
+            </div>
+
+            <div class="content">
+                <div id="main" class="section active">
+                    <div class="main-content">
+                        <h2>Інформація для працівників</h2>
+                        <div class="stats-container">
+                            <div class="stat-card">
+                                <h3>Кількість конвоїв</h3>
+                                <div class="stat-value">
+                                    <p style="color: #908E8B;">Всього: <span id="convoyCountTotal">Завантаження...</span></p>
+                                    <p style="color: #908E8B;">За останні 7 днів: <span id="convoyCountWeek">Завантаження...</span></p>
+                                    <p style="color: #908E8B;">За сьогодні: <span id="convoyCountToday">Завантаження...</span></p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <h3>Особливо небезпечних в'язнів</h3>
+                                <div class="stat-value" id="blacklistCount">Завантаження...</div>
+                            </div>
+                        </div>
+                        <div id="mainPageContent"></div>
+                    </div>
+                </div>
+
+                <div id="convoy-form" class="section">
+                    <div class="main-content">
+                        <h2>Форма конвою</h2>
+                        <form id="convoyForm">
+                            <div class="form-group">
+                                <label for="convoy1">Nick Name конвоїра №1:</label>
+                                <input type="text" id="convoy1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="convoy2">Nick Name конвоїра №2 (якщо є):</label>
+                                <input type="text" id="convoy2">
+                            </div>
+                            <div class="form-group">
+                                <label for="prisoner1">Nick Name та ID в'язня №1:</label>
+                                <input type="text" id="prisoner1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prisoner2">Nick Name та ID в'язня №2 (якщо є):</label>
+                                <input type="text" id="prisoner2">
+                            </div>
+                            <button type="submit" class="btn">Зареєструвати конвой</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="convoy-archive" class="section">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h2>Архів конвоїв</h2>
+                        </div>
+                        <div class="search-container">
+                            <input type="text" id="convoySearchInput" placeholder="Пошук за нікнеймом конвоїра або в'язня...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <table id="convoyArchiveTable">
+                            <thead>
+                                <tr>
+                                    <th>Дата</th>
+                                    <th>Конвоїр №1</th>
+                                    <th>Конвоїр №2</th>
+                                    <th>В'язень №1</th>
+                                    <th>В'язень №2</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="blacklist" class="section">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h2>Чорний список в'язнів</h2>
+                        </div>
+                        <div class="search-container">
+                            <input type="text" id="blacklistSearchInput" placeholder="Пошук за ID, нікнеймом або кланом...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <table id="blacklistTable">
+                            <thead>
+                                <tr>
+                                    <th>ID Гравця</th>
+                                    <th>Нікнейм</th>
+                                    <th>Клан</th>
+                                    <th>Причина</th>
+                                    <th>Залишилось часу</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="add-blacklist" class="section">
+                    <div class="main-content">
+                        <h2>Додати до Чорного Списку</h2>
+                        <form id="addToBlacklistForm">
+                            <div class="form-group">
+                                <label for="playerId">ID Гравця</label>
+                                <input type="text" id="playerId" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="nickname">Нікнейм</label>
+                                <input type="text" id="nickname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="clan">Клан</label>
+                                <input type="text" id="clan">
+                            </div>
+                            <div class="form-group">
+                                <label for="reason">Причина</label>
+                                <textarea id="reason" maxlength="50" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="days">Кількість днів</label>
+                                <input type="number" id="days" required>
+                            </div>
+                            <button type="submit" class="btn">Додати</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="recent-activities" class="section">
+                    <div class="main-content">
+                        <h2>Останні дії</h2>
+                        <ul class="activities-list" id="activitiesList"></ul>
+                    </div>
+                </div>
+
+                <div id="admin-panel" class="section">
+                    <div class="main-content">
+                        <h2>Адмін панель</h2>
+                        <form id="adminForm">
+                            <div class="form-group">
+                                <label for="infoTitle">Заголовок</label>
+                                <input type="text" id="infoTitle" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="infoContent">Зміст</label>
+                                <textarea id="infoContent" required></textarea>
+                            </div>
+                            <button type="submit" class="btn">Додати/Оновити</button>
+                        </form>
+                        <div id="adminInfoList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="login-modal" id="loginModal">
+            <h2>Авторизація</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginUsername">Логін</label>
+                    <input type="text" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Пароль</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn">Увійти</button>
+                    <button type="button" class="btn" id="closeLoginModal">На головну</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBzefxFDTHQqXFHg9t08JTiL5EaH8si1oY",
+            authDomain: "dkvs-1ec88.firebaseapp.com",
+            databaseURL: "https://dkvs-1ec88-default-rtdb.firebaseio.com",
+            projectId: "dkvs-1ec88",
+            storageBucket: "dkvs-1ec88.appspot.com",
+            messagingSenderId: "167430647129",
+            appId: "1:167430647129:web:ab209fec7735f20b597048",
+            measurementId: "G-H6LKMLYD10"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        const authScreen = document.getElementById('authScreen');
+        const mainInterface = document.getElementById('mainInterface');
+        const fingerprintAuth = document.getElementById('fingerprintAuth');
+        const loginModal = document.getElementById('loginModal');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const loginForm = document.getElementById('loginForm');
+        const addToBlacklistForm = document.getElementById('addToBlacklistForm');
+        const convoyForm = document.getElementById('convoyForm');
+        const blacklistTableBody = document.getElementById('blacklistTable').getElementsByTagName('tbody')[0];
+        const convoyArchiveTableBody = document.getElementById('convoyArchiveTable').getElementsByTagName('tbody')[0];
+        const blacklistSearchInput = document.getElementById('blacklistSearchInput');
+        const convoySearchInput = document.getElementById('convoySearchInput');
+        const navItems = document.querySelectorAll('.nav-item');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const closeLoginModal = document.getElementById('closeLoginModal');
+        const sidebar = document.getElementById('sidebar');
+        const activitiesList = document.getElementById('activitiesList');
+        const menuToggle = document.getElementById('menuToggle');
+        const adminForm = document.getElementById('adminForm');
+
+        function showSmsNotification(title, message, actions = []) {
+            const notification = document.createElement('div');
+            notification.className = 'sms-notification';
+            notification.innerHTML = `
+                <div class="sms-header">
+                    <span class="sms-title">${title}</span>
+                    <span class="sms-close">&times;</span>
+                </div>
+                <div class="sms-content">${message}</div>
+                <div class="sms-actions"></div>
+            `;
+
+            const actionsContainer = notification.querySelector('.sms-actions');
+            actions.forEach(action => {
+                const button = document.createElement('button');
+                button.className = 'sms-action';
+                button.textContent = action.text;
+                button.onclick = action.onClick;
+                actionsContainer.appendChild(button);
+            });
+
+            document.body.appendChild(notification);
+            setTimeout(() => notification.classList.add('show'), 100);
+
+            const closeBtn = notification.querySelector('.sms-close');
+            closeBtn.onclick = () => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            };
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+
+        function showView(viewName) {
+            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+            document.getElementById(viewName).classList.add('active');
+
+            if ((viewName === 'add-blacklist' || viewName === 'admin-panel') && !isAuthenticated()) {
+                showLoginModal();
+            }
+        }
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                showView(item.dataset.view);
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        });
+
+        fingerprintAuth.addEventListener('click', () => {
+            authScreen.style.display = 'none';
+            mainInterface.style.display = 'grid';
+            fetchBlacklistData();
+            fetchConvoyData();
+            updateStats();
+            fetchRecentActivities();
+        });
+
+        function showLoginModal() {
+            loginModal.style.display = 'block';
+            modalOverlay.style.display = 'block';
+        }
+
+        function hideLoginModal() {
+            loginModal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+        }
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (username === 'admin' && password === 'password123') {
+                localStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('authExpiration', Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+                localStorage.setItem('userRole', 'admin');
+                hideLoginModal();
+                showView('main');
+                updateUIForRole('admin');
+                showSmsNotification('Успіх', 'Ви успішно увійшли в систему!');
+            } else {
+                showSmsNotification('Помилка', 'Невірний логін або пароль', [
+                    {
+                        text: 'Спробувати ще раз',
+                        onClick: () => {
+                            document.getElementById('loginUsername').value = '';
+                            document.getElementById('loginPassword').value = '';
+                            document.getElementById('loginUsername').focus();
+                        }
+                    }
+                ]);
+            }
+        });
+
+        closeLoginModal.addEventListener('click', () => {
+            hideLoginModal();
+            showView('main');
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('authExpiration');
+            localStorage.removeItem('userRole');
+            authScreen.style.display = 'flex';
+            mainInterface.style.display = 'none';
+            showSmsNotification('Вихід', 'Ви вийшли з системи');
+        });
+
+        addToBlacklistForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const playerId = document.getElementById('playerId').value;
+            const nickname = document.getElementById('nickname').value;
+            const clan = document.getElementById('clan').value;
+            const reason = document.getElementById('reason').value;
+            const days = document.getElementById('days').value;
+
+            await addToBlacklist(playerId, nickname, clan, reason, days);
+            addToBlacklistForm.reset();
+            showSmsNotification('Успіх', 'Запис успішно додано до чорного списку!');
+        });
+
+        convoyForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const convoy1 = document.getElementById('convoy1').value;
+            const convoy2 = document.getElementById('convoy2').value;
+            const prisoner1 = document.getElementById('prisoner1').value;
+            const prisoner2 = document.getElementById('prisoner2').value;
+
+            await addConvoy(convoy1, convoy2, prisoner1, prisoner2);
+            convoyForm.reset();
+            showSmsNotification('Успіх', 'Конвой успішно зареєстровано!');
+        });
+
+        async function addToBlacklist(playerId, nickname, clan, reason, days) {
+            const blacklistRef = database.ref("blacklist");
+            const newBlacklistRef = blacklistRef.push();
+
+            const expirationTime = Date.now() + days * 24 * 60 * 60 * 1000;
+
+            await newBlacklistRef.set({
+                playerId,
+                nickname,
+                clan,
+                reason,
+                days,
+                createdAt: Date.now(),
+                expirationTime,
+            });
+
+            await addActivity('blacklist', `Додано до ЧС: ${nickname}`);
+            fetchBlacklistData();
+        }
+
+        async function addConvoy(convoy1, convoy2, prisoner1, prisoner2) {
+            const convoyRef = database.ref("convoys");
+            const newConvoyRef = convoyRef.push();
+
+            await newConvoyRef.set({
+                convoy1,
+                convoy2,
+                prisoner1,
+                prisoner2,
+                timestamp: Date.now()
+            });
+
+            const counterRef = database.ref('counter');
+            const currentCount = (await counterRef.once('value')).val() || 0;
+            await counterRef.set(currentCount + 1);
+
+            await sendToDiscord({ convoy1, convoy2, prisoner1, prisoner2 });
+
+            await addActivity('convoy', `Новий конвой: ${convoy1}`);
+            fetchConvoyData();
+            updateStats();
+        }
+
+        async function addActivity(type, description) {
+            const activityRef = database.ref("activities");
+            const newActivityRef = activityRef.push();
+            await newActivityRef.set({
+                type,
+                description,
+                timestamp: Date.now()
+            });
+        }
+
+        async function fetchRecentActivities() {
+            const activitiesRef = database.ref("activities").orderByChild("timestamp").limitToLast(10);
+            activitiesRef.on('value', (snapshot) => {
+                const activities = [];
+                snapshot.forEach((childSnapshot) => {
+                    activities.unshift({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
+                });
+                renderActivities(activities);
+            });
+        }
+
+        function renderActivities(activities) {
+            activitiesList.innerHTML = '';
+            activities.forEach(activity => {
+                const li = document.createElement('li');
+                li.className = `activity-item ${activity.type}`;
+                li.innerHTML = `
+                    <span class="activity-icon">
+                        <i class="fas fa-${activity.type === 'convoy' ? 'truck' : 'user-slash'}"></i>
+                    </span>
+                    <div class="activity-details">
+                        <p>${activity.description}</p>
+                        <p class="activity-time">${new Date(activity.timestamp).toLocaleString('uk-UA')}</p>
+                    </div>
+                `;
+                activitiesList.appendChild(li);
+            });
+        }
+
+        async function sendToDiscord(data) {
+            const webhookUrl = "https://discord.com/api/webhooks/1315033282663940106/LwG48yjgoZ031k_mjsYGJwPd5TVDH6TZneNQR9-akM7vy9cRfNi28dhL7BdMUvuESmlI";
+            try {
+                await fetch(webhookUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        username: "UKRAINE GTA | 02",
+                        avatar_url: "https://i.imgur.com/2Kwd6vU.png",
+                        content: `# <a:alert:1214621954187731015> Зроблено новий конвой!\n## <:policepanda:1073299171999764591>Конвоїр №1: ${data.convoy1}\n## <:policepanda:1073299171999764591>Конвоїр №2: ${data.convoy2 || "—"}\n\n## <:Group7:1317828933189898320>В'язень №1: ${data.prisoner1}\n## <:Group7:1317828933189898320>В'язень №2: ${data.prisoner2 || "—"}`
+                    }),
+                });
+            } catch (error) {
+                console.error("Помилка відправки на Discord:", error);
+            }
+        }
+
+        async function fetchBlacklistData() {
+            const blacklistRef = database.ref("blacklist");
+            blacklistTableBody.innerHTML = '<tr><td colspan="5" class="loading">Завантаження...</td></tr>';
+
+            try {
+                const snapshot = await blacklistRef.once('value');
+
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    const keys = Object.keys(data);
+
+                    blacklistTableBody.innerHTML = "";
+
+                    keys.forEach(key => {
+                        const item = data[key];
+                        const row = createBlacklistTableRow(item, key);
+                        blacklistTableBody.appendChild(row);
+                    });
+
+                    checkAndRemoveExpiredEntries();
+                    filterBlacklistTable();
+                } else {
+                    blacklistTableBody.innerHTML = '<tr><td colspan="5">Немає даних</td></tr>';
+                }
+            } catch (error) {
+                console.error("Помилка при отриманні даних чорного списку:", error);
+                blacklistTableBody.innerHTML = '<tr><td colspan="5">Помилка завантаження даних</td></tr>';
+            }
+        }
+
+        async function fetchConvoyData() {
+            const convoyRef = database.ref("convoys");
+            convoyArchiveTableBody.innerHTML = '<tr><td colspan="5" class="loading">Завантаження...</td></tr>';
+
+            try {
+                const snapshot = await convoyRef.once('value');
+
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    const keys = Object.keys(data);
+
+                    convoyArchiveTableBody.innerHTML = "";
+
+                    keys.sort((a, b) => data[b].timestamp - data[a].timestamp).forEach(key => {
+                        const item = data[key];
+                        const row = createConvoyTableRow(item);
+                        convoyArchiveTableBody.appendChild(row);
+                    });
+
+                    filterConvoyTable();
+                } else {
+                    convoyArchiveTableBody.innerHTML = '<tr><td colspan="5">Немає даних</td></tr>';
+                }
+            } catch (error) {
+                console.error("Помилка при отриманні даних конвоїв:", error);
+                convoyArchiveTableBody.innerHTML = '<tr><td colspan="5">Помилка завантаження даних</td></tr>';
+            }
+        }
+
+        function createBlacklistTableRow(item, key) {
+            const row = document.createElement("tr");
+            const currentTime = Date.now();
+            const timeLeft = item.expirationTime - currentTime;
+
+            let timeString = "Час вичерпано";
+            if (timeLeft > 0) {
+                timeString = formatTimeLeft(timeLeft);
+            }
+
+            row.innerHTML = `
+                <td>${item.playerId || "Помилка ID"}</td>
+                <td>${item.nickname || "Помилка NICK"}</td>
+                <td>${item.clan || "Немає"}</td>
+                <td>${item.reason}</td>
+                <td class="time-left" data-key="${key}">${timeString}</td>
+            `;
+
+            return row;
+        }
+
+        function createConvoyTableRow(item) {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${new Date(item.timestamp).toLocaleString('uk-UA')}</td>
+                <td>${item.convoy1}</td>
+                <td>${item.convoy2 || "—"}</td>
+                <td>${item.prisoner1}</td>
+                <td>${item.prisoner2 || "—"}</td>
+            `;
+            return row;
+        }
+
+        function formatTimeLeft(timeLeft) {
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+
+            let timeString = "";
+            if (days > 0) {
+                timeString += `${days} ${days === 1 ? 'день' : days < 5 ? 'дні' : 'днів'}`;
+            }
+            if (hours > 0 || days > 0) timeString += ` ${hours} год.`;
+            timeString += ` ${minutes} хв.`;
+
+            return timeString.trim();
+        }
+
+        async function checkAndRemoveExpiredEntries() {
+            const blacklistRef = database.ref("blacklist");
+
+            try {
+                const snapshot = await blacklistRef.once('value');
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    const keys = Object.keys(data);
+
+                    keys.forEach(key => {
+                        const item = data[key];
+                        if (Date.now() >= item.expirationTime) {
+                            blacklistRef.child(key).remove();
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error("Помилка при видаленні записів:", error);
+            }
+        }
+
+        function filterBlacklistTable() {
+            const filter = blacklistSearchInput.value.toLowerCase();
+            const rows = blacklistTableBody.getElementsByTagName("tr");
+
+            for (let row of rows) {
+                const cells = row.getElementsByTagName("td");
+                let shouldShow = false;
+
+                for (let cell of cells) {
+                    const text = cell.textContent || cell.innerText;
+                    if (text.toLowerCase().includes(filter)) {
+                        shouldShow = true;
+                        highlightText(cell, filter);
+                    } else {
+                        removeHighlight(cell);
+                    }
+                }
+
+                row.style.display = shouldShow ? "" : "none";
+            }
+        }
+
+        function filterConvoyTable() {
+            const filter = convoySearchInput.value.toLowerCase();
+            const rows = convoyArchiveTableBody.getElementsByTagName("tr");
+
+            for (let row of rows) {
+                const cells = row.getElementsByTagName("td");
+                let shouldShow = false;
+
+                for (let cell of cells) {
+                    const text = cell.textContent || cell.innerText;
+                    if (text.toLowerCase().includes(filter)) {
+                        shouldShow = true;
+                        highlightText(cell, filter);
+                    } else {
+                        removeHighlight(cell);
+                    }
+                }
+
+                row.style.display = shouldShow ? "" : "none";
+            }
+        }
+
+        function highlightText(element, filter) {
+            const text = element.textContent;
+            const regex = new RegExp(`(${filter})`, 'gi');
+            element.innerHTML = text.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        function removeHighlight(element) {
+            element.innerHTML = element.textContent;
+        }
+
+        function isAuthenticated() {
+            const isAuth = localStorage.getItem('isAuthenticated');
+            const authExpiration = localStorage.getItem('authExpiration');
+            return isAuth && authExpiration && Date.now() < parseInt(authExpiration);
+        }
+
+        function updateUIForRole(role) {
+            const adminElements = document.querySelectorAll('.admin-only');
+            adminElements.forEach(el => {
+                el.style.display = role === 'admin' ? 'block' : 'none';
+            });
+        }
+
+        blacklistSearchInput.addEventListener('input', filterBlacklistTable);
+        convoySearchInput.addEventListener('input', filterConvoyTable);
+
+        setInterval(() => {
+            const timeElements = document.querySelectorAll('.time-left');
+            timeElements.forEach(element => {
+                const key = element.dataset.key;
+                database.ref(`blacklist/${key}`).once('value').then(snapshot => {
+                    if (snapshot.exists()) {
+                        const item = snapshot.val();
+                        const timeLeft = item.expirationTime - Date.now();
+                        if (timeLeft > 0) {
+                            element.textContent = formatTimeLeft(timeLeft);
+                        } else {
+                            element.textContent = "Час вичерпано";
+                        }
+                    }
+                });
+            });
+        }, 60000);
+
+        setInterval(fetchBlacklistData, 300000);
+        setInterval(fetchConvoyData, 300000);
+
+        function updateStats() {
+            database.ref('counter').once('value').then(snapshot => {
+                const convoyCount = snapshot.val() || 0;
+                document.getElementById('convoyCountTotal').textContent = convoyCount;
+            });
+
+            database.ref('blacklist').once('value').then(snapshot => {
+                const blacklistCount = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+                document.getElementById('blacklistCount').textContent = blacklistCount;
+            });
+
+            const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+            database.ref('convoys').orderByChild('timestamp').startAt(oneWeekAgo).once('value').then(snapshot => {
+                const weeklyCount = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+                document.getElementById('convoyCountWeek').textContent = weeklyCount;
+            });
+
+            const startOfToday = new Date().setHours(0, 0, 0, 0);
+            database.ref('convoys').orderByChild('timestamp').startAt(startOfToday).once('value').then(snapshot => {
+                const todayCount = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+                document.getElementById('convoyCountToday').textContent = todayCount;
+            });
+
+            updateConvoyChart();
+        }
+
+        function updateConvoyChart() {
+            database.ref('convoys').once('value').then(snapshot => {
+                if (snapshot.exists()) {
+                    const convoys = snapshot.val();
+                    const convoyDates = Object.values(convoys).map(convoy => new Date(convoy.timestamp).toLocaleDateString('uk-UA'));
+                    const convoyCountByDate = convoyDates.reduce((acc, date) => {
+                        acc[date] = (acc[date] || 0) + 1;
+                        return acc;
+                    }, {});
+
+                    const chartData = Object.entries(convoyCountByDate).map(([date, count]) => [date, count]);
+                    chartData.unshift(['Дата', 'Кількість конвоїв']);
+
+                    google.charts.load('current', {'packages':['corechart']});
+                    google.charts.setOnLoadCallback(() => {
+                        const data = google.visualization.arrayToDataTable(chartData);
+                        const options = {
+                            title: 'Кількість конвоїв за датами',
+                            curveType: 'function',
+                            legend: { position: 'bottom' },
+                            backgroundColor: { fill:'transparent' },
+                            colors: ['#007BFF'],
+                            titleTextStyle: { color: '#FFF' },
+                            hAxis: { textStyle: { color: '#FFF' } },
+                            vAxis: { textStyle: { color: '#FFF' } },
+                            legend: { textStyle: { color: '#FFF' } }
+                        };
+                        const chart = new google.visualization.LineChart(document.getElementById('convoyChart'));
+                        chart.draw(data, options);
+                    });
+                }
+            });
+        }
+
+        window.addEventListener('load', () => {
+            if (isAuthenticated()) {
+                authScreen.style.display = 'none';
+                mainInterface.style.display = 'grid';
+                fetchBlacklistData();
+                fetchConvoyData();
+                updateStats();
+                fetchRecentActivities();
+                updateUIForRole(localStorage.getItem('userRole'));
+            } else {
+                authScreen.style.display = 'flex';
+                mainInterface.style.display = 'none';
+            }
+        });
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        function handleResize() {
+            if (window.innerWidth <= 768) {
+                menuToggle.style.display = 'block';
+                sidebar.classList.remove('active');
+            } else {
+                menuToggle.style.display = 'none';
+                sidebar.classList.remove('active');
+            }
+        }
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        function addMainPageInfo(title, content) {
+            const infoRef = database.ref('mainPageInfo').push();
+            infoRef.set({
+                title: title,
+                content: content,
+                timestamp: Date.now()
+            });
+        }
+
+        function updateMainPageInfo(key, title, content) {
+            database.ref('mainPageInfo/' + key).update({
+                title: title,
+                content: content
+            });
+        }
+
+        function deleteMainPageInfo(key) {
+            database.ref('mainPageInfo/' + key).remove();
+        }
+
+        function renderMainPageInfo() {
+            const mainPageContent = document.getElementById('mainPageContent');
+            mainPageContent.innerHTML = '<div class="loading">Завантаження...</div>';
+
+            database.ref('mainPageInfo').orderByChild('timestamp').on('value', (snapshot) => {
+                mainPageContent.innerHTML = '';
+                snapshot.forEach((childSnapshot) => {
+                    const key = childSnapshot.key;
+                    const data = childSnapshot.val();
+                    const infoCard = document.createElement('div');
+                    infoCard.className = 'info-card';
+                    infoCard.innerHTML = `
+                        <h3>${data.title}</h3>
+                        <p>${data.content.replace(/\n/g, '<br>')}</p>
+                    `;
+                    mainPageContent.appendChild(infoCard);
+                });
+            });
+        }
+
+        function renderAdminInfoList() {
+            const adminInfoList = document.getElementById('adminInfoList');
+            adminInfoList.innerHTML = '<div class="loading">Завантаження...</div>';
+
+            database.ref('mainPageInfo').orderByChild('timestamp').on('value', (snapshot) => {
+                adminInfoList.innerHTML = '';
+                snapshot.forEach((childSnapshot) => {
+                    const key = childSnapshot.key;
+                    const data = childSnapshot.val();
+                    const infoItem = document.createElement('div');
+                    infoItem.className = 'info-item';
+                    infoItem.innerHTML = `
+                        <h3>${data.title}</h3>
+                        <p>${data.content.replace(/\n/g, '<br>')}</p>
+                        <div class="info-actions">
+                            <button class="btn edit-info" data-key="${key}">Редагувати</button>
+                            <button class="btn delete-info" data-key="${key}">Видалити</button>
+                        </div>
+                    `;
+                    adminInfoList.appendChild(infoItem);
+                });
+
+                document.querySelectorAll('.edit-info').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const key = e.target.getAttribute('data-key');
+                        editMainPageInfo(key);
+                    });
+                });
+
+                document.querySelectorAll('.delete-info').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const key = e.target.getAttribute('data-key');
+                        showSmsNotification('Підтвердження', 'Ви впевнені, що хочете видалити цю інформацію?', [
+                            {
+                                text: 'Так',
+                                onClick: () => {
+                                    deleteMainPageInfo(key);
+                                    showSmsNotification('Успіх', 'Інформацію успішно видалено!');
+                                }
+                            },
+                            {
+                                text: 'Ні',
+                                onClick: () => {}
+                            }
+                        ]);
+                    });
+                });
+            });
+        }
+
+        function editMainPageInfo(key) {
+            database.ref('mainPageInfo/' + key).once('value', (snapshot) => {
+                const data = snapshot.val();
+                document.getElementById('infoTitle').value = data.title;
+                document.getElementById('infoContent').value = data.content;
+                document.getElementById('adminForm').setAttribute('data-edit-key', key);
+            });
+        }
+
+        document.getElementById('adminForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = document.getElementById('infoTitle').value;
+            const content = document.getElementById('infoContent').value;
+            const editKey = e.target.getAttribute('data-edit-key');
+
+            if (editKey) {
+                updateMainPageInfo(editKey, title, content);
+                e.target.removeAttribute('data-edit-key');
+                showSmsNotification('Успіх', 'Інформацію успішно оновлено!');
+            } else {
+                addMainPageInfo(title, content);
+                showSmsNotification('Успіх', 'Нову інформацію успішно додано!');
+            }
+
+            e.target.reset();
+        });
+
+        renderMainPageInfo();
+        renderAdminInfoList();
+    </script>
+</body>
+</html>
+
