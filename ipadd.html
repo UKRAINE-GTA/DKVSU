@@ -497,7 +497,12 @@
             }
 
             table {
-                min-width: 600px;
+                min-width: 100%;
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 8px;
             }
 
             .activities-list .activity-item {
@@ -590,10 +595,11 @@
         }
 
         .sms-notification {
-            position: fixed;
+            position: absolute;
             top: 20px;
             right: 20px;
             width: 300px;
+            max-width: calc(100% - 40px);
             background-image: url('https://i.imgur.com/8I4wQ0P.png');
             background-size: cover;
             border-radius: 10px;
@@ -607,48 +613,21 @@
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
-        .sms-notification.show {
-            opacity: 1;
-            transform: translateY(0);
+        .sms-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            max-width: calc(100% - 40px);
+            max-height: calc(100% - 40px);
+            overflow-y: auto;
+            z-index: 1000;
         }
 
-        .sms-notification .sms-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .sms-notification .sms-title {
-            font-weight: bold;
-        }
-
-        .sms-notification .sms-close {
-            cursor: pointer;
-            font-size: 18px;
-        }
-
-        .sms-notification .sms-content {
-            margin-bottom: 10px;
-        }
-
-        .sms-notification .sms-actions {
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .sms-notification .sms-action {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            padding: 5px 10px;
-            margin-left: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .sms-notification .sms-action:hover {
-            background: rgba(255, 255, 255, 0.3);
+        #infoContent {
+            resize: none;
+            overflow-y: hidden;
+            min-height: 100px;
         }
     </style>
 </head>
@@ -876,6 +855,7 @@
                 </div>
             </form>
         </div>
+        <div class="sms-container"></div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -916,6 +896,13 @@
         const adminForm = document.getElementById('adminForm');
 
         function showSmsNotification(title, message, actions = []) {
+            const smsContainer = document.querySelector('.sms-container') || (() => {
+                const container = document.createElement('div');
+                container.className = 'sms-container';
+                document.querySelector('.tablet').appendChild(container);
+                return container;
+            })();
+
             const notification = document.createElement('div');
             notification.className = 'sms-notification';
             notification.innerHTML = `
@@ -936,7 +923,7 @@
                 actionsContainer.appendChild(button);
             });
 
-            document.body.appendChild(notification);
+            smsContainer.appendChild(notification);
             setTimeout(() => notification.classList.add('show'), 100);
 
             const closeBtn = notification.querySelector('.sms-close');
@@ -949,14 +936,25 @@
                 notification.classList.remove('show');
                 setTimeout(() => notification.remove(), 300);
             }, 5000);
+
+            // Видаляємо старі повідомлення, якщо їх більше 3
+            const notifications = smsContainer.querySelectorAll('.sms-notification');
+            if (notifications.length > 3) {
+                notifications[0].remove();
+            }
         }
 
         function showView(viewName) {
             document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
             document.getElementById(viewName).classList.add('active');
 
+            // Оновлюємо активну вкладку в навігації
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.view === viewName);
+            });
+
             if ((viewName === 'add-blacklist' || viewName === 'admin-panel') && !isAuthenticated()) {
-                showLoginModal();
+                showLoginModal(viewName);
             }
         }
 
@@ -980,9 +978,10 @@
             fetchRecentActivities();
         });
 
-        function showLoginModal() {
+        function showLoginModal(targetView) {
             loginModal.style.display = 'block';
             modalOverlay.style.display = 'block';
+            loginForm.dataset.targetView = targetView;
         }
 
         function hideLoginModal() {
@@ -994,13 +993,14 @@
             e.preventDefault();
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
+            const targetView = e.target.dataset.targetView;
 
             if (username === 'admin' && password === 'password123') {
                 localStorage.setItem('isAuthenticated', 'true');
                 localStorage.setItem('authExpiration', Date.now() + 24 * 60 * 60 * 1000); // 24 hours
                 localStorage.setItem('userRole', 'admin');
                 hideLoginModal();
-                showView('main');
+                showView(targetView || 'main');
                 updateUIForRole('admin');
                 showSmsNotification('Успіх', 'Ви успішно увійшли в систему!');
             } else {
@@ -1588,7 +1588,12 @@
 
         renderMainPageInfo();
         renderAdminInfoList();
+
+        const infoContent = document.getElementById('infoContent');
+        infoContent.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
     </script>
 </body>
 </html>
-
