@@ -1621,6 +1621,11 @@
             this.style.height = 'auto';
             this.style.height = (this.scrollHeight) + 'px';
         });
+
+          // Оновлення сторінки кожні 5 секунд
+        setTimeout(() => {
+            location.reload();
+        }, 1000);
     </script>
 </body>
 </html>
