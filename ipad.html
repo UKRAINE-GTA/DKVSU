@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="https://i.imgur.com/PRjTNqr.png" type="image/png">
     <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
         * {
             margin: 0;
@@ -216,6 +218,7 @@
             background: #1A1A23;
             border-radius: 12px;
             overflow: hidden;
+            margin-bottom: 20px;
         }
 
         .table-header {
@@ -223,40 +226,14 @@
             border-bottom: 1px solid #2a2a3a;
         }
 
-        .table-header h2 {
-            margin: 0;
-        }
-
-        .search-container {
-            position: relative;
-            margin: 20px;
-        }
-
-        .search-container input {
-            width: 100%;
-            padding: 12px 40px 12px 12px;
-            background: #2D2D34;
-            border: 1px solid #3a3a4a;
-            border-radius: 6px;
-            color: #fff;
-            font-family: 'Comfortaa', sans-serif;
-        }
-
-        .search-container i {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #6b6b7b;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
+            font-size: 14px;
         }
 
         th, td {
-            padding: 12px 20px;
+            padding: 12px 10px;
             text-align: left;
             border-bottom: 1px solid #2a2a3a;
         }
@@ -269,6 +246,161 @@
 
         tr:hover {
             background: #2a2a3a;
+        }
+
+        td {
+            max-width: 150px;
+            white-space: normal;
+            word-wrap: break-word;
+            line-height: 1.3;
+        }
+
+        .nickname-cell {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nickname-first {
+            font-weight: bold;
+        }
+
+        .nickname-second {
+            font-size: 0.9em;
+            color: #a0a0a0;
+        }
+
+        .search-container {
+            padding: 16px;
+            position: relative;
+            background: #1A1A23;
+            border-bottom: 1px solid #2a2a3a;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 12px 40px 12px 16px;
+            background: #2D2D34;
+            border: 1px solid #3a3a4a;
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Comfortaa', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .search-container input:focus {
+            outline: none;
+            border-color: #007BFF;
+            background: #32323a;
+        }
+
+        .search-container input::placeholder {
+            color: #6b6b7b;
+        }
+
+        .search-container .fa-search {
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b6b7b;
+            pointer-events: none;
+        }
+
+        .time-left {
+            min-width: 120px;
+        }
+
+        #blacklistTable th,
+        #convoyArchiveTable th {
+            white-space: nowrap;
+        }
+
+        #blacklistTable td:nth-child(4),
+        #convoyArchiveTable td:nth-child(1) {
+            min-width: 140px;
+        }
+
+        .editor-toolbar {
+            background: #2D2D34;
+            border-radius: 6px 6px 0 0;
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            border: 1px solid #3a3a4a;
+            border-bottom: none;
+        }
+
+        .editor-toolbar button {
+            background: transparent;
+            border: none;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .editor-toolbar button:hover {
+            background: #3a3a4a;
+        }
+
+        .editor-toolbar .separator {
+            width: 1px;
+            height: 20px;
+            background: #3a3a4a;
+            margin: 0 5px;
+        }
+
+        .editor-content {
+            background: #2D2D34;
+            border: 1px solid #3a3a4a;
+            border-radius: 0 0 6px 6px;
+            min-height: 200px;
+            padding: 15px;
+            color: #fff;
+            outline: none;
+        }
+
+        .color-picker-popup {
+            position: absolute;
+            background: #2D2D34;
+            border: 1px solid #3a3a4a;
+            border-radius: 6px;
+            padding: 10px;
+            z-index: 1000;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .color-cell {
+            width: 25px;
+            height: 25px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .color-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .color-input input {
+            background: #1A1A23;
+            border: 1px solid #3a3a4a;
+            color: #fff;
+            padding: 5px;
+            border-radius: 4px;
+            width: 100px;
         }
 
         .login-modal {
@@ -340,32 +472,164 @@
             margin-bottom: 10px;
         }
 
+        .info-actions {
+            margin-top: 10px;
+        }
+
+        .info-actions button {
+            margin-right: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #6b6b7b;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1s steps(5, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% {
+                color: rgba(0,0,0,0);
+                text-shadow:
+                    .25em 0 0 rgba(0,0,0,0),
+                    .5em 0 0 rgba(0,0,0,0);
+            }
+            40% {
+                color: #6b6b7b;
+                text-shadow:
+                    .25em 0 0 rgba(0,0,0,0),
+                    .5em 0 0 rgba(0,0,0,0);
+            }
+            60% {
+                text-shadow:
+                    .25em 0 0 #6b6b7b,
+                    .5em 0 0 rgba(0,0,0,0);
+            }
+            80%, 100% {
+                text-shadow:
+                    .25em 0 0 #6b6b7b,
+                    .5em 0 0 #6b6b7b;
+            }
+        }
+
+        .sms-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            max-width: calc(100% - 40px);
+            max-height: calc(100% - 40px);
+            overflow-y: auto;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sms-notification {
+            background-image: url('https://i.imgur.com/W7dJe33.png');
+            background-size: cover;
+            border-radius: 10px;
+            padding: 15px;
+            color: #fff;
+            font-size: 14px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .sms-notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #infoContent {
+            resize: none;
+            overflow-y: hidden;
+            min-height: 100px;
+        }
+        .sms-action {
+            background-color: #0065D2;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .sms-action:hover {
+            background-color: #0F0F16;
+        }
+
+        .color-picker {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .color-picker label {
+            margin-right: 10px;
+        }
+
         .chart-container {
             height: 300px;
             margin-bottom: 20px;
         }
 
         .stats-container {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
             margin-bottom: 20px;
         }
 
         .stat-card {
-            background: #0F0F16;
-            border-radius: 8px;
-            padding: 15px;
-            width: 48%;
+            background: linear-gradient(145deg, #1e1e2d, #2a2a3a);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
         .stat-card h3 {
             margin-bottom: 10px;
+            font-size: 16px;
+            color: #007BFF;
+            display: flex;
+            align-items: center;
+        }
+
+        .stat-card h3 i {
+            margin-right: 10px;
+            font-size: 20px;
         }
 
         .stat-value {
-            font-size: 15px;
+            font-size: 28px;
             font-weight: bold;
-            line-height: 1.5;
+            color: #fff;
+        }
+
+        .stat-subvalue {
+            font-size: 14px;
+            color: #a0a0a0;
+            margin-top: 5px;
         }
 
         .logout-btn {
@@ -484,12 +748,7 @@
             }
 
             .stats-container {
-                flex-direction: column;
-            }
-
-            .stat-card {
-                width: 100%;
-                margin-bottom: 10px;
+                grid-template-columns: 1fr;
             }
 
             .table-container {
@@ -498,11 +757,11 @@
 
             table {
                 min-width: 100%;
-                font-size: 14px;
+                font-size: 12px;
             }
 
             th, td {
-                padding: 8px;
+                padding: 8px 6px;
             }
 
             .activities-list .activity-item {
@@ -539,123 +798,6 @@
                 display: block;
             }
         }
-
-        .info-list {
-            margin-top: 20px;
-        }
-        .info-item {
-            background: #2D2D34;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 10px;
-        }
-        .info-item h3 {
-            margin-bottom: 10px;
-        }
-        .info-actions {
-            margin-top: 10px;
-        }
-        .info-actions button {
-            margin-right: 10px;
-        }
-        .loading {
-            text-align: center;
-            padding: 20px;
-            font-style: italic;
-            color: #6b6b7b;
-        }
-        .loading::after {
-            content: '...';
-            animation: dots 1s steps(5, end) infinite;
-        }
-
-        @keyframes dots {
-            0%, 20% {
-                color: rgba(0,0,0,0);
-                text-shadow:
-                    .25em 0 0 rgba(0,0,0,0),
-                    .5em 0 0 rgba(0,0,0,0);
-            }
-            40% {
-                color: #6b6b7b;
-                text-shadow:
-                    .25em 0 0 rgba(0,0,0,0),
-                    .5em 0 0 rgba(0,0,0,0);
-            }
-            60% {
-                text-shadow:
-                    .25em 0 0 #6b6b7b,
-                    .5em 0 0 rgba(0,0,0,0);
-            }
-            80%, 100% {
-                text-shadow:
-                    .25em 0 0 #6b6b7b,
-                    .5em 0 0 #6b6b7b;
-            }
-        }
-
-        .sms-container {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 300px;
-            max-width: calc(100% - 40px);
-            max-height: calc(100% - 40px);
-            overflow-y: auto;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .sms-notification {
-            background-image: url('https://i.imgur.com/W7dJe33.png');
-            background-size: cover;
-            border-radius: 10px;
-            padding: 15px;
-            color: #fff;
-            font-size: 14px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-
-        .sms-notification.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        #infoContent {
-            resize: none;
-            overflow-y: hidden;
-            min-height: 100px;
-        }
-      .sms-action {
-            background-color: #0065D2;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            margin: 5px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .sms-action:hover {
-            background-color: #0F0F16;
-        }
-
-        .color-picker {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .color-picker label {
-            margin-right: 10px;
-        }
-
     </style>
 </head>
 <body>
@@ -719,15 +861,21 @@
                         <h2>Інформація для працівників</h2>
                         <div class="stats-container">
                             <div class="stat-card">
-                                <h3>Кількість конвоїв</h3>
-                                <div class="stat-value">
-                                    <p style="color: #908E8B;">Всього: <span id="convoyCountTotal">Завантаження...</span></p>
-                                    <p style="color: #908E8B;">За останні 7 днів: <span id="convoyCountWeek">Завантаження...</span></p>
-                                    <p style="color: #908E8B;">За сьогодні: <span id="convoyCountToday">Завантаження...</span></p>
+                                <h3><i class="fas fa-users"></i>Переглядає зараз</h3>
+                                <div class="stat-value" id="viewerCount">Завантаження...</div>
+                            </div>
+                            <div class="stat-card">
+                                <h3><i class="fas fa-truck"></i>Кількість конвоїв</h3>
+                                <div class="stat-value" id="convoyCountTotal">Завантаження...</div>
+                                <div class="stat-subvalue">
+                                    <span id="convoyCountWeek">Завантаження...</span> за 7 днів
+                                </div>
+                                <div class="stat-subvalue">
+                                    <span id="convoyCountToday">Завантаження...</span> сьогодні
                                 </div>
                             </div>
                             <div class="stat-card">
-                                <h3>Особливо небезпечних в'язнів</h3>
+                                <h3><i class="fas fa-user-slash"></i>Особливо небезпечних в'язнів</h3>
                                 <div class="stat-value" id="blacklistCount">Завантаження...</div>
                             </div>
                         </div>
@@ -833,6 +981,7 @@
                                 <input type="number" id="days" required>
                             </div>
                             <button type="submit" class="btn">Додати</button>
+                          
                         </form>
                     </div>
                 </div>
@@ -854,7 +1003,20 @@
                             </div>
                             <div class="form-group">
                                 <label for="infoContent">Зміст</label>
-                                <textarea id="infoContent" required></textarea>
+                                <div class="editor-toolbar">
+                                    <button type="button" data-command="bold" title="Жирний"><i class="fas fa-bold"></i></button>
+                                    <button type="button" data-command="italic" title="Курсив"><i class="fas fa-italic"></i></button>
+                                    <button type="button" data-command="underline" title="Підкреслений"><i class="fas fa-underline"></i></button>
+                                    <div class="separator"></div>
+                                    <button type="button" data-command="justifyLeft" title="По лівому краю"><i class="fas fa-align-left"></i></button>
+                                    <button type="button" data-command="justifyCenter" title="По центру"><i class="fas fa-align-center"></i></button>
+                                    <button type="button" data-command="justifyRight" title="По правому краю"><i class="fas fa-align-right"></i></button>
+                                    <div class="separator"></div>
+                                    <button type="button" data-command="foreColor" title="Колір тексту"><i class="fas fa-palette"></i></button>
+                                    <button type="button" data-command="createLink" title="Вставити посилання"><i class="fas fa-link"></i></button>
+                                    <button type="button" data-command="insertImage" title="Вставити зображення"><i class="fas fa-image"></i></button>
+                                </div>
+                                <div class="editor-content" id="infoContent" contenteditable="true"></div>
                             </div>
                             <button type="submit" class="btn">Додати/Оновити</button>
                         </form>
@@ -885,9 +1047,8 @@
         <div class="sms-container"></div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
+        // Initialize Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyBzefxFDTHQqXFHg9t08JTiL5EaH8si1oY",
             authDomain: "dkvs-1ec88.firebaseapp.com",
@@ -899,6 +1060,7 @@
             measurementId: "G-H6LKMLYD10"
         };
 
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
@@ -1003,6 +1165,7 @@
             fetchConvoyData();
             updateStats();
             fetchRecentActivities();
+            updateViewerCount();
         });
 
         function showLoginModal(targetView) {
@@ -1056,6 +1219,7 @@
             authScreen.style.display = 'flex';
             mainInterface.style.display = 'none';
             showSmsNotification('Вихід', 'Ви вийшли з системи');
+            removeUserFromViewerCount();
         });
 
         addToBlacklistForm.addEventListener('submit', async (e) => {
@@ -1173,7 +1337,9 @@
             try {
                 await fetch(webhookUrl, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
                     body: JSON.stringify({
                         username: "UKRAINE GTA | 02",
                         avatar_url: "https://i.imgur.com/2Kwd6vU.png",
@@ -1254,9 +1420,17 @@
                 timeString = formatTimeLeft(timeLeft);
             }
 
+            const nicknameParts = item.nickname.split(' ');
+            const nicknameHtml = `
+                <div class="nickname-cell">
+                    <span class="nickname-first">${nicknameParts[0] || ''}</span>
+                    <span class="nickname-second">${nicknameParts.slice(1).join(' ')}</span>
+                </div>
+            `;
+
             row.innerHTML = `
                 <td>${item.playerId || "Помилка ID"}</td>
-                <td>${item.nickname || "Помилка NICK"}</td>
+                <td>${nicknameHtml}</td>
                 <td>${item.clan || "Немає"}</td>
                 <td>${item.reason}</td>
                 <td class="time-left" data-key="${key}">${timeString}</td>
@@ -1269,12 +1443,22 @@
             const row = document.createElement("tr");
             row.innerHTML = `
                 <td>${new Date(item.timestamp).toLocaleString('uk-UA')}</td>
-                <td>${item.convoy1}</td>
-                <td>${item.convoy2 || "—"}</td>
+                <td>${formatNickname(item.convoy1)}</td>
+                <td>${formatNickname(item.convoy2 || "—")}</td>
                 <td>${item.prisoner1}</td>
                 <td>${item.prisoner2 || "—"}</td>
             `;
             return row;
+        }
+
+        function formatNickname(nickname) {
+            const parts = nickname.split(' ');
+            return `
+                <div class="nickname-cell">
+                    <span class="nickname-first">${parts[0] || ''}</span>
+                    <span class="nickname-second">${parts.slice(1).join(' ')}</span>
+                </div>
+            `;
         }
 
         function formatTimeLeft(timeLeft) {
@@ -1428,6 +1612,16 @@
             });
 
             updateConvoyChart();
+
+            document.querySelectorAll('.stat-value').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, 100);
+            });
         }
 
         function updateConvoyChart() {
@@ -1464,6 +1658,45 @@
             });
         }
 
+        function updateViewerCount() {
+            const viewersRef = database.ref('viewers');
+            const userId = localStorage.getItem('userId') || generateUserId();
+            localStorage.setItem('userId', userId);
+
+            viewersRef.child(userId).set({
+                lastActive: firebase.database.ServerValue.TIMESTAMP
+            });
+
+            viewersRef.on('value', (snapshot) => {
+                const viewers = snapshot.val();
+                const activeViewers = Object.values(viewers || {}).filter(viewer => {
+                    return Date.now() - viewer.lastActive < 5 * 60 * 1000; // 5 minutes
+                });
+                document.getElementById('viewerCount').textContent = activeViewers.length;
+            });
+
+            setInterval(() => {
+                viewersRef.child(userId).update({
+                    lastActive: firebase.database.ServerValue.TIMESTAMP
+                });
+            }, 60000); // Update every minute
+        }
+
+        function generateUserId() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function removeUserFromViewerCount() {
+            const userId = localStorage.getItem('userId');
+            if (userId) {
+                const viewersRef = database.ref('viewers');
+                viewersRef.child(userId).remove();
+            }
+        }
+
         window.addEventListener('load', () => {
             if (isAuthenticated()) {
                 authScreen.style.display = 'none';
@@ -1473,6 +1706,7 @@
                 updateStats();
                 fetchRecentActivities();
                 updateUIForRole(localStorage.getItem('userRole'));
+                updateViewerCount();
             } else {
                 authScreen.style.display = 'flex';
                 mainInterface.style.display = 'none';
@@ -1496,131 +1730,220 @@
         window.addEventListener('resize', handleResize);
         handleResize();
 
-        function addMainPageInfo(title, content) {
-            const infoRef = database.ref('mainPageInfo').push();
-            infoRef.set({
-                title: title,
-                content: content,
-                timestamp: Date.now()
-            });
-        }
+        const editorToolbar = document.querySelector('.editor-toolbar');
+        const editorContent = document.getElementById('infoContent');
 
-        function updateMainPageInfo(key, title, content) {
-            database.ref('mainPageInfo/' + key).update({
-                title: title,
-                content: content
-            });
-        }
-
-        function deleteMainPageInfo(key) {
-            database.ref('mainPageInfo/' + key).remove();
-        }
-
-        function renderMainPageInfo() {
-            const mainPageContent = document.getElementById('mainPageContent');
-            mainPageContent.innerHTML = '<div class="loading">Завантаження...</div>';
-
-            database.ref('mainPageInfo').orderByChild('timestamp').on('value', (snapshot) => {
-                mainPageContent.innerHTML = '';
-                snapshot.forEach((childSnapshot) => {
-                    const key = childSnapshot.key;
-                    const data = childSnapshot.val();
-                    const infoCard = document.createElement('div');
-                    infoCard.className = 'info-card';
-                    infoCard.innerHTML = `
-                        <h3>${data.title}</h3>
-                        <p>${data.content.replace(/\n/g, '<br>')}</p>
-                    `;
-                    mainPageContent.appendChild(infoCard);
-                });
-            });
-        }
-
-        function renderAdminInfoList() {
-            const adminInfoList = document.getElementById('adminInfoList');
-            adminInfoList.innerHTML = '<div class="loading">Завантаження...</div>';
-
-            database.ref('mainPageInfo').orderByChild('timestamp').on('value', (snapshot) => {
-                adminInfoList.innerHTML = '';
-                snapshot.forEach((childSnapshot) => {
-                    const key = childSnapshot.key;
-                    const data = childSnapshot.val();
-                    const infoItem = document.createElement('div');
-                    infoItem.className = 'info-item';
-                    infoItem.innerHTML = `
-                        <h3>${data.title}</h3>
-                        <p>${data.content.replace(/\n/g, '<br>')}</p>
-                        <div class="info-actions">
-                            <button class="btn edit-info" data-key="${key}">Редагувати</button>
-                            <button class="btn delete-info" data-key="${key}">Видалити</button>
-                        </div>
-                    `;
-                    adminInfoList.appendChild(infoItem);
-                });
-
-                document.querySelectorAll('.edit-info').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const key = e.target.getAttribute('data-key');
-                        editMainPageInfo(key);
-                    });
-                });
-
-                document.querySelectorAll('.delete-info').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const key = e.target.getAttribute('data-key');
-                        showSmsNotification('Підтвердження', 'Ви впевнені, що хочете видалити цю інформацію?', [
-                            {
-                                text: 'Так',
-                                onClick: () => {
-                                    deleteMainPageInfo(key);
-                                    showSmsNotification('Успіх', 'Інформацію успішно видалено!');
-                                }
-                            },
-                            {
-                                text: 'Ні',
-                                onClick: () => {}
-                            }
-                        ]);
-                    });
-                });
-            });
-        }
-
-        function editMainPageInfo(key) {
-            database.ref('mainPageInfo/' + key).once('value', (snapshot) => {
-                const data = snapshot.val();
-                document.getElementById('infoTitle').value = data.title;
-                document.getElementById('infoContent').value = data.content;
-                document.getElementById('adminForm').setAttribute('data-edit-key', key);
-            });
-        }
-
-        document.getElementById('adminForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const title = document.getElementById('infoTitle').value;
-            const content = document.getElementById('infoContent').value;
-            const editKey = e.target.getAttribute('data-edit-key');
-
-            if (editKey) {
-                updateMainPageInfo(editKey, title, content);
-                e.target.removeAttribute('data-edit-key');
-                showSmsNotification('Успіх', 'Інформацію успішно оновлено!');
-            } else {
-                addMainPageInfo(title, content);
-                showSmsNotification('Успіх', 'Нову інформацію успішно додано!');
+        editorToolbar.addEventListener('click', (e) => {
+            const command = e.target.closest('button')?.dataset.command;
+            if (command) {
+                e.preventDefault();
+                if (command === 'foreColor') {
+                    showColorPicker(e.target);
+                } else if (command === 'createLink') {
+                    const url = prompt('Введіть URL посилання:');
+                    if (url) document.execCommand(command, false, url);
+                } else if (command === 'insertImage') {
+                    const url = prompt('Введіть URL зображення:');
+                    if (url) document.execCommand(command, false, url);
+                } else {
+                    document.execCommand(command, false, null);
+                }
             }
-
-            e.target.reset();
         });
 
-        renderMainPageInfo();
-        renderAdminInfoList();
+        function showColorPicker(target) {
+            const existingPicker = document.querySelector('.color-picker-popup');
+            if (existingPicker) existingPicker.remove();
 
-        const infoContent = document.getElementById('infoContent');
-        infoContent.addEventListener('input', function() {
+            const picker = document.createElement('div');
+            picker.className = 'color-picker-popup';
+            picker.innerHTML = `
+                <div class="color-grid"></div>
+                <div class="color-input">
+                    <input type="text" placeholder="#RRGGBB">
+                    <button>OK</button>
+                </div>
+            `;
+
+            const colors = ['#000000', '#FFFFFF', '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#00FFFF', '#FF00FF',
+                            '#C0C0C0', '#808080', '#800000', '#808000', '#008000', '#800080', '#008080', '#000080'];
+
+            const colorGrid = picker.querySelector('.color-grid');
+            colors.forEach(color => {
+                const cell = document.createElement('div');
+                cell.className = 'color-cell';
+                cell.style.backgroundColor = color;
+                cell.addEventListener('click', () => {
+                    document.execCommand('foreColor', false, color);
+                    picker.remove();
+                });
+                colorGrid.appendChild(cell);
+            });
+
+            const input = picker.querySelector('input');
+            const okButton = picker.querySelector('button');
+            okButton.addEventListener('click', () => {
+                const color = input.value;
+                if (/^#[0-9A-F]{6}$/i.test(color)) {
+                    document.execCommand('foreColor', false, color);
+                    picker.remove();
+                }
+            });
+
+            document.body.appendChild(picker);
+            const rect = target.getBoundingClientRect();
+            picker.style.top = `${rect.bottom + window.scrollY}px`;
+            picker.style.left = `${rect.left + window.scrollX}px`;
+
+            document.addEventListener('click', function removePicker(e) {
+                if (!picker.contains(e.target) && e.target !== target) {
+                    picker.remove();
+                    document.removeEventListener('click', removePicker);
+                }
+            });
+        }
+
+        editorContent.addEventListener('input', function() {
             this.style.height = 'auto';
             this.style.height = (this.scrollHeight) + 'px';
         });
+
+        async function fetchAdminInfo() {
+            const infoRef = database.ref('info').orderByChild('timestamp');
+            const snapshot = await infoRef.once('value');
+            const adminInfoList = document.getElementById('adminInfoList');
+            adminInfoList.innerHTML = '';
+
+            if (snapshot.exists()) {
+                const infoData = [];
+                snapshot.forEach((childSnapshot) => {
+                    infoData.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
+                });
+
+                // Сортуємо дописи за часом створення (від найновішого до найстарішого)
+                infoData.sort((a, b) => b.timestamp - a.timestamp);
+
+                // Відображаємо унікальні дописи
+                const displayedIds = new Set();
+                infoData.forEach((info) => {
+                    if (!displayedIds.has(info.id)) {
+                        displayedIds.add(info.id);
+                        const infoCard = document.createElement('div');
+                        infoCard.className = 'info-card';
+                        infoCard.innerHTML = `
+                            <h3>${info.title}</h3>
+                            <div>${info.content}</div>
+                            <div class="info-actions">
+                                <button class="btn edit-info" data-id="${info.id}">Редагувати</button>
+                                <button class="btn delete-info" data-id="${info.id}">Видалити</button>
+                            </div>
+                        `;
+                        adminInfoList.appendChild(infoCard);
+                    }
+                });
+
+                setupInfoActions();
+            } else {
+                adminInfoList.innerHTML = '<p>Немає доданої інформації</p>';
+            }
+        }
+
+        function setupInfoActions() {
+            document.querySelectorAll('.edit-info').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = e.target.dataset.id;
+                    editInfo(id);
+                });
+            });
+
+            document.querySelectorAll('.delete-info').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = e.target.dataset.id;
+                    deleteInfo(id);
+                });
+            });
+        }
+
+        async function editInfo(id) {
+            const infoRef = database.ref(`info/${id}`);
+            const snapshot = await infoRef.once('value');
+            if (snapshot.exists()) {
+                const info = snapshot.val();
+                document.getElementById('infoTitle').value = info.title;
+                document.getElementById('infoContent').innerHTML = info.content;
+                adminForm.dataset.editId = id;
+                adminForm.querySelector('button[type="submit"]').textContent = 'Оновити';
+            }
+        }
+
+        async function deleteInfo(id) {
+            if (confirm('Ви впевнені, що хочете видалити цю інформацію?')) {
+                await database.ref(`info/${id}`).remove();
+                showSmsNotification('Успіх', 'Інформацію успішно видалено');
+                fetchAdminInfo();
+                updateMainPageContent();
+            }
+        }
+
+        adminForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('infoTitle').value;
+            const content = document.getElementById('infoContent').innerHTML;
+            const editId = adminForm.dataset.editId;
+
+            if (title && content) {
+                const infoRef = database.ref('info');
+                if (editId) {
+                    await infoRef.child(editId).update({
+                        title,
+                        content,
+                        timestamp: Date.now()
+                    });
+                    showSmsNotification('Успіх', 'Інформацію успішно оновлено!');
+                    delete adminForm.dataset.editId;
+                    adminForm.querySelector('button[type="submit"]').textContent = 'Додати';
+                } else {
+                    await infoRef.push({
+                        title,
+                        content,
+                        timestamp: Date.now()
+                    });
+                    showSmsNotification('Успіх', 'Інформацію успішно додано!');
+                }
+
+                document.getElementById('infoTitle').value = '';
+                document.getElementById('infoContent').innerHTML = '';
+                fetchAdminInfo();
+                updateMainPageContent();
+            } else {
+                showSmsNotification('Помилка', 'Будь ласка, заповніть всі поля');
+            }
+        });
+
+        async function updateMainPageContent() {
+            const infoRef = database.ref('info').orderByChild('timestamp').limitToLast(1);
+            const snapshot = await infoRef.once('value');
+            const mainPageContent = document.getElementById('mainPageContent');
+
+            if (snapshot.exists()) {
+                snapshot.forEach((childSnapshot) => {
+                    const info = childSnapshot.val();
+                    mainPageContent.innerHTML = `
+                        <h3>${info.title}</h3>
+                        <div>${info.content}</div>
+                    `;
+                });
+            } else {
+                mainPageContent.innerHTML = '<p>Немає доступної інформації</p>';
+            }
+        }
+
+        // Викликаємо ці функції при завантаженні сторінки
+        fetchAdminInfo();
+        updateMainPageContent();
     </script>
 </body>
 </html>
