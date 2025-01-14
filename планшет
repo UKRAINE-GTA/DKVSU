@@ -631,6 +631,31 @@
             overflow-y: hidden;
             min-height: 100px;
         }
+      .sms-action {
+            background-color: #0065D2;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .sms-action:hover {
+            background-color: #0F0F16;
+        }
+
+        .color-picker {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .color-picker label {
+            margin-right: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -723,11 +748,11 @@
                                 <input type="text" id="convoy2">
                             </div>
                             <div class="form-group">
-                                <label for="prisoner1">Nick Name та ID в'язня №1:</label>
+                                <label for="prisoner1">ID в'язня №1:</label>
                                 <input type="text" id="prisoner1" required>
                             </div>
                             <div class="form-group">
-                                <label for="prisoner2">Nick Name та ID в'язня №2 (якщо є):</label>
+                                <label for="prisoner2">ID в'язня №2 (якщо є):</label>
                                 <input type="text" id="prisoner2">
                             </div>
                             <button type="submit" class="btn">Зареєструвати конвой</button>
@@ -793,7 +818,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="nickname">Нікнейм</label>
-                                <input type="text" id="nickname" required>
+                                <input type="text" id="nickname">
                             </div>
                             <div class="form-group">
                                 <label for="clan">Клан</label>
@@ -801,7 +826,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="reason">Причина</label>
-                                <textarea id="reason" maxlength="50" required></textarea>
+                                <textarea id="reason" maxlength="70" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="days">Кількість днів</label>
