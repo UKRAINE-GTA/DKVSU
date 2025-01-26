@@ -1407,7 +1407,7 @@
             });
 
             await addActivity('blacklist', `Додано до ЧС: ${nickname} : ${reason}`);
-            await addLog('blacklist', `${addedBy} додав ${nickname} : ${reason} до ЧС на ${days} днів. Причина: ${reason}`);
+            await addLog('blacklist', `${addedBy} додав ${nickname} : ${playerId} до ЧС на ${days} днів. Причина: ${reason}`);
             fetchBlacklistData();
         }
 
