@@ -1339,10 +1339,10 @@
             const password = document.getElementById('loginPassword').value;
             const targetView = e.target.dataset.targetView;
 
-            if (username === 'admin' && password === 'DKVS33') {
+            if (username === 'dkvs' && password === 'DKVS33') {
                 localStorage.setItem('isAuthenticated', 'true');
                 localStorage.setItem('authExpiration', Date.now() + 24 * 60 * 60 * 1000); // 24 hours
-                localStorage.setItem('userRole', 'dkvs');
+                localStorage.setItem('userRole', 'admin');
                 hideLoginModal();
                 showView(targetView || 'main');
                 updateUIForRole('admin');
