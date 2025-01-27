@@ -70,7 +70,7 @@
         .auth-screen {
             width: 100%;
             height: 100%;
-            background: #007BFF;
+            background: url('https://i.imgur.com/Dqt7AIA.png') no-repeat center center fixed;
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -90,6 +90,18 @@
             margin-bottom: 40px;
             line-height: 1.4;
         }
+      
+      .auth-info {
+    font-size: 15px;
+    text-align: left;
+    margin: 0; /* Скидаємо відступи */
+    line-height: 1.4;
+    position: absolute; /* Додаємо позиціонування */
+    bottom: 0; /* Прив'язуємо до нижнього краю */
+    left: 0; /* Прив'язуємо до лівого краю */
+    padding: 20px; /* Додаємо внутрішні відступи, якщо потрібно */
+}
+
 
         .fingerprint-icon {
             width: 80px;
@@ -904,6 +916,7 @@
             <div class="fingerprint-icon" id="fingerprintAuth">
                 <i class="fas fa-fingerprint"></i>
             </div>
+          <h1 class="auth-info">З повагою, <br> Данило Шульга</h1>
         </div>
 
         <div class="main-interface" id="mainInterface">
@@ -1058,7 +1071,7 @@
                         <form id="addToBlacklistForm">
                             <div class="form-group">
                                 <label for="playerId">ID Гравця</label>
-                                <input type="text" id="playerId" required>
+                                <input type="number" id="playerId" required>
                             </div>
                             <div class="form-group">
                                 <label for="nickname">Нікнейм</label>
@@ -1070,7 +1083,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="reason">Причина</label>
-                                <textarea id="reason" maxlength="70" required></textarea>
+                                <input id="reason" maxlength="70" required>
                             </div>
                             <div class="form-group">
                                 <label for="days">Кількість днів</label>
@@ -1080,6 +1093,11 @@
                                 <label for="addedBy">Nick Name того, хто заносить в ЧС</label>
                                 <input type="text" id="addedBy" required>
                             </div>
+                          <div class="form-group">
+                                <label for="urlblack">Докази порушення URL (через хостинг YouTube або Imgur)</label>
+                                <input type="text" id="urlblack" required>
+                            </div>
+                          
                             <button type="submit" class="btn">Додати</button>
                         </form>
                         <div class="blacklist-info">
@@ -1143,14 +1161,12 @@
                                     <option value="all">Всі типи</option>
                                     <option value="convoy">Конвой</option>
                                     <option value="blacklist">Чорний список</option>
-                                    <option value="admin">Адмін</option>
                                     <option value="auth">Авторизація</option>
                                 </select>
                                 <select id="logDateFilter">
                                     <option value="all">Весь час</option>
                                     <option value="today">Сьогодні</option>
                                     <option value="week">Цей тиждень</option>
-                                    <option value="month">Цей місяць</option>
                                 </select>
                             </div>
                         </div>
@@ -1323,10 +1339,10 @@
             const password = document.getElementById('loginPassword').value;
             const targetView = e.target.dataset.targetView;
 
-            if (username === 'admin' && password === 'password123') {
+            if (username === 'admin' && password === 'DKVS33') {
                 localStorage.setItem('isAuthenticated', 'true');
                 localStorage.setItem('authExpiration', Date.now() + 24 * 60 * 60 * 1000); // 24 hours
-                localStorage.setItem('userRole', 'admin');
+                localStorage.setItem('userRole', 'dkvs');
                 hideLoginModal();
                 showView(targetView || 'main');
                 updateUIForRole('admin');
@@ -1371,8 +1387,9 @@
             const reason = document.getElementById('reason').value;
             const days = document.getElementById('days').value;
             const addedBy = document.getElementById('addedBy').value;
+            const urlblack = document.getElementById('urlblack').value;
 
-            await addToBlacklist(playerId, nickname, clan, reason, days, addedBy);
+            await addToBlacklist(playerId, nickname, clan, reason, days, addedBy, urlblack);
             addToBlacklistForm.reset();
             showSmsNotification('Успіх', 'Запис успішно додано до чорного списку!');
         });
@@ -1389,7 +1406,7 @@
             showSmsNotification('Успіх', 'Конвой успішно зареєстровано!');
         });
 
-        async function addToBlacklist(playerId, nickname, clan, reason, days, addedBy) {
+        async function addToBlacklist(playerId, nickname, clan, reason, days, addedBy, urlblack) {
             const blacklistRef = database.ref("blacklist");
             const newBlacklistRef = blacklistRef.push();
 
@@ -1402,13 +1419,18 @@
                 reason,
                 days,
                 addedBy,
+                urlblack,
                 createdAt: Date.now(),
                 expirationTime,
             });
 
-            await addActivity('blacklist', `Додано до ЧС: ${nickname} : ${reason}`);
-            await addLog('blacklist', `${addedBy} додав ${nickname} : ${playerId} до ЧС на ${days} днів. Причина: ${reason}`);
-            fetchBlacklistData();
+          await addActivity('blacklist', `Додано до ЧС: ${nickname} ${playerId} : ${reason}`);
+await addLog(
+    'blacklist',
+    `${addedBy} додав ${nickname} : ${playerId} до ЧС на ${days} днів. Причина: ${reason} <br><br> Докази: <span style="display:block;color:blue;"> <a href="${urlblack}" target="_blank" style="color:blue;text-decoration:underline;">${urlblack}</a></span>`
+);
+fetchBlacklistData();
+
         }
 
         async function addConvoy(convoy1, convoy2, prisoner1, prisoner2) {
@@ -1575,23 +1597,28 @@
                 timeString = formatTimeLeft(timeLeft);
             }
 
-            const nicknameParts = item.nickname.split(' ');
-            const nicknameHtml = `
-                <div class="nickname-cell">
-                    <span class="nickname-first">${nicknameParts[0] || ''}</span>
-                    <span class="nickname-second">${nicknameParts.slice(1).join(' ')}</span>
-                </div>
-            `;
+            const nicknameHtml = item.nickname
+    ? (() => {
+        const nicknameParts = item.nickname.split(' ');
+        return `
+            <div class="nickname-cell">
+                <span class="nickname-first">${nicknameParts[0] || ''}</span>
+                <span class="nickname-second">${nicknameParts.slice(1).join(' ')}</span>
+            </div>
+        `;
+    })()
+    : `<div class="nickname-error">Помилка NICKNAME</div>`;
 
-            row.innerHTML = `
-                <td>${item.playerId || "Помилка ID"}</td>
-                <td>${nicknameHtml}</td>
-                <td>${item.clan || "Помилка NICK"}</td>
-                <td>${item.reason}</td>
-                <td class="time-left" data-key="${key}">${timeString}</td>
-            `;
+row.innerHTML = `
+    <td>${item.playerId || "Помилка ID"}</td>
+    <td>${nicknameHtml}</td>
+    <td>${item.clan || "Помилка CLAN"}</td>
+    <td>${item.reason}</td>
+    <td class="time-left" data-key="${key}">${timeString}</td>
+`;
 
-            return row;
+return row;
+
         }
 
         function createConvoyTableRow(item) {
@@ -2047,7 +2074,6 @@
             const types = {
                 'convoy': 'Конвой',
                 'blacklist': 'Чорний список',
-                'admin': 'Адмін',
                 'auth': 'Авторизація'
             };
             return types[type] || 'Інше';
