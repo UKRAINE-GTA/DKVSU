@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ДКВС - Логи</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --primary-hover: #357abd;
+            --background-color: #f0f2f5;
+            --surface-color: #ffffff;
+            --text-color: #333333;
+            --text-muted: #6c757d;
+            --border-color: #e1e4e8;
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 30px;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--surface-color);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar a:hover, .sidebar a.active {
+            color: var(--primary-color);
+            background-color: rgba(74, 144, 226, 0.1);
+            transform: translateX(5px);
+        }
+
+        .sidebar a i {
+            margin-right: 12px;
+            width: 24px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            margin-left: var(--sidebar-width);
+        }
+
+        .header {
+            background-color: var(--surface-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+        }
+
+        .filters select {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 16px;
+            background-color: var(--surface-color);
+            color: var(--text-color);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .filters select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
+        }
+
+        .logs-table {
+            background-color: var(--surface-color);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        th, td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: rgba(74, 144, 226, 0.1);
+            font-weight: 600;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 0.05em;
+        }
+
+        tr:hover {
+            background-color: rgba(74, 144, 226, 0.05);
+        }
+
+        .log-type {
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-block;
+        }
+
+        .log-type-convoy { background-color: rgba(16, 185, 129, 0.2); color: #059669; }
+        .log-type-blacklist { background-color: rgba(239, 68, 68, 0.2); color: #dc2626; }
+        .log-type-auth { background-color: rgba(59, 130, 246, 0.2); color: #2563eb; }
+        .log-type-admin { background-color: rgba(245, 158, 11, 0.2); color: #d97706; }
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            font-style: italic;
+            color: var(--text-muted);
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: var(--background-color);
+        }
+
+        .login-form {
+            background-color: var(--surface-color);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 360px;
+        }
+
+        .login-form h2 {
+            margin-bottom: 30px;
+            text-align: center;
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 28px;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            font-size: 16px;
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
+        }
+
+        .login-form button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .login-form button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .login-form button:active {
+            transform: scale(0.98);
+        }
+
+        .logout-btn {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .logout-btn:hover {
+            background-color: #dc2626;
+        }
+
+        .logout-btn:active {
+            transform: scale(0.98);
+        }
+
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                height: auto;
+                margin-bottom: 30px;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .filters {
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="login-page" class="login-container">
+        <form id="login-form" class="login-form">
+            <h2>Вхід в систему</h2>
+            <input type="text" id="username" placeholder="Логін" required>
+            <input type="password" id="password" placeholder="Пароль" required>
+            <button type="submit">Увійти</button>
+        </form>
+    </div>
+
+    <div id="main-page" class="container" style="display: none;">
+        <aside class="sidebar">
+            <h2>Розділи логів</h2>
+            <ul>
+                <li><a href="#" data-type="all" class="active"><i class="fas fa-list"></i> Всі логи</a></li>
+                <li><a href="#" data-type="convoy"><i class="fas fa-truck"></i> Конвой</a></li>
+                <li><a href="#" data-type="blacklist"><i class="fas fa-ban"></i> Чорний список</a></li>
+                <li><a href="#" data-type="auth"><i class="fas fa-user-shield"></i> Авторизація</a></li>
+                <li><a href="#" data-type="admin"><i class="fas fa-user-cog"></i> Адмін</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <header class="header">
+                <h1>Логи системи ДКВС</h1>
+                <div class="filters">
+                    <select id="dateFilter">
+                        <option value="all">Весь час</option>
+                        <option value="today">Сьогодні</option>
+                        <option value="week">Цей тиждень</option>
+                        <option value="month">Цей місяць</option>
+                    </select>
+                    <button id="logout-btn" class="logout-btn">Вийти</button>
+                </div>
+            </header>
+            <section class="logs-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Тип</th>
+                            <th>Опис</th>
+                            <th>Дата та час</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logsTableBody">
+                        <tr>
+                            <td colspan="3" class="loading">Завантаження логів...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBzefxFDTHQqXFHg9t08JTiL5EaH8si1oY",
+            authDomain: "dkvs-1ec88.firebaseapp.com",
+            databaseURL: "https://dkvs-1ec88-default-rtdb.firebaseio.com",
+            projectId: "dkvs-1ec88",
+            storageBucket: "dkvs-1ec88.appspot.com",
+            messagingSenderId: "167430647129",
+            appId: "1:167430647129:web:ab209fec7735f20b597048",
+            measurementId: "G-H6LKMLYD10"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const auth = firebase.auth();
+
+        const loginPage = document.getElementById('login-page');
+        const mainPage = document.getElementById('main-page');
+        const loginForm = document.getElementById('login-form');
+        const logoutBtn = document.getElementById('logout-btn');
+        const logsTableBody = document.getElementById('logsTableBody');
+        const dateFilter = document.getElementById('dateFilter');
+        const sidebarLinks = document.querySelectorAll('.sidebar a');
+
+        let currentTypeFilter = 'all';
+        let currentDateFilter = 'all';
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            auth.signInWithEmailAndPassword(username, password)
+                .then((userCredential) => {
+                    console.log('Успішний вхід:', userCredential.user);
+                    showMainPage();
+                })
+                .catch((error) => {
+                    console.error('Помилка входу:', error);
+                    alert('Невірний логін або пароль');
+                });
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            auth.signOut().then(() => {
+                showLoginPage();
+            }).catch((error) => {
+                console.error('Помилка виходу:', error);
+            });
+        });
+
+        function showLoginPage() {
+            loginPage.style.display = 'flex';
+            mainPage.style.display = 'none';
+        }
+
+        function showMainPage() {
+            loginPage.style.display = 'none';
+            mainPage.style.display = 'flex';
+            fetchLogs();
+        }
+
+        function fetchLogs() {
+            const logsRef = database.ref("logs").orderByChild("timestamp").limitToLast(100);
+            logsTableBody.innerHTML = '<tr><td colspan="3" class="loading">Завантаження логів...</td></tr>';
+
+            logsRef.once('value').then((snapshot) => {
+                if (snapshot.exists()) {
+                    const logs = [];
+                    snapshot.forEach((childSnapshot) => {
+                        logs.unshift({
+                            id: childSnapshot.key,
+                            ...childSnapshot.val()
+                        });
+                    });
+                    renderLogs(logs);
+                } else {
+                    logsTableBody.innerHTML = '<tr><td colspan="3">Немає доступних логів</td></tr>';
+                }
+            }).catch((error) => {
+                console.error("Помилка при отриманні логів:", error);
+                logsTableBody.innerHTML = '<tr><td colspan="3">Помилка при завантаженні логів</td></tr>';
+            });
+        }
+
+        function renderLogs(logs) {
+            logsTableBody.innerHTML = '';
+
+            const filteredLogs = filterLogs(logs);
+
+            filteredLogs.forEach((log) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><span class="log-type log-type-${log.type}">${getLogTypeText(log.type)}</span></td>
+                    <td>${log.description}</td>
+                    <td>${new Date(log.timestamp).toLocaleString('uk-UA')}</td>
+                `;
+                logsTableBody.appendChild(row);
+            });
+
+            if (filteredLogs.length === 0) {
+                logsTableBody.innerHTML = '<tr><td colspan="3">Немає логів, що відповідають вибраним фільтрам</td></tr>';
+            }
+        }
+
+        function getLogTypeText(type) {
+            const types = {
+                'convoy': 'Конвой',
+                'blacklist': 'Чорний список',
+                'auth': 'Авторизація',
+                'admin': 'Адмін'
+            };
+            return types[type] || 'Інше';
+        }
+
+        function filterLogs(logs) {
+            return logs.filter(log => {
+                const typeMatch = currentTypeFilter === 'all' || log.type === currentTypeFilter;
+                const dateMatch = checkDateFilter(log.timestamp, currentDateFilter);
+                return typeMatch && dateMatch;
+            });
+        }
+
+        function checkDateFilter(timestamp, filter) {
+            const logDate = new Date(timestamp);
+            const now = new Date();
+
+            switch (filter) {
+                case 'today':
+                    return logDate.toDateString() === now.toDateString();
+                case 'week':
+                    const weekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+                    return logDate >= weekAgo;
+                case 'month':
+                    const monthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+                    return logDate >= monthAgo;
+                default:
+                    return true;
+            }
+        }
+
+        dateFilter.addEventListener('change', (e) => {
+            currentDateFilter = e.target.value;
+            fetchLogs();
+        });
+
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentTypeFilter = e.target.closest('a').dataset.type;
+                sidebarLinks.forEach(l => l.classList.remove('active'));
+                e.target.closest('a').classList.add('active');
+                fetchLogs();
+            });
+        });
+
+        // Check authentication state on page load
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                showMainPage();
+            } else {
+                showLoginPage();
+            }
+        });
+    </script>
+</body>
+</html>
