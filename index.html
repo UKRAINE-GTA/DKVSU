@@ -93,7 +93,7 @@
             display: inline-block;
         }
 
-        nav ul li a:hover {
+        nav ul li a:hover, nav ul li a.active {
             color: var(--primary-color);
             transform: translateY(-3px);
         }
@@ -556,12 +556,29 @@
             }
 
             nav ul {
+                display: none;
                 flex-direction: column;
-                align-items: center;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--background-color);
+                padding: 20px;
+            }
+
+            nav ul.show {
+                display: flex;
             }
 
             nav ul li {
                 margin: 10px 0;
+            }
+
+            .menu-toggle {
+                display: block;
+                font-size: 1.5rem;
+                color: var(--text-color);
+                cursor: pointer;
             }
 
             .action-buttons {
@@ -573,6 +590,17 @@
                 width: 100%;
                 max-width: 300px;
                 text-align: center;
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .menu-toggle {
+                display: none;
+            }
+
+            nav ul {
+                display: flex !important;
             }
         }
               ::-webkit-scrollbar {
@@ -688,6 +716,7 @@
                 width: 100%;
             }
         }
+      
     </style>
 </head>
 <body>
@@ -698,17 +727,20 @@
                     <img src="https://i.imgur.com/PRjTNqr.png" alt="ДКВС Логотип">
                     <span class="logo-text">ДКВСУ м.Дніпро</span>
                 </div>
-                <ul>
-                    <li><a href="#home">Головна</a></li>
-                    <li><a href="#about">Про нас</a></li>
-                    <li><a href="#statistics">Статистика</a></li>
-                    <li><a href="#leadership">Керівництво</a></li>
-                    <li><a href="#departments">Відділи</a></li>
-                    <li><a href="#requirements">Вимоги</a></li>
-                    <li><a href="#ranks">Звання</a></li>
-                    <li><a href="#gallery">Галерея</a></li>
-                    <li><a href="#schedule">Графік роботи</a></li>
-                    <li><a href="#faq">FAQ</a></li>
+                <div class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <ul id="nav-menu">
+                    <li><a href="#home" class="nav-link">Головна</a></li>
+                    <li><a href="#about" class="nav-link">Про нас</a></li>
+                    <li><a href="#statistics" class="nav-link">Статистика</a></li>
+                    <li><a href="#leadership" class="nav-link">Керівництво</a></li>
+                    <li><a href="#departments" class="nav-link">Відділи</a></li>
+                    <li><a href="#requirements" class="nav-link">Вимоги</a></li>
+                    <li><a href="#ranks" class="nav-link">Звання</a></li>
+                    <li><a href="#gallery" class="nav-link">Галерея</a></li>
+                    <li><a href="#schedule" class="nav-link">Графік роботи</a></li>
+                    <li><a href="#faq" class="nav-link">FAQ</a></li>
                 </ul>
             </nav>
         </div>
@@ -917,7 +949,7 @@
                 <div class="gallery-item animate-on-scroll">
                     <img src="https://i.imgur.com/AoLjINj.png" alt="ДКВС фото 6">
                 </div>
-              <div class="gallery-item animate-on-scroll">
+                <div class="gallery-item animate-on-scroll">
                     <img src="https://i.imgur.com/w4n4yWZ.jpeg" alt="ДКВС фото 7">
                 </div>
             </div>
@@ -957,22 +989,22 @@
                             <td>Четвер</td>
                             <td>09:00 - 21:00</td>
                             <td>12:00 - 13:00 та 17:00 - 18:00</td>
-                          </tr>
+                        </tr>
                         <tr>
                             <td>П'ятниця</td>
                             <td>09:00 - 21:00</td>
                             <td>12:00 - 13:00 та 17:00 - 18:00</td>
-                          </tr>
+                        </tr>
                         <tr>
                             <td>Субота</td>
                             <td>10:00 - 18:00</td>
                             <td>15:00 - 16:00</td>
-                           </tr>
+                        </tr>
                         <tr>
                             <td>Неділя</td>
                             <td>10:00 - 18:00</td>
                             <td>13:00 - 14:00</td>
-                          </tr>
+                        </tr>
                         <tr>
                             <td>Святкові дні</td>
                             <td>11:00 - 17:00</td>
@@ -1020,7 +1052,6 @@
         <div class="container">
             <p>&copy; 2025 ДКВС м.Дніпро. Всі права захищені.</p>
             <p>Слава Україні! Героям слава!</p>
-            </div>
         </div>
     </footer>
 
@@ -1097,6 +1128,26 @@
             } else {
                 header.classList.remove('scrolled');
             }
+
+            // Highlight active section in navigation
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+
+            let currentSection = '';
+            sections.forEach((section) => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 60) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach((link) => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === currentSection) {
+                    link.classList.add('active');
+                }
+            });
         }
 
         window.addEventListener('scroll', handleScroll);
@@ -1131,6 +1182,23 @@
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
+            });
+        });
+
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        
+        const navMenu = document.getElementById('nav-menu');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('show');
+        });
+
+        // Close mobile menu when a link is clicked
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('show');
             });
         });
 
