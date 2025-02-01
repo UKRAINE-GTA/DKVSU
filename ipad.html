@@ -953,10 +953,6 @@
                         <i class="fas fa-history"></i>
                         Останні дії
                     </div>
-                    <div class="nav-item" data-view="logs">
-                        <i class="fas fa-clipboard-list"></i>
-                        Logs
-                    </div>
                 </nav>
                 <div class="logout-btn" id="logoutBtn">
                     <i class="fas fa-sign-out-alt"></i>
@@ -1121,61 +1117,9 @@
                     </div>
                 </div>
 
-                <div id="admin-panel" class="section">
-                    <div class="main-content">
-                        <h2>Адмін панель</h2>
-                        <form id="adminForm">
-                            <div class="form-group">
-                                <label for="infoTitle">Заголовок</label>
-                                <input type="text" id="infoTitle" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="infoContent">Зміст</label>
-                                <div class="editor-toolbar">
-                                    <button type="button" data-command="bold" title="Жирний"><i class="fas fa-bold"></i></button>
-                                    <button type="button" data-command="italic" title="Курсив"><i class="fas fa-italic"></i></button>
-                                    <button type="button" data-command="underline" title="Підкреслений"><i class="fas fa-underline"></i></button>
-                                    <div class="separator"></div>
-                                    <button type="button" data-command="justifyLeft" title="По лівому краю"><i class="fas fa-align-left"></i></button>
-                                    <button type="button" data-command="justifyCenter" title="По центру"><i class="fas fa-align-center"></i></button>
-                                    <button type="button" data-command="justifyRight" title="По правому краю"><i class="fas fa-align-right"></i></button>
-                                    <div class="separator"></div>
-                                    <button type="button" data-command="foreColor" title="Колір тексту"><i class="fas fa-palette"></i></button>
-                                    <button type="button" data-command="createLink" title="Вставити посилання"><i class="fas fa-link"></i></button>
-                                    <button type="button" data-command="insertImage" title="Вставити зображення"><i class="fas fa-image"></i></button>
-                                </div>
-                                <div class="editor-content" id="infoContent" contenteditable="true"></div>
-                            </div>
-                            <button type="submit" class="btn">Додати/Оновити</button>
-                        </form>
-                        <div id="adminInfoList"></div>
-                    </div>
-                </div>
+              
 
-                <div id="logs" class="section">
-                    <div class="logs-container">
-                        <div class="logs-header">
-                            <h2>Логи</h2>
-                            <div class="logs-filter">
-                                <select id="logTypeFilter">
-                                    <option value="all">Всі типи</option>
-                                    <option value="convoy">Конвой</option>
-                                    <option value="blacklist">Чорний список</option>
-                                    <option value="auth">Авторизація</option>
-                                </select>
-                                <select id="logDateFilter">
-                                    <option value="all">Весь час</option>
-                                    <option value="today">Сьогодні</option>
-                                    <option value="week">Цей тиждень</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div id="logsContent"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+               
         <div class="modal-overlay" id="modalOverlay"></div>
         <div class="login-modal" id="loginModal">
             <h2>Авторизація</h2>
