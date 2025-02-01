@@ -50,7 +50,7 @@
         }
 
         .image-container {
-            width: 40%;
+            width: 35%;
         }
 
         .image-container img {
@@ -131,6 +131,7 @@
             height: 200px;
             outline: 1px solid #959390;
             outline-offset: 0px;
+          
         }
 
         .photo {
@@ -183,10 +184,87 @@
             max-height: 0;
             overflow: hidden;
             opacity: 0;
-            transition: max-height 0.5s ease, opacity 0.5s ease;
+            transition: max-height 0.5s ease, opacity 0.5s ease, margin-bottom 0.5s ease;
             width: 100%;
             box-sizing: border-box;
         }
+      
+      
+
+.viddil {
+    width: 100%; /* Ширина контейнера */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Вирівнювання всіх елементів вправо */
+}
+
+.viddil h1 {
+    color: #C04422;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.viddil-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.viddil-item {
+    background-color: #15151D;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    width: 45%; /* Встановлює ширину 45% */
+    margin-left: auto; /* Вирівнює по правому краю */
+    box-sizing: border-box;
+}
+
+.viddil-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.viddil-header {
+    padding: 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1A1A23;
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 10px 10px 0 0;
+}
+
+.viddil-header i {
+    transition: transform 0.3s ease;
+}
+
+.viddil-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background-color: #0F0F16;
+    color: #ffffff;
+    border-radius: 0 0 10px 10px;
+}
+
+.viddil-content-inner {
+    padding: 15px;
+}
+
+.viddil-item.active .viddil-header i {
+    transform: rotate(180deg);
+}
+
+.viddil-item.active .viddil-content {
+    max-height: 500px; /* Задаємо максимальну висоту контенту */
+}
+
+      
 
         .panel {
             text-align: left;
@@ -199,6 +277,12 @@
         .panel.show, .panel-right.show {
             max-height: 500px;
             opacity: 1;
+            margin-bottom: 20px; /* Додано відступ знизу */
+        }
+
+        .accordion + .panel.show,
+        .accordion-right + .panel-right.show {
+            margin-bottom: 30px; /* Додатковий відступ для розгорнутих груп */
         }
 
         .siry-icon {
@@ -213,6 +297,14 @@
             color: #4CAF50;
         }
 
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
         .custombl-button {
             display: inline-flex;
             align-items: center;
@@ -220,14 +312,15 @@
             background-color: #15151D;
             color: #fff;
             text-decoration: none;
-            font-size: 16px;
-            padding: 10px 20px;
+            font-size: 14px;
+            padding: 10px;
             border-radius: 10px;
             border: 2px solid transparent;
             transition: background-color 0.3s ease, border-color 0.3s ease;
             cursor: pointer;
-            width: 250px;
-            height: auto;
+            flex: 1;
+            text-align: center;
+            min-width: 0;
         }
 
         .custombl-button:hover {
@@ -236,47 +329,18 @@
             border-color: #007BFF;
         }
 
-        .button-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            height: 50px;
-            margin: 0;
-        }
-
-        .custom-button {
-            display: flex;
-            flex-direction: left;
-            align-items: center;
-            justify-content: center;
-            background-color: #15151D;
-            color: #fff;
-            text-decoration: none;
-            font-size: 16px;
-            padding: 20px;
-            width: 250px;
-            height: 20px;
-            border-radius: 10px;
-            transition: background-color 0.3s ease;
-            text-align: center;
-        }
-
         .button-icon {
-            font-size: 20px;
-            margin-bottom: 0px;
-            color: #0088cc;
+            font-size: 18px;
+            margin-right: 5px;
+            color: #505050;
         }
-
-        .button-text {
-            font-size: 14px;
-            color: #fff;
+      
+              .button-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-
-        .custom-button:hover {
-            background-color: #202020;
-        }
-
+      
         .animate-on-scroll {
             opacity: 0;
             transform: translateY(50px);
@@ -345,7 +409,7 @@
         }
 
         .fas {
-            color: #FF6347;
+            color: #505050;
         }
 
         .red-icon {
@@ -399,6 +463,43 @@
             border-radius: 4px;
         }
 
+        .find-us {
+            background-color: #0F0F16;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .find-us:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .find-us h2 {
+            color: #0079ff;
+            margin-bottom: 15px;
+        }
+      
+      
+
+        .find-us-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .find-us-text {
+            flex: 1;
+        }
+
+        .find-us-icon {
+            font-size: 40px;
+            color: #0079ff;
+            margin-left: 20px;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 20px;
@@ -440,6 +541,15 @@
                 margin-left: 0;
                 margin-right: 0;
             }
+
+            .find-us-content {
+                flex-direction: column;
+            }
+
+            .find-us-icon {
+                margin-left: 0;
+                margin-top: 15px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -452,16 +562,16 @@
 <body>
     <div class="main-container">
         <div class="text-container">
-            <h2 class="animate-on-scroll"><span style="color: #0079ff;">Державна кримінально-виконавча служба України</span></h2>
+            <h1 class="animate-on-scroll"><span style="color: #0079ff;">Державна кримінально-виконавча служба України</span></h1>
             <h3 class="animate-on-scroll">Державна кримінально-виконавча служба України – на захисті закону та правопорядку!</h3>
             <h4>Державна кримінально-виконавча служба України забезпечує виконання покарань, призначених судами, і сприяє реабілітації осіб, що відбувають покарання, забезпечуючи їх соціальну адаптацію. Ми боремося з правопорушеннями, відновлюємо справедливість та підтримуємо правопорядок.
 
             <br><br>Обираючи службу в ДКВС, ви стаєте частиною команди, яка виконує важливу місію для забезпечення безпеки та захисту законності. Ваша відданість та відповідальність допоможуть у боротьбі зі злочинністю та відновленні порядку.
 
-            <br><br>Приєднуйся до <a href="https://ukraine-gta.github.io/DKVSU/ip">ДКВС</a> 「Клікабельно」— працюй на благо правопорядку та справедливості!</h4>
+            <br><br>Приєднуйся до лав ДКВСУ — працюй на благо правопорядку та справедливості!</h4>
         </div>
         <div class="image-container">
-            <img src="https://i.imgur.com/J00IHJ0.png" alt="Фото">
+            <img src="https://i.imgur.com/PRjTNqr.png" alt="Фото">
         </div>
     </div>
     <br>
@@ -472,9 +582,30 @@
     
     <div><span style="color: #ffcb00;"><i class="fas fa-users yelow-icon"></i> Кількість активних працівників: 21+</span></div>
     <br>
-    <a href="https://ukraine-gta.github.io/DKVSU/blacklist-list" class="custombl-button">
-        <span class="button-text"><i class="fas fa-address-book blacklist-icon"></i>Чорний список в'язнів</span>
-    </a>
+    
+  <div class="button-row">
+        <a href="https://ukraine-gta.github.io/DKVSU/blacklist-list" class="custombl-button">
+            <i class="fas fa-address-book button-icon"></i>
+            <span class="button-text">Чорний список в'язнів</span>
+        </a>
+        <a href="https://ukraine-gta.github.io/DKVSU/ip" class="custombl-button">
+            <i class="fas fa-file-alt button-icon"></i>
+            <span class="button-text">Приєднатися до ДКВС</span>
+        </a>
+        <a href="#" class="custombl-button">
+            <i class="fas fa-calendar-alt button-icon"></i>
+            <span class="button-text">Розклад</span>
+        </a>
+        <a href="#" class="custombl-button">
+            <i class="fas fa-users button-icon"></i>
+            <span class="button-text">Команда</span>
+        </a>
+        <a href="#" class="custombl-button">
+            <i class="fas fa-phone button-icon"></i>
+            <span class="button-text">Контакти</span>
+        </a>
+    </div>
+  
     
     <div class="head-children">
         <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
@@ -510,7 +641,7 @@
                 <div class="inner-border"></div>
                 <div class="photo-info">
                     <h3>Полковник ДКВС</h3>
-                    <p>Вітто Скалета</p>
+                    <p>Іван Тоарницький</p>
                 </div>
             </div>
             <img src="https://i.imgur.com/iOoCMF6.png" alt="Фото 3" class="photo">
@@ -521,7 +652,7 @@
                 <div class="inner-border"></div>
                 <div class="photo-info">
                     <h3>Полковник ДКВС</h3>
-                    <p>Муча Яник</p>
+                    <p>Пауль Мельник</p>
                 </div>
             </div>
             <img src="https://i.imgur.com/iOoCMF6.png" alt="Фото 4" class="photo">
@@ -529,7 +660,9 @@
     </div>
     <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
     <div class="head-children">
-        <h1 class="animate-on-scroll"><span style="color: #EE7651;">Керівники підрозділів ДКВС м.Дніпро</span></h1>
+        <h1 class="animate-on-scroll"><span style="color: #C04422;">Керівники підрозділів ДКВС м.Дніпро</span></h1>
+       <h4 class="animate-on-scroll"><span style="color: #9D9B97;">Примітка: Наведіть курсор на фото, щоб переглянути звання та ім'я держ-службовця.</span></h4>
+    </div>
     </div>
     <div class="gallery">
         <div class="photo-container">
@@ -548,7 +681,7 @@
                 <div class="inner-border"></div>
                 <div class="photo-info">
                     <h3>Підполковник ДКВС, керівник - ВНБ</h3>
-                    <p>Паша Зеленюк</p>
+                    <p>Андрій Массімо</p>
                 </div>
             </div>
             <img src="https://i.imgur.com/Batju6T.png" alt="Фото 6" class="photo">
@@ -559,10 +692,10 @@
                 <div class="inner-border"></div>
                 <div class="photo-info">
                     <h3>Підполковник ДКВС, керівник - НВ</h3>
-                    <p>Вікторія Потужна</p>
+                    <p>Іван Товарницький</p>
                 </div>
             </div>
-            <img src="https://i.imgur.com/ySIIsnY.png" alt="Фото 7" class="photo">
+            <img src="https://i.imgur.com/Batju6T.png" alt="Фото 7" class="photo">
         </div>
 
         <div class="photo-container">
@@ -570,27 +703,133 @@
                 <div class="inner-border"></div>
                 <div class="photo-info">
                     <h3>Підполковник ДКВС, керівник - ОВ</h3>
-                    <p>Назар Казмірук</p>
+                    <p>Арсен Буданов</p>
                 </div>
             </div>
             <img src="https://i.imgur.com/Batju6T.png" alt="Фото 8" class="photo">
         </div>
     </div>
+  <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
             
-    <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
     <div class="viddil">
-        <h1 class="animate-on-scroll"><span style="color: #3D5D52;">Відділи у лавах ДКВС м.Дніпро</span></h1>
-        <div class="viddil-container">
-            <h3> 
-                <ul>
-                    <li>ВНБ - Відділ Нагляду Та Безпеки</li>
-                    <li>ОВ - Оперативний Відділ</li>
-                    <li>ВСПС - Відділ Соціально Психологічної Служби</li>
-                    <li>НВ - Навчальний Відділ</li>
-                    <li>НК - Навчальний Корпус</li>
-                </ul>
-            </h3>
-        </div>
+        <h1 class="animate-on-scroll">Відділи у лавах ДКВС м.Дніпро</h1>
+        <ul class="viddil-list">
+            <li class="viddil-item">
+                <div class="viddil-header">
+                    <span>ВНБ - Відділ Нагляду Та Безпеки</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="viddil-content">
+                    <div class="viddil-content-inner">
+                        <div>
+                          
+    <ul>
+        <li>
+            <p><strong>Основна відповідальність за охорону об’єктів та територій.</strong></p>
+        </li>
+        <li>
+            <p><strong>Забезпечує дотримання режиму безпеки в установі.</strong></p>
+        </li>
+        <li>
+            <p><strong>Контролює рух осіб по території, запобігає незаконному проносу та виносу предметів.</strong></p>
+        </li>
+        <li>
+            <p><strong>Відповідає за підтримку правопорядку серед персоналу та ув’язнених.</strong></p>
+        </li>
+    </ul>
+</div>
+
+                    </div>
+                </div>
+            </li>
+            <li class="viddil-item">
+                <div class="viddil-header">
+                    <span>ОВ - Оперативний Відділ</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="viddil-content">
+                    <div class="viddil-content-inner">
+                        <div>
+    <ul>
+        <li>
+            <p><strong>Проводить оперативно-розшукову діяльність.</strong></p>
+        </li>
+        <li>
+            <p><strong>Збирає, аналізує та документує інформацію про можливі правопорушення.</strong></p>
+        </li>
+        <li>
+            <p><strong>Координує дії для попередження та ліквідації злочинних проявів.</strong></p>
+        </li>
+        <li>
+            <p><strong>Забезпечує взаємодію з іншими силовими структурами та службами.</strong></p>
+        </li>
+    </ul>
+</div>
+
+                    </div>
+                </div>
+            </li>
+            <li class="viddil-item">
+                <div class="viddil-header">
+                    <span>ВСПС - Відділ Соціально Психологічної Служби</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="viddil-content">
+                    <div class="viddil-content-inner">
+                        <div>
+    <ul>
+        <li>
+            <p><strong>Проводить соціально-психологічну роботу з ув’язненими.</strong></p>
+        </li>
+        <li>
+            <p><strong>Надає психологічну підтримку, адаптацію до умов відбування покарання.</strong></p>
+        </li>
+        <li>
+            <p><strong>Організовує освітні, культурні та релігійні заходи.</strong></p>
+        </li>
+        <li>
+            <p><strong>Сприяє реабілітації та ресоціалізації ув’язнених після звільнення.</strong></p>
+        </li>
+    </ul>
+                    </div>
+                </div>
+            </li>
+            <li class="viddil-item">
+                <div class="viddil-header">
+                    <span>НВ - Навчальний Відділ</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="viddil-content">
+                    <div class="viddil-content-inner">
+                        <ul>
+        <li>
+            <p><strong>Організовує та проводить навчання для персоналу.</strong></p>
+        </li>
+        <li>
+            <p><strong>Відповідає за підвищення кваліфікації співробітників.</strong></p>
+        </li>
+        <li>
+            <p><strong>Проводить тренінги, семінари, та спеціалізовані курси для ефективного виконання службових обов’язків.</strong></p>
+        </li>
+    </ul>
+                    </div>
+                </div>
+            </li>
+            <li class="viddil-item">
+                <div class="viddil-header">
+                    <span>НК - Навчальний Корпус</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="viddil-content">
+                    <div class="viddil-content-inner">
+                        <ul>
+        <li>
+ <p><strong>Працівники проходять теоретичні заняття для здобуття нових знань, необхідних для виконання службових обов'язків.</strong></p>
+</div>
+                    </div>
+                </div>
+            </li>
+        </ul>
     </div>
     <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
   
@@ -623,7 +862,7 @@
                 <ul style="list-style-type: none; padding: 0;">
                     <h2><i class="fas fa-sharp fa-thin fa-user-shield zolotoy-icon"></i> Звання</h2>
                     <h4>
-                        <li><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Ранг - 1 |</span> Сержант</li>
+                         <li><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;"> Ранг - 1 |</span> Сержант</li>
                         <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
                             <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Ранг - 2 |</span> Старший сержант</li>
                         <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
@@ -650,29 +889,109 @@
                 </ul>
             </div>
         </div>
-    </div> 
+    </div>
 
-    <br>
-  
-    <div class="accordion-container-right">
-        <button class="accordion-right"><i class="fas fa-car siry-icon"></i> Автопарк ДКВСУ</button>
-        <div class="panel-right">
-            <ul style="list-style-type: none; padding: 0;">
-                <h2><i class="fas fa-car zolotoy-icon"></i> Службові авто</h2>
-                <h4>
-                    <li><i class="fas fa-light fa-truck-fast grin-icon"></i><span style="color: #8E8C8A;"> КрАЗ АвтоЗАК |</span> Доступний з рангу "Сержант"</li>
-                    <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-                        <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Renault logan |</span> Доступний з рангу "Сержант"</li>
-                    <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-                        <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Peugot Автозак [ДКВС] |</span> Доступний з рангу "Сержант"</li>
-                    <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-                        <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Mitsubishi Lancer X 2.0 |</span> Доступний з рангу "Ст. Прапорщик"</li>
-                    <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-                        <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Renfult Megane [ДКВС] |</span> Доступний з рангу "Сержант"</li>
-                    <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
-                        <i class="fas fa-light fa-helicopter grin-icon"></i><span style="color: #8E8C8A;">  Robinson R44 |</span> Доступний з рангу "Лейтенант"</li>
-                </h4>
-            </ul>
+    <div class="container">
+        <div class="accordion-container-left">
+            <button class="accordion"><i class="fas fa-car siry-icon"></i> Автопарк ДКВСУ</button>
+            <div class="panel">
+                <ul style="list-style-type: none; padding: 0;">
+                    <h2><i class="fas fa-car zolotoy-icon"></i> Службові авто</h2>
+                    <h4>
+                        <li><i class="fas fa-light fa-truck-fast grin-icon"></i><span style="color: #8E8C8A;"> КрАЗ АвтоЗАК |</span> Доступний з рангу "Сержант"</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Renault logan |</span> Доступний з рангу "Сержант"</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Peugot Автозак [ДКВС] |</span> Доступний з рангу "Сержант"</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Mitsubishi Lancer X 2.0 |</span> Доступний з рангу "Ст. Прапорщик"</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  Renfult Megane [ДКВС] |</span> Доступний з рангу "Сержант"</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-helicopter grin-icon"></i><span style="color: #8E8C8A;">  Robinson R44 |</span> Доступний з рангу "Лейтенант"</li>
+                    </h4>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion-container-right">
+            <button class="accordion-right"><i class="fas fa-clock siry-icon"></i> Графік роботи</button>
+            <div class="panel-right">
+                <ul style="list-style-type: none; padding: 0;">
+                    <h2><i class="fas fa-stopwatch zolotoy-icon"></i> час</h2>
+                    <h4>
+                        <li><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Понеділок |</span> 9:00 - 21:00</li>
+                      <li><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Обідня перерва |</span> 12:00 - 13:00 та 17:00 - 18:00</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Вівторок |</span> 9:00 - 21:00</li>
+                      <li><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Обідня перерва |</span> 12:00 - 13:00 та 17:00 - 18:00</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Середа |</span> 9:00 - 21:00</li>
+                      <li><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Обідня перерва |</span> 12:00 - 13:00 та 17:00 - 18:00</li>
+                      <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                        <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Чертвер |</span> 9:00 - 21:00</li>
+                      <li><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Обідня перерва |</span> 12:00 - 13:00 та 17:00 - 18:00</li>
+                      <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                        <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  П'ятниця |</span> 9:00 - 21:00</li>
+                      <li><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Обідня перерва |</span> 12:00 - 13:00 та 17:00 - 18:00</li>
+                      <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                        <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Субота |</span> 10:00 - 18:00</li>
+                      <li><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Обідня перерва |</span> 15:00 - 16:00</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                          <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Неділя |</span> 10:00 - 18:00</li>
+                      <li><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Обідня перерва |</span> 13:00 - 14:00</li>
+                          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Святкові дні |</span> 11:00 - 17:00</li>
+                      <li><i class="fas fa-light fa-circle-check grin-icon"></i><span style="color: #8E8C8A;">  Обідня перерва |</span> 14:00 - 15:00</li>
+                    </h4>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="accordion-container-left">
+            <button class="accordion"><i class="fas fa-circle-question siry-icon"></i> За що вас може бути додано до ЧС?</button>
+            <div class="panel">
+                <ul style="list-style-type: none; padding: 0;">
+                    <h2><i class="fas fa-sharp fa-thin fa-list zolotoy-icon"></i> Причини</h2>
+                    <h4>
+                        <li><i class="fas fa-light fa-circle-dot grin-icon"></i><span style="color: #8E8C8A;">  1.1.</span> Напад на колону конвою - 5 днів</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-dot grin-icon"></i><span style="color: #8E8C8A;">  1.2.</span> Втеча з ДКВС під час виконання виправних робіт - 7 днів</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-dot grin-icon"></i><span style="color: #8E8C8A;">  1.3.</span> Вбивсто працівника ДКВС при виконанні обов'язків - 7 днів</li>
+                      <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                         <i class="fas fa-light fa-circle-dot grin-icon"></i><span style="color: #8E8C8A;">  1.4.</span> Проникнення на територію ДКВС - 6 днів</li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-dot grin-icon"></i><span style="color: #8E8C8A;">  1.5.</span> Образи співробітника ДКВС - 1-3 дня</li>
+                          <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-circle-dot grin-icon"></i><span style="color: #8E8C8A;">  1.6.</span> Спроба саботажу чи організації бунту: 5 днів</li>
+                    </h4>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion-container-right">
+            <button class="accordion-right"><i class="fas fa-car siry-icon"></i> Скоро буде...</button>
+            <div class="panel-right">
+                <ul style="list-style-type: none; padding: 0;">
+                    <h2><i class="fas fa-car zolotoy-icon"></i> ...</h2>
+                    <h4>
+                        <li><i class="fas fa-light fa-truck-fast grin-icon"></i><span style="color: #8E8C8A;"> </span> </li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  </span> </li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  </span> </li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  </span> </li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-car-side grin-icon"></i><span style="color: #8E8C8A;">  </span> </li>
+                        <li><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 10px 0;">
+                            <i class="fas fa-light fa-helicopter grin-icon"></i><span style="color: #8E8C8A;">  </span> </li>
+                    </h4>
+                </ul>
+            </div>
         </div>
     </div>
 </div> 
@@ -704,36 +1023,18 @@
 
 <br><hr style="border: none; height: 1px; background-color: #2D2D34; margin: 5px 0;">
 <div class="special-text">
-    <h1 class="animate-on-scroll"><span style="color: #0E9843;">ДКВС м.Дніпро//UKRAINE GTA//02</span></h1>
+    <h1 class="animate-on-scroll"><span style="color: #C04422;">ДКВС м.Дніпро UKRAINE GTA 02</span></h1>
 
-    <div class="accordion-container-right">
-        <button class="accordion-right"><i class="fas fa-location-dot siry-icon"></i> Як нас знайти?</button>
-        <div class="panel-right">
-            <ul style="list-style-type: none; padding: 0;">
+    <div class="find-us">
+        <h2><i class="fas fa-location-dot"></i> Як нас знайти?</h2>
+        <div class="find-us-content">
+            <div class="find-us-text">
                 <h3><i class="fas fa-route zolotoy-icon"></i> О(Англ.) <i class="fas fa-right-long zolotoy-icon"></i> GPS <i class="fas fa-right-long zolotoy-icon"></i> Державні установи <i class="fas fa-right-long zolotoy-icon"></i> ДКВС</h3>
-            </ul>
+            </div>
+            <div class="find-us-icon">
+                <i class="fas fa-map-marked-alt"></i>
+            </div>
         </div>
-    </div>
-        
-    <h3><i class="fas fa-user"></i> Зв'язок з керівним складом</h3>
-      
-    <div class="button-container">
-        <a href="https://t.me/mucha_4" class="custom-button">
-            <i class="fa-brands fa-telegram button-icon"></i>
-            <span class="button-text"> Telegram М. Яник</span>
-        </a>
-        <a href="https://t.me/Vitennko" class="custom-button">
-            <i class="fa-brands fa-telegram button-icon"></i>
-            <span class="button-text"> Telegram В. Скалетта</span>
-        </a>
-        <a href="https://t.me/Kietenka" class="custom-button">
-            <i class="fa-brands fa-telegram button-icon"></i>
-            <span class="button-text"> Telegram М. Ескобар</span>
-        </a>
-        <a href="https://t.me/MR_1one1" class="custom-button">
-            <i class="fa-brands fa-telegram button-icon"></i>
-            <span class="button-text"> Telegram Р. Борак</span>
-        </a>
     </div>
 </div>
 
@@ -802,10 +1103,14 @@
         acc[i].addEventListener("click", function() {
             this.classList.toggle("active");
             var panel = this.nextElementSibling;
-            if (panel.style.maxHeight) {
-                panel.style.maxHeight = null;
-                panel.style.opacity = 0;
+            if (panel.classList.contains("show")) {
+                panel.classList.remove("show");
+                setTimeout(() => {
+                    panel.style.maxHeight = null;
+                    panel.style.opacity = 0;
+                }, 50);
             } else {
+                panel.classList.add("show");
                 panel.style.maxHeight = panel.scrollHeight + "px";
                 panel.style.opacity = 1;
             }
@@ -816,10 +1121,14 @@
         accRight[i].addEventListener("click", function() {
             this.classList.toggle("active");
             var panelRight = this.nextElementSibling;
-            if (panelRight.style.maxHeight) {
-                panelRight.style.maxHeight = null;
-                panelRight.style.opacity = 0;
+            if (panelRight.classList.contains("show")) {
+                panelRight.classList.remove("show");
+                setTimeout(() => {
+                    panelRight.style.maxHeight = null;
+                    panelRight.style.opacity = 0;
+                }, 50);
             } else {
+                panelRight.classList.add("show");
                 panelRight.style.maxHeight = panelRight.scrollHeight + "px";
                 panelRight.style.opacity = 1;
             }
@@ -843,6 +1152,17 @@
 
         photos.forEach((photo) => observer.observe(photo));
     });
+  
+  document.addEventListener('DOMContentLoaded', function() {
+            const viddilItems = document.querySelectorAll('.viddil-item');
+            
+            viddilItems.forEach(item => {
+                const header = item.querySelector('.viddil-header');
+                header.addEventListener('click', () => {
+                    item.classList.toggle('active');
+                });
+            });
+        });
 </script>
 </body>
 </html>
