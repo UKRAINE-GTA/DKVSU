@@ -1144,14 +1144,14 @@
     <script>
         // Initialize Firebase
         const firebaseConfig = {
-            apiKey: "AIzaSyBzefxFDTHQqXFHg9t08JTiL5EaH8si1oY",
-            authDomain: "dkvs-1ec88.firebaseapp.com",
-            databaseURL: "https://dkvs-1ec88-default-rtdb.firebaseio.com",
-            projectId: "dkvs-1ec88",
-            storageBucket: "dkvs-1ec88.appspot.com",
-            messagingSenderId: "167430647129",
-            appId: "1:167430647129:web:ab209fec7735f20b597048",
-            measurementId: "G-H6LKMLYD10"
+                apiKey: "AIzaSyBzefxFDTHQqXFHg9t08JTiL5EaH8si1oY",
+    authDomain: "dkvs-1ec88.firebaseapp.com",
+    databaseURL: "https://dkvs-1ec88-default-rtdb.firebaseio.com",
+    projectId: "dkvs-1ec88",
+    storageBucket: "dkvs-1ec88.appspot.com",
+    messagingSenderId: "167430647129",
+    appId: "1:167430647129:web:ab209fec7735f20b597048",
+    measurementId: "G-H6LKMLYD10"
         };
 
         // Initialize Firebase
@@ -1453,24 +1453,71 @@ fetchBlacklistData();
             });
         }
 
-        async function sendToDiscord(data) {
-            const webhookUrl = "https://discord.com/api/webhooks/1315033282663940106/LwG48yjgoZ031k_mjsYGJwPd5TVDH6TZneNQR9-akM7vy9cRfNi28dhL7BdMUvuESmlI";
-            try {
-                await fetch(webhookUrl, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        username: "UKRAINE GTA | 02",
-                        avatar_url: "https://i.imgur.com/2Kwd6vU.png",
-                        content: `# <a:alert:1214621954187731015> Зроблено новий конвой!\n## <:policepanda:1073299171999764591>Конвоїр №1: ${data.convoy1}\n## <:policepanda:1073299171999764591>Конвоїр №2: ${data.convoy2 || "—"}\n\n## <:Group7:1317828933189898320>В'язень №1: ${data.prisoner1}\n## <:Group7:1317828933189898320>В'язень №2: ${data.prisoner2 || "—"}`
-                    }),
-                });
-            } catch (error) {
-                console.error("Помилка відправки на Discord:", error);
-            }
+       async function getWebhookUrl() {
+    const webhookRef = database.ref("config1/webhookUrl");
+    const snapshot = await webhookRef.once("value");
+    return snapshot.val();
+}
+
+async function sendToDiscord(data) {
+    try {
+        const webhookUrl = await getWebhookUrl();
+        if (!webhookUrl) {
+            console.error("Помилка: URL вебхука не знайдено у базі даних.");
+            return;
         }
+
+        const embed = {
+            "username": "UKRAINE GTA | 02",  // Назва бота
+            "avatar_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/KVS_logo.svg/1200px-KVS_logo.svg.png",  // Аватар бота
+            "embeds": [
+                {
+                    "title": "🔔 **Новий конвой створено!**",
+                    "color": 3447003, // Синій колір для заголовку
+                    "fields": [
+                        {
+                            "name": "🚔 **Конвоїри**",
+                            "value": `**Конвоїр #1**: ${data.convoy1}\n**Конвоїр #2**: ${data.convoy2 || "—"}`,
+                            "inline": true
+                        },
+                        {
+                            "name": "🔗 **В'язні**",
+                            "value": `**В'язень #1**: ${data.prisoner1}\n**В'язень #2**: ${data.prisoner2 || "—"}`,
+                            "inline": true
+                        },
+                        {
+                            "name": "📅 **Дата конвою**",
+                            "value": `**${new Date().toLocaleString('uk-UA', { 
+                                weekday: 'long', 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric', 
+                                hour: '2-digit', 
+                                minute: '2-digit'
+                            })}**`, // Форматоване дата для кращого вигляду
+                            "inline": false
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // Відправка повідомлення через webhook
+        const response = await fetch(webhookUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(embed)
+        });
+
+        if (!response.ok) {
+            console.error("Помилка при відправці повідомлення у Discord:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Помилка при відправці даних до Discord:", error);
+    }
+}
 
         async function fetchBlacklistData() {
             const blacklistRef = database.ref("blacklist");
