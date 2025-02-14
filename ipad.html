@@ -1477,12 +1477,12 @@ async function sendToDiscord(data) {
                     "fields": [
                         {
                             "name": "🚔 **Конвоїри**",
-                            "value": `**Конвоїр #1**: ${data.convoy1}\n**Конвоїр #2**: ${data.convoy2 || "—"}`,
+                            "value": `**Конвоїр #1**: ${data.convoy1}\n**Конвоїр #2**: ${data.convoy2 || "none"}`,
                             "inline": true
                         },
                         {
                             "name": "🔗 **В'язні**",
-                            "value": `**В'язень #1**: ${data.prisoner1}\n**В'язень #2**: ${data.prisoner2 || "—"}`,
+                            "value": `**В'язень #1**: ${data.prisoner1}\n**В'язень #2**: ${data.prisoner2 || "none"}`,
                             "inline": true
                         },
                         {
