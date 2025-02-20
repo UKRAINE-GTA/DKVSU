@@ -1,0 +1,2157 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ДКВС - Ipad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="https://i.imgur.com/PRjTNqr.png" type="image/png">
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comfortaa', sans-serif;
+            background: #000000 url('https://i.imgur.com/ezSjQn5.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .tablet {
+            width: 100%;
+            max-width: 1024px;
+            height: 100vh;
+            max-height: 768px;
+            background: #15151D;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 12px solid #000;
+            box-shadow: 0 0 0 2px #333;
+        }
+
+        .tablet::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -8px;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 60px;
+            background: #333;
+            border-radius: 2px;
+        }
+
+        .tablet::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 9px;
+            height: 9px;
+            background: #333;
+            border-radius: 50%;
+            border: 2px solid #555;
+        }
+
+        .auth-screen {
+            width: 100%;
+            height: 100%;
+            background: url('https://i.imgur.com/Dqt7AIA.png') no-repeat center center fixed;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 30px;
+        }
+
+        .auth-title {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.4;
+        }
+      
+      .auth-info {
+    font-size: 15px;
+    text-align: left;
+    margin: 0; /* Скидаємо відступи */
+    line-height: 1.4;
+    position: absolute; /* Додаємо позиціонування */
+    bottom: 0; /* Прив'язуємо до нижнього краю */
+    left: 0; /* Прив'язуємо до лівого краю */
+    padding: 20px; /* Додаємо внутрішні відступи, якщо потрібно */
+}
+
+
+        .fingerprint-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .fingerprint-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .fingerprint-icon i {
+            font-size: 40px;
+            color: #fff;
+        }
+
+        .main-interface {
+            display: none;
+            width: 100%;
+            height: 100%;
+            grid-template-columns: 250px 1fr;
+        }
+
+        .sidebar {
+            background: #15151D;
+            border-right: 1px solid #2a2a3a;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .logo-section img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .nav-item.active {
+            background: #2a2a3a;
+        }
+
+        .nav-item:hover {
+            background: #2a2a3a;
+        }
+
+        .content {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: #2D2D34;
+            border: 1px solid #3a3a4a;
+            border-radius: 6px;
+            color: #fff;
+            font-family: 'Comfortaa', sans-serif;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn {
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Comfortaa', sans-serif;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        .table-container {
+            background: #1A1A23;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .table-header {
+            padding: 20px;
+            border-bottom: 1px solid #2a2a3a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid #2a2a3a;
+        }
+
+        th {
+            background: #2D2D34;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #2a2a3a;
+        }
+
+        td {
+            max-width: 150px;
+            white-space: normal;
+            word-wrap: break-word;
+            line-height: 1.3;
+        }
+
+        .nickname-cell {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nickname-first {
+            font-weight: bold;
+        }
+
+        .nickname-second {
+            font-size: 0.9em;
+            color: #a0a0a0;
+        }
+
+        .search-container {
+            padding: 16px;
+            position: relative;
+            background: #1A1A23;
+            border-bottom: 1px solid #2a2a3a;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 12px 40px 12px 16px;
+            background: #2D2D34;
+            border: 1px solid #3a3a4a;
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Comfortaa', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .search-container input:focus {
+            outline: none;
+            border-color: #007BFF;
+            background: #32323a;
+        }
+
+        .search-container input::placeholder {
+            color: #6b6b7b;
+        }
+
+        .search-container .fa-search {
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b6b7b;
+            pointer-events: none;
+        }
+
+        .time-left {
+            min-width: 120px;
+        }
+
+        #blacklistTable th,
+        #convoyArchiveTable th {
+            white-space: nowrap;
+        }
+
+        #blacklistTable td:nth-child(4),
+        #convoyArchiveTable td:nth-child(1) {
+            min-width: 140px;
+        }
+
+        .editor-toolbar {
+            background: #2D2D34;
+            border-radius: 6px 6px 0 0;
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            border: 1px solid #3a3a4a;
+            border-bottom: none;
+        }
+
+        .editor-toolbar button {
+            background: transparent;
+            border: none;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .editor-toolbar button:hover {
+            background: #3a3a4a;
+        }
+
+        .editor-toolbar .separator {
+            width: 1px;
+            height: 20px;
+            background: #3a3a4a;
+            margin: 0 5px;
+        }
+
+        .editor-content {
+            background: #2D2D34;
+            border: 1px solid #3a3a4a;
+            border-radius: 0 0 6px 6px;
+            min-height: 200px;
+            padding: 15px;
+            color: #fff;
+            outline: none;
+        }
+
+        .color-picker-popup {
+            position: absolute;
+            background: #2D2D34;
+            border: 1px solid #3a3a4a;
+            border-radius: 6px;
+            padding: 10px;
+            z-index: 1000;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .color-cell {
+            width: 25px;
+            height: 25px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .color-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .color-input input {
+            background: #1A1A23;
+            border: 1px solid #3a3a4a;
+            color: #fff;
+            padding: 5px;
+            border-radius: 4px;
+            width: 100px;
+        }
+
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1A1A23;
+            padding: 20px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            z-index: 1000;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 999;
+        }
+
+        .highlight {
+            background-color: #007BFF;
+            color: #fff;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #15151D;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2a2a3a;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3a3a4a;
+        }
+
+        .main-content {
+            background: #1A1A23;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .main-content h2 {
+            margin-bottom: 15px;
+        }
+
+        .info-card {
+            background: #0F0F16;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .info-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .info-actions {
+            margin-top: 10px;
+        }
+
+        .info-actions button {
+            margin-right: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #6b6b7b;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1s steps(5, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% {
+                color: rgba(0,0,0,0);
+                text-shadow:
+                    .25em 0 0 rgba(0,0,0,0),
+                    .5em 0 0 rgba(0,0,0,0);
+            }
+            40% {
+                color: #6b6b7b;
+                text-shadow:
+                    .25em 0 0 rgba(0,0,0,0),
+                    .5em 0 0 rgba(0,0,0,0);
+            }
+            60% {
+                text-shadow:
+                    .25em 0 0 #6b6b7b,
+                    .5em 0 0 rgba(0,0,0,0);
+            }
+            80%, 100% {
+                text-shadow:
+                    .25em 0 0 #6b6b7b,
+                    .5em 0 0 #6b6b7b;
+            }
+        }
+
+        .sms-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            max-width: calc(100% - 40px);
+            max-height: calc(100% - 40px);
+            overflow-y: auto;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sms-notification {
+            background-image: url('https://i.imgur.com/W7dJe33.png');
+            background-size: cover;
+            border-radius: 10px;
+            padding: 15px;
+            color: #fff;
+            font-size: 14px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .sms-notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #infoContent {
+            resize: none;
+            overflow-y: hidden;
+            min-height: 100px;
+        }
+        .sms-action {
+            background-color: #0065D2;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .sms-action:hover {
+            background-color: #0F0F16;
+        }
+
+        .color-picker {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .color-picker label {
+            margin-right: 10px;
+        }
+
+        .chart-container {
+            height: 300px;
+            margin-bottom: 20px;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, #1e1e2d, #2a2a3a);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #007BFF;
+            display: flex;
+            align-items: center;
+        }
+
+        .stat-card h3 i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .stat-subvalue {
+            font-size: 14px;
+            color: #a0a0a0;
+            margin-top: 5px;
+        }
+
+        .logout-btn {
+            margin-top: auto;
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #0056b3;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .modal-buttons .btn {
+            width: 48%;
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        textarea {
+            height: 80px;
+            resize: vertical;
+        }
+
+        .activities-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #2a2a3a;
+        }
+
+        .activity-icon {
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .activity-details {
+            flex-grow: 1;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: #6b6b7b;
+        }
+
+        .convoy {
+            color: #4CAF50;
+        }
+
+        .blacklist {
+            color: #F44336;
+        }
+
+        @media (max-width: 768px) {
+            .tablet {
+                border: none;
+                border-radius: 0;
+            }
+
+            .main-interface {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: -250px;
+                height: 100%;
+                z-index: 1000;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .content {
+                padding: 10px;
+            }
+
+            .auth-title {
+                font-size: 20px;
+            }
+
+            .fingerprint-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .fingerprint-icon i {
+                font-size: 30px;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 100%;
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 8px 6px;
+            }
+
+            .activities-list .activity-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .activity-icon {
+                margin-bottom: 5px;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                font-size: 16px;
+            }
+        }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1001;
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+      
+        .blacklist-info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #0F0F16;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .blacklist-info h3 {
+            margin-bottom: 10px;
+            color: #007BFF;
+        }
+
+        .blacklist-info ul {
+            padding-left: 20px;
+        }
+
+        .blacklist-info li {
+            margin-bottom: 5px;
+        }
+
+        .logs-container {
+            background: #1A1A23;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .logs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .logs-header h2 {
+            margin: 0;
+        }
+
+        .logs-filter {
+            display: flex;
+            gap: 10px;
+        }
+
+        .logs-filter select {
+            background: #2D2D34;
+            border: 1px solid #3a3a4a;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .log-entry {
+            background: #0F0F16;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .log-entry-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .log-type {
+            font-weight: bold;
+        }
+
+        .log-time {
+            color: #6b6b7b;
+        }
+
+        .log-description {
+            color: #a0a0a0;
+        }
+
+        .log-type-convoy {
+            color: #4CAF50;
+        }
+
+        .log-type-blacklist {
+            color: #F44336;
+        }
+
+        .log-type-admin {
+            color: #FFC107;
+        }
+
+        .log-type-auth {
+            color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="tablet">
+        <div class="auth-screen" id="authScreen">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/KVS_logo.svg" alt="ДКВС Лого" class="auth-logo">
+            <h1 class="auth-title">ДЕРЖАВНА КРИМІНАЛЬНО-<br>ВИКОНАВЧА СЛУЖБА УКРАЇНИ</h1>
+            <div class="fingerprint-icon" id="fingerprintAuth">
+                <i class="fas fa-fingerprint"></i>
+            </div>
+          <h1 class="auth-info">З повагою, <br> Данило Шульга</h1>
+        </div>
+
+        <div class="main-interface" id="mainInterface">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="sidebar" id="sidebar">
+                <div class="logo-section">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/KVS_logo.svg" alt="ДКВС Лого">
+                    <span>ДКВС</span>
+                </div>
+                <nav>
+                    <div class="nav-item active" data-view="main">
+                        <i class="fas fa-home"></i>
+                        Головна
+                    </div>
+                    <div class="nav-item" data-view="convoy-form">
+                        <i class="fas fa-clipboard-list"></i>
+                        Форма конвою
+                    </div>
+                    <div class="nav-item" data-view="convoy-archive">
+                        <i class="fas fa-archive"></i>
+                        Архів конвоїв
+                    </div>
+                    <div class="nav-item" data-view="blacklist">
+                        <i class="fas fa-users"></i>
+                        ЧС в'язнів
+                    </div>
+                    <div class="nav-item" data-view="add-blacklist">
+                        <i class="fas fa-user-plus"></i>
+                        Додати до ЧС
+                    </div>
+                    <div class="nav-item" data-view="recent-activities">
+                        <i class="fas fa-history"></i>
+                        Останні дії
+                    </div>
+                </nav>
+                <div class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Вийти
+                </div>
+            </div>
+
+            <div class="content">
+                <div id="main" class="section active">
+                    <div class="main-content">
+                        <h2>Інформація для працівників</h2>
+                        <div class="stats-container">
+                            <div class="stat-card">
+                                <h3><i class="fas fa-users"></i>Переглядає зараз</h3>
+                                <div class="stat-value" id="viewerCount">Завантаження...</div>
+                            </div>
+                            <div class="stat-card">
+                                <h3><i class="fas fa-truck"></i>Кількість конвоїв</h3>
+                                <div class="stat-value" id="convoyCountTotal">Завантаження...</div>
+                                <div class="stat-subvalue">
+                                    <span id="convoyCountWeek">Завантаження...</span> за 7 днів
+                                </div>
+                                <div class="stat-subvalue">
+                                    <span id="convoyCountToday">Завантаження...</span> сьогодні
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <h3><i class="fas fa-user-slash"></i>Особливо небезпечних в'язнів</h3>
+                                <div class="stat-value" id="blacklistCount">Завантаження...</div>
+                            </div>
+                        </div>
+                       <div id="mainPageContent"></div>
+                    </div>
+                </div>
+
+                <div id="convoy-form" class="section">
+                    <div class="main-content">
+                        <h2>Форма конвою</h2>
+                        <form id="convoyForm">
+                            <div class="form-group">
+                                <label for="convoy1">Nick Name конвоїра №1:</label>
+                                <input type="text" id="convoy1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="convoy2">Nick Name конвоїра №2 (якщо є):</label>
+                                <input type="text" id="convoy2">
+                            </div>
+                            <div class="form-group">
+                                <label for="prisoner1">ID в'язня №1:</label>
+                                <input type="text" id="prisoner1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prisoner2">ID в'язня №2 (якщо є):</label>
+                                <input type="text" id="prisoner2">
+                            </div>
+                            <button type="submit" class="btn">Зареєструвати конвой</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="convoy-archive" class="section">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h2>Архів конвоїв</h2>
+                        </div>
+                        <div class="search-container">
+                            <input type="text" id="convoySearchInput" placeholder="Пошук за нікнеймом конвоїра або в'язня...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <table id="convoyArchiveTable">
+                            <thead>
+                                <tr>
+                                    <th>Дата</th>
+                                    <th>Конвоїр №1</th>
+                                    <th>Конвоїр №2</th>
+                                    <th>В'язень №1</th>
+                                    <th>В'язень №2</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="blacklist" class="section">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h2>Чорний список в'язнів</h2>
+                        </div>
+                        <div class="search-container">
+                            <input type="text" id="blacklistSearchInput" placeholder="Пошук за ID, нікнеймом або кланом...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <table id="blacklistTable">
+                            <thead>
+                                <tr>
+                                    <th>ID Гравця</th>
+                                    <th>Нікнейм</th>
+                                    <th>Клан</th>
+                                    <th>Причина</th>
+                                    <th>Залишилось часу</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="add-blacklist" class="section">
+                    <div class="main-content">
+                        <h2>Додати до Чорного Списку</h2>
+                        <form id="addToBlacklistForm">
+                            <div class="form-group">
+                                <label for="playerId">ID Гравця</label>
+                                <input type="number" id="playerId" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="nickname">Нікнейм</label>
+                                <input type="text" id="nickname">
+                            </div>
+                            <div class="form-group">
+                                <label for="clan">Клан</label>
+                                <input type="text" id="clan">
+                            </div>
+                            <div class="form-group">
+                                <label for="reason">Причина</label>
+                                <input id="reason" maxlength="70" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="days">Кількість днів</label>
+                                <input type="number" id="days" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="addedBy">Nick Name того, хто заносить в ЧС</label>
+                                <input type="text" id="addedBy" required>
+                            </div>
+                          <div class="form-group">
+                                <label for="urlblack">Докази порушення URL (через хостинг YouTube або Imgur)</label>
+                                <input type="text" id="urlblack" required>
+                            </div>
+                          
+                            <button type="submit" class="btn">Додати</button>
+                        </form>
+                        <div class="blacklist-info">
+                            <h3>Інформація про додавання до чорного списку:</h3>
+                            <ul>
+                                <li>Напад на колону конвою - 5 днів</li>
+                                <li>Втеча з ДКВС під час виконання виправних робіт - 7 днів</li>
+                                <li>Вбивсто працівника ДКВС при виконанні обов'язків - 7 днів</li>
+                                <li>Проникнення на територію ДКВС - 6 днів</li>
+                                <li>Образи співробітника ДКВС - 1-3 дня</li>
+                                <li>Спроба саботажу чи організації бунту: 5 днів</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="recent-activities" class="section">
+                    <div class="main-content">
+                        <h2>Останні дії</h2>
+                        <ul class="activities-list" id="activitiesList"></ul>
+                    </div>
+                </div>
+
+              
+
+               
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="login-modal" id="loginModal">
+            <h2>Авторизація</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginUsername">Логін</label>
+                    <input type="text" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Пароль</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn">Увійти</button>
+                    <button type="button" class="btn" id="closeLoginModal">На головну</button>
+                </div>
+            </form>
+        </div>
+        <div class="sms-container"></div>
+    </div>
+
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+                apiKey: "AIzaSyBzefxFDTHQqXFHg9t08JTiL5EaH8si1oY",
+    authDomain: "dkvs-1ec88.firebaseapp.com",
+    databaseURL: "https://dkvs-1ec88-default-rtdb.firebaseio.com",
+    projectId: "dkvs-1ec88",
+    storageBucket: "dkvs-1ec88.appspot.com",
+    messagingSenderId: "167430647129",
+    appId: "1:167430647129:web:ab209fec7735f20b597048",
+    measurementId: "G-H6LKMLYD10"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        const authScreen = document.getElementById('authScreen');
+        const mainInterface = document.getElementById('mainInterface');
+        const fingerprintAuth = document.getElementById('fingerprintAuth');
+        const loginModal = document.getElementById('loginModal');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const loginForm = document.getElementById('loginForm');
+        const addToBlacklistForm = document.getElementById('addToBlacklistForm');
+        const convoyForm = document.getElementById('convoyForm');
+        const blacklistTableBody = document.getElementById('blacklistTable').getElementsByTagName('tbody')[0];
+        const convoyArchiveTableBody = document.getElementById('convoyArchiveTable').getElementsByTagName('tbody')[0];
+        const blacklistSearchInput = document.getElementById('blacklistSearchInput');
+        const convoySearchInput = document.getElementById('convoySearchInput');
+        const navItems = document.querySelectorAll('.nav-item');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const closeLoginModal = document.getElementById('closeLoginModal');
+        const sidebar = document.getElementById('sidebar');
+        const activitiesList = document.getElementById('activitiesList');
+        const menuToggle = document.getElementById('menuToggle');
+        const adminForm = document.getElementById('adminForm');
+        const logTypeFilter = document.getElementById('logTypeFilter');
+        const logDateFilter = document.getElementById('logDateFilter');
+
+        function showSmsNotification(title, message, actions = []) {
+            const smsContainer = document.querySelector('.sms-container');
+            if (!smsContainer) {
+                const container = document.createElement('div');
+                container.className = 'sms-container';
+                document.querySelector('.tablet').appendChild(container);
+            }
+
+            const notification = document.createElement('div');
+            notification.className = 'sms-notification';
+            notification.innerHTML = `
+                <div class="sms-header">
+                    <span class="sms-title">${title}</span>
+                    <span class="sms-close">&times;</span>
+                </div>
+                <div class="sms-content">${message}</div>
+                <div class="sms-actions"></div>
+            `;
+
+            const actionsContainer = notification.querySelector('.sms-actions');
+            actions.forEach(action => {
+                const button = document.createElement('button');
+                button.className = 'sms-action';
+                button.textContent = action.text;
+                button.onclick = action.onClick;
+                actionsContainer.appendChild(button);
+            });
+
+            smsContainer.appendChild(notification);
+            setTimeout(() => notification.classList.add('show'), 100);
+
+            const closeBtn = notification.querySelector('.sms-close');
+            closeBtn.onclick = () => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            };
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+
+            // Видаляємо старі повідомлення, якщо їх більше 3
+            const notifications = smsContainer.querySelectorAll('.sms-notification');
+            if (notifications.length > 3) {
+                notifications[0].remove();
+            }
+        }
+
+        function showView(viewName) {
+            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+            document.getElementById(viewName).classList.add('active');
+
+            // Оновлюємо активну вкладку в навігації
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.view === viewName);
+            });
+
+            if ((viewName === 'add-blacklist' || viewName === 'admin-panel' || viewName === 'logs') && !isAuthenticated()) {
+                showLoginModal(viewName);
+            } else if (viewName === 'logs') {
+                fetchLogs();
+            }
+        }
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                showView(item.dataset.view);
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        });
+
+        fingerprintAuth.addEventListener('click', () => {
+            authScreen.style.display = 'none';
+            mainInterface.style.display = 'grid';
+            fetchBlacklistData();
+            fetchConvoyData();
+            updateStats();
+            fetchRecentActivities();
+            updateViewerCount();
+        });
+
+        function showLoginModal(targetView) {
+            loginModal.style.display = 'block';
+            modalOverlay.style.display = 'block';
+            loginForm.dataset.targetView = targetView;
+        }
+
+        function hideLoginModal() {
+            loginModal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+        }
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const targetView = e.target.dataset.targetView;
+
+            if (username === 'dkvs' && password === 'DKVS33') {
+                localStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('authExpiration', Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+                localStorage.setItem('userRole', 'admin');
+                hideLoginModal();
+                showView(targetView || 'main');
+                updateUIForRole('admin');
+                showSmsNotification('Успіх', 'Ви успішно увійшли в систему!');
+                await addLog('auth', 'Успішна авторизація адміністратора');
+            } else {
+                showSmsNotification('Помилка', 'Невірний логін або пароль', [
+                    {
+                        text: 'Спробувати ще раз',
+                        onClick: () => {
+                            document.getElementById('loginUsername').value = '';
+                            document.getElementById('loginPassword').value = '';
+                            document.getElementById('loginUsername').focus();
+                        }
+                    }
+                ]);
+                await addLog('auth', 'Невдала спроба авторизації');
+            }
+        });
+
+        closeLoginModal.addEventListener('click', () => {
+            hideLoginModal();
+            showView('main');
+        });
+
+        logoutBtn.addEventListener('click', async () => {
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('authExpiration');
+            localStorage.removeItem('userRole');
+            authScreen.style.display = 'flex';
+            mainInterface.style.display = 'none';
+            showSmsNotification('Вихід', 'Ви вийшли з системи');
+            removeUserFromViewerCount();
+            await addLog('auth', 'Вихід з системи');
+        });
+
+        addToBlacklistForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const playerId = document.getElementById('playerId').value;
+            const nickname = document.getElementById('nickname').value;
+            const clan = document.getElementById('clan').value;
+            const reason = document.getElementById('reason').value;
+            const days = document.getElementById('days').value;
+            const addedBy = document.getElementById('addedBy').value;
+            const urlblack = document.getElementById('urlblack').value;
+
+            await addToBlacklist(playerId, nickname, clan, reason, days, addedBy, urlblack);
+            addToBlacklistForm.reset();
+            showSmsNotification('Успіх', 'Запис успішно додано до чорного списку!');
+        });
+
+        convoyForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const convoy1 = document.getElementById('convoy1').value;
+            const convoy2 = document.getElementById('convoy2').value;
+            const prisoner1 = document.getElementById('prisoner1').value;
+            const prisoner2 = document.getElementById('prisoner2').value;
+
+            await addConvoy(convoy1, convoy2, prisoner1, prisoner2);
+            convoyForm.reset();
+            showSmsNotification('Успіх', 'Конвой успішно зареєстровано!');
+        });
+
+        async function addToBlacklist(playerId, nickname, clan, reason, days, addedBy, urlblack) {
+            const blacklistRef = database.ref("blacklist");
+            const newBlacklistRef = blacklistRef.push();
+
+            const expirationTime = Date.now() + days * 24 * 60 * 60 * 1000;
+
+            await newBlacklistRef.set({
+                playerId,
+                nickname,
+                clan,
+                reason,
+                days,
+                addedBy,
+                urlblack,
+                createdAt: Date.now(),
+                expirationTime,
+            });
+
+          await addActivity('blacklist', `Додано до ЧС: ${nickname} ${playerId} : ${reason}`);
+await addLog(
+    'blacklist',
+    `${addedBy} додав ${nickname} : ${playerId} до ЧС на ${days} днів. Причина: ${reason} <br><br> Докази: <span style="display:block;color:blue;"> <a href="${urlblack}" target="_blank" style="color:blue;text-decoration:underline;">${urlblack}</a></span>`
+);
+fetchBlacklistData();
+
+        }
+
+        async function addConvoy(convoy1, convoy2, prisoner1, prisoner2) {
+            const convoyRef = database.ref("convoys");
+            const newConvoyRef = convoyRef.push();
+
+            await newConvoyRef.set({
+                convoy1,
+                convoy2,
+                prisoner1,
+                prisoner2,
+                timestamp: Date.now()
+            });
+
+            const counterRef = database.ref('counter');
+            const currentCount = (await counterRef.once('value')).val() || 0;
+            await counterRef.set(currentCount + 1);
+
+            await sendToDiscord({ convoy1, convoy2, prisoner1, prisoner2 });
+
+            await addActivity('convoy', `Новий конвой: ${convoy1}`);
+            await addLog('convoy', `Зареєстровано новий конвой. Конвоїр 1: ${convoy1}, Конвоїр 2: ${convoy2 || 'Відсутній'}, В'язень 1: ${prisoner1}, В'язень 2: ${prisoner2 || 'Відсутній'}`);
+            fetchConvoyData();
+            updateStats();
+        }
+
+        async function addActivity(type, description) {
+            const activityRef = database.ref("activities");
+            const newActivityRef = activityRef.push();
+            await newActivityRef.set({
+                type,
+                description,
+                timestamp: Date.now()
+            });
+        }
+
+        async function addLog(type, description) {
+            const logsRef = database.ref("logs");
+            const newLogRef = logsRef.push();
+            await newLogRef.set({
+                type,
+                description,
+                timestamp: Date.now()
+            });
+        }
+
+        async function fetchRecentActivities() {
+            const activitiesRef = database.ref("activities").orderByChild("timestamp").limitToLast(10);
+            activitiesRef.on('value', (snapshot) => {
+                const activities = [];
+                snapshot.forEach((childSnapshot) => {
+                    activities.unshift({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
+                });
+                renderActivities(activities);
+            });
+        }
+
+        function renderActivities(activities) {
+            activitiesList.innerHTML = '';
+            activities.forEach(activity => {
+                const li = document.createElement('li');
+                li.className = `activity-item ${activity.type}`;
+                li.innerHTML = `
+                    <span class="activity-icon">
+                        <i class="fas fa-${activity.type === 'convoy' ? 'truck' : 'user-slash'}"></i>
+                    </span>
+                    <div class="activity-details">
+                        <p>${activity.description}</p>
+                        <p class="activity-time">${new Date(activity.timestamp).toLocaleString('uk-UA')}</p>
+                    </div>
+                `;
+                activitiesList.appendChild(li);
+            });
+        }
+
+       async function getWebhookUrl() {
+    const webhookRef = database.ref("config1/webhookUrl");
+    const snapshot = await webhookRef.once("value");
+    return snapshot.val();
+}
+
+async function sendToDiscord(data) {
+    try {
+        const webhookUrl = await getWebhookUrl();
+        if (!webhookUrl) {
+            console.error("Помилка: URL вебхука не знайдено у базі даних.");
+            return;
+        }
+
+        const embed = {
+            "username": "UKRAINE GTA | 02",  // Назва бота
+            "avatar_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/KVS_logo.svg/1200px-KVS_logo.svg.png",  // Аватар бота
+            "embeds": [
+                {
+                    "title": "🔔 **Новий конвой створено!**",
+                    "color": 3447003, // Синій колір для заголовку
+                    "fields": [
+                        {
+                            "name": "🚔 **Конвоїри**",
+                            "value": `**Конвоїр #1**: ${data.convoy1}\n**Конвоїр #2**: ${data.convoy2 || "none"}`,
+                            "inline": true
+                        },
+                        {
+                            "name": "🔗 **В'язні**",
+                            "value": `**В'язень #1**: ${data.prisoner1}\n**В'язень #2**: ${data.prisoner2 || "none"}`,
+                            "inline": true
+                        },
+                        {
+                            "name": "📅 **Дата конвою**",
+                            "value": `**${new Date().toLocaleString('uk-UA', { 
+                                weekday: 'long', 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric', 
+                                hour: '2-digit', 
+                                minute: '2-digit'
+                            })}**`, // Форматоване дата для кращого вигляду
+                            "inline": false
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // Відправка повідомлення через webhook
+        const response = await fetch(webhookUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(embed)
+        });
+
+        if (!response.ok) {
+            console.error("Помилка при відправці повідомлення у Discord:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Помилка при відправці даних до Discord:", error);
+    }
+}
+
+        async function fetchBlacklistData() {
+            const blacklistRef = database.ref("blacklist");
+            blacklistTableBody.innerHTML = '<tr><td colspan="5" class="loading">Завантаження...</td></tr>';
+
+            try {
+                const snapshot = await blacklistRef.once('value');
+
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    const keys = Object.keys(data);
+
+                    blacklistTableBody.innerHTML = "";
+
+                    keys.forEach(key => {
+                        const item = data[key];
+                        const row = createBlacklistTableRow(item, key);
+                        blacklistTableBody.appendChild(row);
+                    });
+
+                    checkAndRemoveExpiredEntries();
+                    filterBlacklistTable();
+                } else {
+                    blacklistTableBody.innerHTML = '<tr><td colspan="5">Немає даних</td></tr>';
+                }
+            } catch (error) {
+                console.error("Помилка при отриманні даних чорного списку:", error);
+                blacklistTableBody.innerHTML = '<tr><td colspan="5">Помилка завантаження даних</td></tr>';
+            }
+        }
+
+        async function fetchConvoyData() {
+            const convoyRef = database.ref("convoys");
+            convoyArchiveTableBody.innerHTML = '<tr><td colspan="5" class="loading">Завантаження...</td></tr>';
+
+            try {
+                const snapshot = await convoyRef.once('value');
+
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    const keys = Object.keys(data);
+
+                    convoyArchiveTableBody.innerHTML = "";
+
+                    keys.sort((a, b) => data[b].timestamp - data[a].timestamp).forEach(key => {
+                        const item = data[key];
+                        const row = createConvoyTableRow(item);
+                        convoyArchiveTableBody.appendChild(row);
+                    });
+
+                    filterConvoyTable();
+                } else {
+                    convoyArchiveTableBody.innerHTML = '<tr><td colspan="5">Немає даних</td></tr>';
+                }
+            } catch (error) {
+                console.error("Помилка при отриманні даних конвоїв:", error);
+                convoyArchiveTableBody.innerHTML = '<tr><td colspan="5">Помилка завантаження даних</td></tr>';
+            }
+        }
+
+        function createBlacklistTableRow(item, key) {
+            const row = document.createElement("tr");
+            const currentTime = Date.now();
+            const timeLeft = item.expirationTime - currentTime;
+
+            let timeString = "Час вичерпано";
+            if (timeLeft > 0) {
+                timeString = formatTimeLeft(timeLeft);
+            }
+
+            const nicknameHtml = item.nickname
+    ? (() => {
+        const nicknameParts = item.nickname.split(' ');
+        return `
+            <div class="nickname-cell">
+                <span class="nickname-first">${nicknameParts[0] || ''}</span>
+                <span class="nickname-second">${nicknameParts.slice(1).join(' ')}</span>
+            </div>
+        `;
+    })()
+    : `<div class="nickname-error">Помилка NICKNAME</div>`;
+
+row.innerHTML = `
+    <td>${item.playerId || "Помилка ID"}</td>
+    <td>${nicknameHtml}</td>
+    <td>${item.clan || "Помилка CLAN"}</td>
+    <td>${item.reason}</td>
+    <td class="time-left" data-key="${key}">${timeString}</td>
+`;
+
+return row;
+
+        }
+
+        function createConvoyTableRow(item) {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${new Date(item.timestamp).toLocaleString('uk-UA')}</td>
+                <td>${formatNickname(item.convoy1)}</td>
+                <td>${formatNickname(item.convoy2 || "—")}</td>
+                <td>${item.prisoner1}</td>
+                <td>${item.prisoner2 || "—"}</td>
+            `;
+            return row;
+        }
+
+        function formatNickname(nickname) {
+            const parts = nickname.split(' ');
+            return `
+                <div class="nickname-cell">
+                    <span class="nickname-first">${parts[0] || ''}</span>
+                    <span class="nickname-second">${parts.slice(1).join(' ')}</span>
+                </div>
+            `;
+        }
+
+        function formatTimeLeft(timeLeft) {
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+
+            let timeString = "";
+            if (days > 0) {
+                timeString += `${days} ${days === 1 ? 'день' : days < 5 ? 'дні' : 'днів'}`;
+            }
+            if (hours > 0 || days > 0) timeString += ` ${hours} год.`;
+            timeString += ` ${minutes} хв.`;
+
+            return timeString.trim();
+        }
+
+        async function checkAndRemoveExpiredEntries() {
+            const blacklistRef = database.ref("blacklist");
+
+            try {
+                const snapshot = await blacklistRef.once('value');
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    const keys = Object.keys(data);
+
+                    keys.forEach(key => {
+                        const item = data[key];
+                        if (Date.now() >= item.expirationTime) {
+                            blacklistRef.child(key).remove();
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error("Помилка при видаленні записів:", error);
+            }
+        }
+
+        function filterBlacklistTable() {
+            const filter = blacklistSearchInput.value.toLowerCase();
+            const rows = blacklistTableBody.getElementsByTagName("tr");
+
+            for (let row of rows) {
+                const cells = row.getElementsByTagName("td");
+                let shouldShow = false;
+
+                for (let cell of cells) {
+                    const text = cell.textContent || cell.innerText;
+                    if (text.toLowerCase().includes(filter)) {
+                        shouldShow = true;
+                        highlightText(cell, filter);
+                    } else {
+                        removeHighlight(cell);
+                    }
+                }
+
+                row.style.display = shouldShow ? "" : "none";
+            }
+        }
+
+        function filterConvoyTable() {
+            const filter = convoySearchInput.value.toLowerCase();
+            const rows = convoyArchiveTableBody.getElementsByTagName("tr");
+
+            for (let row of rows) {
+                const cells = row.getElementsByTagName("td");
+                let shouldShow = false;
+
+                for (let cell of cells) {
+                    const text = cell.textContent || cell.innerText;
+                    if (text.toLowerCase().includes(filter)) {
+                        shouldShow = true;
+                        highlightText(cell, filter);
+                    } else {
+                        removeHighlight(cell);
+                    }
+                }
+
+                row.style.display = shouldShow ? "" : "none";
+            }
+        }
+
+        function highlightText(element, filter) {
+            const text = element.textContent;
+            const regex = new RegExp(`(${filter})`, 'gi');
+            element.innerHTML = text.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        function removeHighlight(element) {
+            element.innerHTML = element.textContent;
+        }
+
+        function isAuthenticated() {
+            const isAuth = localStorage.getItem('isAuthenticated');
+            const authExpiration = localStorage.getItem('authExpiration');
+            return isAuth && authExpiration && Date.now() < parseInt(authExpiration);
+        }
+
+        function updateUIForRole(role) {
+            const adminElements = document.querySelectorAll('.admin-only');
+            adminElements.forEach(el => {
+                el.style.display = role === 'admin' ? 'block' : 'none';
+            });
+        }
+
+        blacklistSearchInput.addEventListener('input', filterBlacklistTable);
+        convoySearchInput.addEventListener('input', filterConvoyTable);
+
+        setInterval(() => {
+            const timeElements = document.querySelectorAll('.time-left');
+            timeElements.forEach(element => {
+                const key = element.dataset.key;
+                database.ref(`blacklist/${key}`).once('value').then(snapshot => {
+                    if (snapshot.exists()) {
+                        const item = snapshot.val();
+                        const timeLeft = item.expirationTime - Date.now();
+                        if (timeLeft > 0) {
+                            element.textContent = formatTimeLeft(timeLeft);
+                        } else {
+                            element.textContent = "Час вичерпано";
+                        }
+                    }
+                });
+            });
+        }, 60000);
+
+        async function updateStats() {
+            const convoyRef = database.ref("convoys");
+            const blacklistRef = database.ref("blacklist");
+            const counterRef = database.ref("counter");
+
+            try {
+                const [convoySnapshot, blacklistSnapshot, counterSnapshot] = await Promise.all([
+                    convoyRef.once('value'),
+                    blacklistRef.once('value'),
+                    counterRef.once('value')
+                ]);
+
+                const convoys = convoySnapshot.val() || {};
+                const blacklist = blacklistSnapshot.val() || {};
+                const totalConvoys = counterSnapshot.val() || 0;
+
+                const now = Date.now();
+                const oneDayAgo = now - 24 * 60 * 60 * 1000;
+                const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
+
+                const convoysToday = Object.values(convoys).filter(convoy => convoy.timestamp > oneDayAgo).length;
+                const convoysThisWeek = Object.values(convoys).filter(convoy => convoy.timestamp > sevenDaysAgo).length;
+
+                const blacklistCount = Object.keys(blacklist).length;
+
+                document.getElementById('convoyCountTotal').textContent = totalConvoys;
+                document.getElementById('convoyCountWeek').textContent = convoysThisWeek;
+                document.getElementById('convoyCountToday').textContent = convoysToday;
+                document.getElementById('blacklistCount').textContent = blacklistCount;
+
+                updateConvoyChart(convoys);
+            } catch (error) {
+                console.error("Помилка при оновленні статистики:", error);
+            }
+        }
+
+        function updateConvoyChart(convoys) {
+            const chartData = [['День', 'Кількість конвоїв']];
+            const now = new Date();
+            const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(sevenDaysAgo.getTime() + i * 24 * 60 * 60 * 1000);
+                const dateString = date.toLocaleDateString('uk-UA', { weekday: 'short' });
+                const count = Object.values(convoys).filter(convoy => {
+                    const convoyDate = new Date(convoy.timestamp);
+                    return convoyDate.toDateString() === date.toDateString();
+                }).length;
+                chartData.push([dateString, count]);
+            }
+
+            google.charts.load('current', {'packages':['corechart']});
+            google.charts.setOnLoadCallback(() => {
+                const data = google.visualization.arrayToDataTable(chartData);
+                const options = {
+                    title: 'Кількість конвоїв за останні 7 днів',
+                    curveType: 'function',
+                    legend: { position: 'bottom' },
+                    backgroundColor: '#1A1A23',
+                    titleTextStyle: { color: '#fff' },
+                    hAxis: { textStyle: { color: '#fff' } },
+                    vAxis: { textStyle: { color: '#fff' } },
+                    legend: { textStyle: { color: '#fff' } },
+                    colors: ['#007BFF']
+                };
+                const container = document.getElementById('convoyChart');
+                if (container) {
+                    const chart = new google.visualization.LineChart(container);
+                    chart.draw(data, options);
+                } else {
+                    console.error('Container for convoy chart not found');
+                }
+            });
+        }
+
+        function updateViewerCount() {
+            const viewersRef = database.ref('viewers');
+            const userId = localStorage.getItem('userId') || generateUserId();
+            localStorage.setItem('userId', userId);
+
+            viewersRef.child(userId).set({
+                lastActive: firebase.database.ServerValue.TIMESTAMP
+            });
+
+            viewersRef.on('value', (snapshot) => {
+                const viewers = snapshot.val();
+                const activeViewers = Object.values(viewers || {}).filter(viewer => {
+                    return Date.now() - viewer.lastActive < 5 * 60 * 1000; // 5 minutes
+                });
+                document.getElementById('viewerCount').textContent = activeViewers.length;
+            });
+
+            setInterval(() => {
+                viewersRef.child(userId).update({
+                    lastActive: firebase.database.ServerValue.TIMESTAMP
+                });
+            }, 60000); // Update every minute
+        }
+
+        function removeUserFromViewerCount() {
+            const userId = localStorage.getItem('userId');
+            if (userId) {
+                const viewersRef = database.ref('viewers');
+                viewersRef.child(userId).remove();
+            }
+        }
+
+        function generateUserId() {
+            return 'user-' + Math.random().toString(36).substr(2, 9);
+        }
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        adminForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('infoTitle').value;
+            const content = document.getElementById('infoContent').innerHTML;
+
+            await addAdminInfo(title, content);
+            adminForm.reset();
+            document.getElementById('infoContent').innerHTML = '';
+            showSmsNotification('Успіх', 'Інформацію успішно додано/оновлено!');
+        });
+
+        async function addAdminInfo(title, content) {
+            const adminInfoRef = database.ref("adminInfo");
+            const newInfoRef = adminInfoRef.push();
+
+            await newInfoRef.set({
+                title,
+                content,
+                timestamp: Date.now()
+            });
+
+            await addActivity('admin', `Додано нову інформацію: ${title}`);
+            await addLog('admin', `Адміністратор додав нову інформацію: ${title}`);
+            fetchAdminInfo();
+        }
+
+        async function fetchAdminInfo() {
+            const adminInfoRef = database.ref("adminInfo").orderByChild("timestamp");
+            const snapshot = await adminInfoRef.once('value');
+            const adminInfoList = document.getElementById('adminInfoList');
+            adminInfoList.innerHTML = '';
+
+            if (snapshot.exists()) {
+                snapshot.forEach((childSnapshot) => {
+                    const info = childSnapshot.val();
+                    const infoCard = createInfoCard(info, childSnapshot.key);
+                    adminInfoList.appendChild(infoCard);
+                });
+            } else {
+                adminInfoList.innerHTML = '<p>Немає доступної інформації</p>';
+            }
+        }
+
+        function createInfoCard(info, key) {
+            const card = document.createElement('div');
+            card.className = 'info-card';
+            card.innerHTML = `
+                <h3>${info.title}</h3>
+                <div>${info.content}</div>
+                <div class="info-actions">
+                    <button class="btn edit-info" data-key="${key}">Редагувати</button>
+                    <button class="btn delete-info" data-key="${key}">Видалити</button>
+                </div>
+            `;
+
+            card.querySelector('.edit-info').addEventListener('click', () => editInfo(key, info));
+            card.querySelector('.delete-info').addEventListener('click', () => deleteInfo(key));
+
+            return card;
+        }
+
+        function editInfo(key, info) {
+            document.getElementById('infoTitle').value = info.title;
+            document.getElementById('infoContent').innerHTML = info.content;
+            adminForm.dataset.editKey = key;
+        }
+
+        async function deleteInfo(key) {
+            if (confirm('Ви впевнені, що хочете видалити цю інформацію?')) {
+                const adminInfoRef = database.ref("adminInfo");
+                await adminInfoRef.child(key).remove();
+                await addActivity('admin', 'Видалено інформацію');
+                await addLog('admin', `Адміністратор видалив інформацію`);
+                fetchAdminInfo();
+                showSmsNotification('Успіх', 'Інформацію успішно видалено!');
+            }
+        }
+
+        document.querySelectorAll('.editor-toolbar button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const command = this.dataset.command;
+                if (command === 'createLink') {
+                    const url = prompt('Введіть URL посилання:');
+                    if (url) document.execCommand(command, false, url);
+                } else if (command === 'insertImage') {
+                    const url = prompt('Введіть URL зображення:');
+                    if (url) document.execCommand(command, false, url);
+                } else if (command === 'foreColor') {
+                    showColorPicker(this);
+                } else {
+                    document.execCommand(command, false, null);
+                }
+            });
+        });
+
+        function showColorPicker(button) {
+            const colorPicker = document.createElement('div');
+            colorPicker.className = 'color-picker-popup';
+            colorPicker.innerHTML = `
+                <div class="color-grid"></div>
+                <div class="color-input">
+                    <input type="text" placeholder="#000000">
+                    <button>OK</button>
+                </div>
+            `;
+
+            const colors = ['#000000', '#ffffff', '#ff0000', '#00ff00', '#0000ff', '#ffff00', '#00ffff', '#ff00ff',
+                            '#c0c0c0', '#808080', '#800000', '#808000', '#008000', '#800080', '#008080', '#000080'];
+
+            const colorGrid = colorPicker.querySelector('.color-grid');
+            colors.forEach(color => {
+                const colorCell = document.createElement('div');
+                colorCell.className = 'color-cell';
+                colorCell.style.backgroundColor = color;
+                colorCell.addEventListener('click', () => {
+                    document.execCommand('foreColor', false, color);
+                    colorPicker.remove();
+                });
+                colorGrid.appendChild(colorCell);
+            });
+
+            const colorInput = colorPicker.querySelector('input');
+            const okButton = colorPicker.querySelector('button');
+            okButton.addEventListener('click', () => {
+                const color = colorInput.value;
+                if (/^#[0-9A-F]{6}$/i.test(color)) {
+                    document.execCommand('foreColor', false, color);
+                    colorPicker.remove();
+                } else {
+                    alert('Будь ласка, введіть правильний колір у форматі #RRGGBB');
+                }
+            });
+
+            document.body.appendChild(colorPicker);
+            const buttonRect = button.getBoundingClientRect();
+            colorPicker.style.top = `${buttonRect.bottom + window.scrollY}px`;
+            colorPicker.style.left = `${buttonRect.left + window.scrollX}px`;
+
+            document.addEventListener('click', function closeColorPicker(e) {
+                if (!colorPicker.contains(e.target) && e.target !== button) {
+                    colorPicker.remove();
+                    document.removeEventListener('click', closeColorPicker);
+                }
+            });
+        }
+
+        async function fetchLogs() {
+            const logsRef = database.ref("logs").orderByChild("timestamp").limitToLast(100);
+            const snapshot = await logsRef.once('value');
+            const logsContent = document.getElementById('logsContent');
+            logsContent.innerHTML = '';
+
+            if (snapshot.exists()) {
+                const logs = [];
+                snapshot.forEach((childSnapshot) => {
+                    logs.unshift({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
+                });
+
+                renderLogs(logs);
+            } else {
+                logsContent.innerHTML = '<p>Немає доступних логів</p>';
+            }
+        }
+
+        function renderLogs(logs) {
+            const logsContent = document.getElementById('logsContent');
+            logsContent.innerHTML = '';
+
+            const filteredLogs = filterLogs(logs);
+
+            filteredLogs.forEach((log) => {
+                const logEntry = document.createElement('div');
+                logEntry.className = `log-entry log-type-${log.type}`;
+                logEntry.innerHTML = `
+                    <div class="log-entry-header">
+                        <span class="log-type">${getLogTypeText(log.type)}</span>
+                        <span class="log-time">${new Date(log.timestamp).toLocaleString('uk-UA')}</span>
+                    </div>
+                    <div class="log-description">${log.description}</div>
+                `;
+                logsContent.appendChild(logEntry);
+            });
+        }
+
+        function getLogTypeText(type) {
+            const types = {
+                'convoy': 'Конвой',
+                'blacklist': 'Чорний список',
+                'auth': 'Авторизація'
+            };
+            return types[type] || 'Інше';
+        }
+
+        function filterLogs(logs) {
+            const typeFilter = logTypeFilter.value;
+            const dateFilter = logDateFilter.value;
+
+            return logs.filter(log => {
+                const typeMatch = typeFilter === 'all' || log.type === typeFilter;
+                const dateMatch = checkDateFilter(log.timestamp, dateFilter);
+                return typeMatch && dateMatch;
+            });
+        }
+
+        function checkDateFilter(timestamp, filter) {
+            const logDate = new Date(timestamp);
+            const now = new Date();
+
+            switch (filter) {
+                case 'today':
+                    return logDate.toDateString() === now.toDateString();
+                case 'week':
+                    const weekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+                    return logDate >= weekAgo;
+                case 'month':
+                    const monthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+                    return logDate >= monthAgo;
+                default:
+                    return true;
+            }
+        }
+
+        logTypeFilter.addEventListener('change', () => fetchLogs());
+        logDateFilter.addEventListener('change', () => fetchLogs());
+
+        async function deleteOldLogs() {
+            const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+            const logsRef = database.ref("logs");
+            const oldLogsSnapshot = await logsRef.orderByChild("timestamp").endAt(sevenDaysAgo).once('value');
+            
+            if (oldLogsSnapshot.exists()) {
+                oldLogsSnapshot.forEach((childSnapshot) => {
+                    logsRef.child(childSnapshot.key).remove();
+                });
+            }
+        }
+      
+      
+      
+      
+              async function updateMainPageContent() {
+            const infoRef = database.ref('info').orderByChild('timestamp').limitToLast(1);
+            const snapshot = await infoRef.once('value');
+            const mainPageContent = document.getElementById('mainPageContent');
+
+            if (snapshot.exists()) {
+                snapshot.forEach((childSnapshot) => {
+                    const info = childSnapshot.val();
+                    mainPageContent.innerHTML = `
+                        <h3>${info.title}</h3>
+                        <div>${info.content}</div>
+                    `;
+                });
+            } else {
+                mainPageContent.innerHTML = '<p>Немає доступної інформації</p>';
+            }
+        }
+      
+      
+
+        setInterval(deleteOldLogs, 24 * 60 * 60 * 1000);
+
+        fetchBlacklistData();
+        fetchConvoyData();
+        updateStats();
+        fetchRecentActivities();
+        updateViewerCount();
+        fetchAdminInfo();
+
+        if (isAuthenticated()) {
+            const userRole = localStorage.getItem('userRole');
+            updateUIForRole(userRole);
+        }
+
+        window.addEventListener('beforeunload', removeUserFromViewerCount);
+    </script>
+</body>
+</html>
