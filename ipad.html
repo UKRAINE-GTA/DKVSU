@@ -4,15 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ДКВС - Ipad</title>
+
+    <!-- Шрифти та іконки -->
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="https://i.imgur.com/PRjTNqr.png" type="image/png">
+
+    <!-- Google Charts -->
     <script src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <!-- Основний CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
     <div class="tablet">
         <div class="auth-screen" id="authScreen">
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/KVS_logo.svg" alt="ДКВС Лого" class="auth-logo">
@@ -20,13 +29,14 @@
             <div class="fingerprint-icon" id="fingerprintAuth">
                 <i class="fas fa-fingerprint"></i>
             </div>
-          <h1 class="auth-info">З повагою, <br> Данило Шульга</h1>
+            <h1 class="auth-info">З повагою, <br> Данило Шульга</h1>
         </div>
 
         <div class="main-interface" id="mainInterface">
             <button class="menu-toggle" id="menuToggle">
                 <i class="fas fa-bars"></i>
             </button>
+
             <div class="sidebar" id="sidebar">
                 <div class="logo-section">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/KVS_logo.svg" alt="ДКВС Лого">
@@ -34,33 +44,26 @@
                 </div>
                 <nav>
                     <div class="nav-item active" data-view="main">
-                        <i class="fas fa-home"></i>
-                        Головна
+                        <i class="fas fa-home"></i> Головна
                     </div>
                     <div class="nav-item" data-view="convoy-form">
-                        <i class="fas fa-clipboard-list"></i>
-                        Форма конвою
+                        <i class="fas fa-clipboard-list"></i> Форма конвою
                     </div>
                     <div class="nav-item" data-view="convoy-archive">
-                        <i class="fas fa-archive"></i>
-                        Архів конвоїв
+                        <i class="fas fa-archive"></i> Архів конвоїв
                     </div>
                     <div class="nav-item" data-view="blacklist">
-                        <i class="fas fa-users"></i>
-                        ЧС в'язнів
+                        <i class="fas fa-users"></i> ЧС в'язнів
                     </div>
                     <div class="nav-item" data-view="add-blacklist">
-                        <i class="fas fa-user-plus"></i>
-                        Додати до ЧС
+                        <i class="fas fa-user-plus"></i> Додати до ЧС
                     </div>
                     <div class="nav-item" data-view="recent-activities">
-                        <i class="fas fa-history"></i>
-                        Останні дії
+                        <i class="fas fa-history"></i> Останні дії
                     </div>
                 </nav>
                 <div class="logout-btn" id="logoutBtn">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Вийти
+                    <i class="fas fa-sign-out-alt"></i> Вийти
                 </div>
             </div>
 
@@ -76,44 +79,14 @@
                             <div class="stat-card">
                                 <h3><i class="fas fa-truck"></i>Кількість конвоїв</h3>
                                 <div class="stat-value" id="convoyCountTotal">Завантаження...</div>
-                                <div class="stat-subvalue">
-                                    <span id="convoyCountWeek">Завантаження...</span> за 7 днів
-                                </div>
-                                <div class="stat-subvalue">
-                                    <span id="convoyCountToday">Завантаження...</span> сьогодні
-                                </div>
+                                <div class="stat-subvalue"><span id="convoyCountWeek">Завантаження...</span> за 7 днів</div>
+                                <div class="stat-subvalue"><span id="convoyCountToday">Завантаження...</span> сьогодні</div>
                             </div>
                             <div class="stat-card">
                                 <h3><i class="fas fa-user-slash"></i>Особливо небезпечних в'язнів</h3>
                                 <div class="stat-value" id="blacklistCount">Завантаження...</div>
                             </div>
                         </div>
-                       <div id="mainPageContent"></div>
-                    </div>
-                </div>
-
-                <div id="convoy-form" class="section">
-                    <div class="main-content">
-                        <h2>Форма конвою</h2>
-                        <form id="convoyForm">
-                            <div class="form-group">
-                                <label for="convoy1">Nick Name конвоїра №1:</label>
-                                <input type="text" id="convoy1" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="convoy2">Nick Name конвоїра №2 (якщо є):</label>
-                                <input type="text" id="convoy2">
-                            </div>
-                            <div class="form-group">
-                                <label for="prisoner1">ID в'язня №1:</label>
-                                <input type="text" id="prisoner1" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="prisoner2">ID в'язня №2 (якщо є):</label>
-                                <input type="text" id="prisoner2">
-                            </div>
-                            <button type="submit" class="btn">Зареєструвати конвой</button>
-                        </form>
                     </div>
                 </div>
 
@@ -141,89 +114,15 @@
                     </div>
                 </div>
 
-                <div id="blacklist" class="section">
-                    <div class="table-container">
-                        <div class="table-header">
-                            <h2>Чорний список в'язнів</h2>
-                        </div>
-                        <div class="search-container">
-                            <input type="text" id="blacklistSearchInput" placeholder="Пошук за ID, нікнеймом або кланом...">
-                            <i class="fas fa-search"></i>
-                        </div>
-                        <table id="blacklistTable">
-                            <thead>
-                                <tr>
-                                    <th>ID Гравця</th>
-                                    <th>Нікнейм</th>
-                                    <th>Клан</th>
-                                    <th>Причина</th>
-                                    <th>Залишилось часу</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div id="add-blacklist" class="section">
-                    <div class="main-content">
-                        <h2>Додати до Чорного Списку</h2>
-                        <form id="addToBlacklistForm">
-                            <div class="form-group">
-                                <label for="playerId">ID Гравця</label>
-                                <input type="number" id="playerId" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="nickname">Нікнейм</label>
-                                <input type="text" id="nickname">
-                            </div>
-                            <div class="form-group">
-                                <label for="clan">Клан</label>
-                                <input type="text" id="clan">
-                            </div>
-                            <div class="form-group">
-                                <label for="reason">Причина</label>
-                                <input id="reason" maxlength="70" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="days">Кількість днів</label>
-                                <input type="number" id="days" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="addedBy">Nick Name того, хто заносить в ЧС</label>
-                                <input type="text" id="addedBy" required>
-                            </div>
-                          <div class="form-group">
-                                <label for="urlblack">Докази порушення URL (через хостинг YouTube або Imgur)</label>
-                                <input type="text" id="urlblack" required>
-                            </div>
-                          
-                            <button type="submit" class="btn">Додати</button>
-                        </form>
-                        <div class="blacklist-info">
-                            <h3>Інформація про додавання до чорного списку:</h3>
-                            <ul>
-                                <li>Напад на колону конвою - 5 днів</li>
-                                <li>Втеча з ДКВС під час виконання виправних робіт - 7 днів</li>
-                                <li>Вбивсто працівника ДКВС при виконанні обов'язків - 7 днів</li>
-                                <li>Проникнення на територію ДКВС - 6 днів</li>
-                                <li>Образи співробітника ДКВС - 1-3 дня</li>
-                                <li>Спроба саботажу чи організації бунту: 5 днів</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
                 <div id="recent-activities" class="section">
                     <div class="main-content">
                         <h2>Останні дії</h2>
                         <ul class="activities-list" id="activitiesList"></ul>
                     </div>
                 </div>
+            </div>
+        </div>
 
-              
-
-               
         <div class="modal-overlay" id="modalOverlay"></div>
         <div class="login-modal" id="loginModal">
             <h2>Авторизація</h2>
@@ -242,9 +141,9 @@
                 </div>
             </form>
         </div>
-        <div class="sms-container"></div>
     </div>
 
-    <script>
-        <script src="script.js" defer></script>
-        
+    <!-- Основний JavaScript -->
+    <script src="script.js" defer></script>
+</body>
+</html>
