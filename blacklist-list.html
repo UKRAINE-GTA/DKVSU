@@ -3,193 +3,704 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="icon" href="https://i.imgur.com/PRjTNqr.png" type="image/png">
-  <title>Чорний Список</title>
+  <title>ДКВС - Чорний Список</title>
   <style>
-    body {
-      font-family: 'Comfortaa', sans-serif;
+    :root {
+      --primary-bg: #0a0a0f;
+      --secondary-bg: #15151d;
+      --card-bg: #1a1a23;
+      --accent-bg: #252530;
+      --border-color: #2a2a3a;
+      --text-primary: #ffffff;
+      --text-secondary: #b0b0b0;
+      --text-muted: #6b6b7b;
+      --accent-blue: #3b82f6;
+      --accent-green: #10b981;
+      --accent-red: #ef4444;
+      --accent-yellow: #f59e0b;
+      --accent-purple: #8b5cf6;
+      --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+      --border-radius: 12px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
       margin: 0;
-      padding: 0px;
-      display: flex;
-      flex-direction: column;
-      background: #000000 url('https://i.imgur.com/8I4wQ0P.png');
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      color: #fff;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: var(--primary-bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
       line-height: 1.6;
-      overflow-x: hidden;
     }
 
     .container {
-      width: 99%;
-      background-color: rgba(21, 21, 29, 0.9);
-      padding: 10px;
-      border-radius: 10px;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
-      overflow-x: auto;
-      margin-top: 10px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Header */
+    .header {
+      background: rgba(26, 26, 35, 0.8);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: 24px;
+      margin-bottom: 24px;
       position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-primary);
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
     }
 
     .logo {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 100px;
-      height: auto;
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      box-shadow: var(--shadow-md);
     }
 
-    h1 {
+    .title-section h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .title-section p {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .stats-section {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
       text-align: center;
-      margin-bottom: 20px;
+      padding: 12px 16px;
+      background: var(--accent-bg);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
     }
 
-    .search-container {
-      margin-bottom: 20px;
-      width: 100%;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
+    .stat-number {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Controls */
+    .controls {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: 24px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-section {
+      flex: 1;
+      min-width: 300px;
       position: relative;
     }
 
-    #searchInput {
+    .search-input {
       width: 100%;
-      padding: 10px 40px 10px 10px;
-      border: none;
-      border-radius: 5px;
-      background-color: #2D2D34;
-      color: #fff;
-      font-family: 'Comfortaa', sans-serif;
-      font-size: 16px;
+      padding: 12px 16px 12px 44px;
+      background: var(--accent-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
 
     .search-icon {
       position: absolute;
-      right: 10px;
+      left: 16px;
       top: 50%;
       transform: translateY(-50%);
-      color: #007BFF;
+      color: var(--text-muted);
+    }
+
+    .filters-section {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .filter-select {
+      padding: 8px 12px;
+      background: var(--accent-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-size: 13px;
+      min-width: 120px;
+    }
+
+    .filter-select option {
+      background: var(--card-bg);
+      color: var(--text-primary);
+    }
+
+    .view-toggle {
+      display: flex;
+      background: var(--accent-bg);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .view-btn {
+      padding: 8px 12px;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .view-btn.active {
+      background: var(--accent-blue);
+      color: white;
+    }
+
+    /* Table */
+    .table-container {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+
+    .table-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--accent-bg);
+    }
+
+    .table-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .table-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      padding: 6px 12px;
+      background: var(--accent-blue);
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-size: 12px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .action-btn:hover {
+      background: #2563eb;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
     }
 
     th, td {
-      padding: 12px;
+      padding: 16px;
       text-align: left;
-      border: 1px solid #fff;
-      background-color: #2D2D34;
-      background: #000000 url('https://i.imgur.com/8I4wQ0P.png'); /* Заміна на реальний URL */
-      background-size: cover; /* Зображення покриває весь екран */
-      background-position: center center; /* Центрування фото */
-      background-repeat: no-repeat; /* Фото не повторюється */
-      background-attachment: fixed; /* Фон статичний при прокручуванні */
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
     }
 
     th {
-      background-color: #007BFF;
+      background: var(--accent-bg);
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      cursor: pointer;
+      user-select: none;
     }
 
-    tr:nth-child(even) {
-      background-color: rgba(21, 21, 29, 0.7);
+    th:hover {
+      background: var(--border-color);
+    }
+
+    th .sort-icon {
+      margin-left: 8px;
+      opacity: 0.5;
+      transition: var(--transition);
+    }
+
+    th.sorted .sort-icon {
+      opacity: 1;
+      color: var(--accent-blue);
     }
 
     tr:hover {
-      background-color: rgba(68, 68, 68, 0.7);
+      background: var(--accent-bg);
     }
 
+    .player-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .player-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--gradient-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .player-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .player-name {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .player-id {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .clan-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--accent-blue);
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .reason-cell {
+      max-width: 300px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .reason-cell:hover {
+      white-space: normal;
+      word-wrap: break-word;
+    }
+
+    .time-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .time-badge.expired {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--accent-red);
+    }
+
+    .time-badge.warning {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--accent-yellow);
+    }
+
+    .time-badge.normal {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--accent-green);
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      padding: 20px;
+      background: var(--accent-bg);
+      border-top: 1px solid var(--border-color);
+    }
+
+    .pagination-btn {
+      padding: 8px 12px;
+      background: transparent;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .pagination-btn:hover:not(:disabled) {
+      background: var(--accent-blue);
+      color: white;
+      border-color: var(--accent-blue);
+    }
+
+    .pagination-btn.active {
+      background: var(--accent-blue);
+      color: white;
+      border-color: var(--accent-blue);
+    }
+
+    .pagination-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .pagination-info {
+      margin: 0 16px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* Loading */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+      color: var(--text-muted);
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--border-color);
+      border-top: 3px solid var(--accent-blue);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 16px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 12px;
+      }
+
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .stats-section {
+        justify-content: center;
+      }
+
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search-section {
+        min-width: auto;
+      }
+
+      .filters-section {
+        justify-content: center;
+      }
+
+      th, td {
+        padding: 12px 8px;
+        font-size: 14px;
+      }
+
+      .player-info {
+        flex-direction: column;
+        gap: 4px;
+        text-align: center;
+      }
+
+      .reason-cell {
+        max-width: 150px;
+      }
+
+      .pagination {
+        flex-wrap: wrap;
+      }
+    }
+
+    /* Animations */
+    .fade-in {
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide-in {
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Custom scrollbar */
     ::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--secondary-bg);
     }
 
     ::-webkit-scrollbar-thumb {
-      background-color: #007BFF;
+      background: var(--border-color);
       border-radius: 4px;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-      background-color: #0056b3;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #15151D;
-      border-radius: 4px;
-    }
-
-    .header-icons {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .header-icon {
-      font-size: 24px;
-      margin: 0 15px;
-      color: #007BFF;
-    }
-    
-    @media (max-width: 768px) {
-      body {
-        padding: 10px;
-      }
-
-      .container {
-        padding: 5px;
-      }
-
-      th, td {
-        padding: 8px;
-        font-size: 14px;
-      }
-
-      #searchInput {
-        font-size: 14px;
-      }
-
-      .logo {
-        width: 60px;
-      }
-
-      .header-icon {
-        font-size: 20px;
-        margin: 0 10px;
-      }
+      background: var(--accent-bg);
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="https://i.imgur.com/PRjTNqr.png" alt="Logo" class="logo">
-    <div class="header-icons">
+    <!-- Header -->
+    <div class="header fade-in">
+      <div class="header-content">
+        <div class="logo-section">
+          <img src="https://i.imgur.com/PRjTNqr.png" alt="ДКВС Logo" class="logo">
+          <div class="title-section">
+            <h1>Чорний список ДКВС</h1>
+            <p>Заборонені до випуску особи</p>
+          </div>
+        </div>
+        <div class="stats-section">
+          <div class="stat-item">
+            <span class="stat-number" id="totalCount">0</span>
+            <span class="stat-label">Всього</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="activeCount">0</span>
+            <span class="stat-label">Активні</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="expiredCount">0</span>
+            <span class="stat-label">Прострочені</span>
+          </div>
+        </div>
+      </div>
     </div>
-    <h1>Заборонені до випуску: чорний список</h1>
-    <div class="search-container">
-      <input type="text" id="searchInput" placeholder="Пошук за ID, нікнеймом або кланом...">
-      <i class="fas fa-search search-icon"></i>
+
+    <!-- Controls -->
+    <div class="controls fade-in">
+      <div class="search-section">
+        <input type="text" id="searchInput" class="search-input" placeholder="Пошук за ID, нікнеймом або кланом...">
+        <i class="fas fa-search search-icon"></i>
+      </div>
+      <div class="filters-section">
+        <select id="statusFilter" class="filter-select">
+          <option value="all">Всі статуси</option>
+          <option value="active">Активні</option>
+          <option value="expired">Прострочені</option>
+        </select>
+        <select id="sortBy" class="filter-select">
+          <option value="newest">Найновіші</option>
+          <option value="oldest">Найстаріші</option>
+          <option value="expiring">Закінчуються</option>
+          <option value="nickname">За нікнеймом</option>
+        </select>
+        <select id="itemsPerPage" class="filter-select">
+          <option value="10">10 на сторінці</option>
+          <option value="25">25 на сторінці</option>
+          <option value="50">50 на сторінці</option>
+          <option value="100">100 на сторінці</option>
+        </select>
+      </div>
     </div>
-    <table id="blacklistTable">
-      <thead>
-        <tr>
-          <th>ID Гравця</th>
-          <th>Нікнейм</th>
-          <th>Клан</th>
-          <th>Причина</th>
-          <th>Залишилось часу</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Дані будуть додані сюди -->
-      </tbody>
-    </table>
+
+    <!-- Table -->
+    <div class="table-container fade-in">
+      <div class="table-header">
+        <h3 class="table-title">Список заборонених осіб</h3>
+        <div class="table-actions">
+          <button class="action-btn" onclick="exportData()">
+            <i class="fas fa-download"></i> Експорт
+          </button>
+          <button class="action-btn" onclick="refreshData()">
+            <i class="fas fa-sync-alt"></i> Оновити
+          </button>
+        </div>
+      </div>
+      
+      <div class="table-responsive">
+        <table id="blacklistTable">
+          <thead>
+            <tr>
+              <th onclick="sortTable('player')" class="sortable">
+                Гравець
+                <i class="fas fa-sort sort-icon"></i>
+              </th>
+              <th onclick="sortTable('clan')" class="sortable">
+                Клан
+                <i class="fas fa-sort sort-icon"></i>
+              </th>
+              <th onclick="sortTable('reason')" class="sortable">
+                Причина
+                <i class="fas fa-sort sort-icon"></i>
+              </th>
+              <th onclick="sortTable('time')" class="sortable">
+                Залишилось часу
+                <i class="fas fa-sort sort-icon"></i>
+              </th>
+              <th onclick="sortTable('added')" class="sortable">
+                Додано
+                <i class="fas fa-sort sort-icon"></i>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr>
+              <td colspan="5">
+                <div class="loading">
+                  <div class="spinner"></div>
+                  <span>Завантаження даних...</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" id="pagination">
+        <button class="pagination-btn" id="prevBtn" onclick="changePage(-1)">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <div id="pageNumbers"></div>
+        <button class="pagination-btn" id="nextBtn" onclick="changePage(1)">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+        <div class="pagination-info" id="paginationInfo"></div>
+      </div>
+    </div>
   </div>
 
   <script type="module">
@@ -209,181 +720,437 @@
 
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
-    const tableBody = document.querySelector("#blacklistTable tbody");
+
+    // Global variables
+    let allData = [];
+    let filteredData = [];
+    let currentPage = 1;
+    let itemsPerPage = 25;
+    let currentSort = { field: 'newest', direction: 'desc' };
+
+    // DOM elements
+    const tableBody = document.getElementById('tableBody');
     const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const sortBy = document.getElementById('sortBy');
+    const itemsPerPageSelect = document.getElementById('itemsPerPage');
+    const pagination = document.getElementById('pagination');
+    const totalCount = document.getElementById('totalCount');
+    const activeCount = document.getElementById('activeCount');
+    const expiredCount = document.getElementById('expiredCount');
 
-    async function addToBlacklist(playerId, nickname, clan, reason, days) {
-      const blacklistRef = ref(database, "blacklist");
-      const newBlacklistRef = push(blacklistRef);
+    // Event listeners
+    searchInput.addEventListener('input', debounce(handleSearch, 300));
+    statusFilter.addEventListener('change', handleFilter);
+    sortBy.addEventListener('change', handleSort);
+    itemsPerPageSelect.addEventListener('change', handleItemsPerPageChange);
 
-      const expirationTime = Date.now() + days * 24 * 60 * 60 * 1000;
-
-      await update(newBlacklistRef, {
-        playerId,
-        nickname,
-        clan,
-        reason,
-        days,
-        createdAt: Date.now(),
-        expirationTime,
-      });
+    // Debounce function
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
     }
 
+    // Fetch data from Firebase
     async function fetchBlacklistData() {
-      const blacklistRef = ref(database, "blacklist");
-
       try {
+        const blacklistRef = ref(database, "blacklist");
         const snapshot = await get(blacklistRef);
 
         if (snapshot.exists()) {
           const data = snapshot.val();
-          const keys = Object.keys(data);
+          allData = Object.keys(data).map(key => ({
+            id: key,
+            ...data[key]
+          }));
 
-          tableBody.innerHTML = "";
-
-          keys.forEach(key => {
-            const item = data[key];
-            const row = createTableRow(item, key);
-            tableBody.appendChild(row);
-          });
-
-          checkAndRemoveExpiredEntries();
-          filterTable();
+          await checkAndRemoveExpiredEntries();
+          updateStats();
+          applyFiltersAndSort();
         } else {
-          console.log("Дані не знайдено.");
+          allData = [];
+          updateStats();
+          renderTable();
         }
       } catch (error) {
-        console.error("Помилка при отриманні даних з Firebase:", error);
+        console.error("Помилка при отриманні даних:", error);
+        showError();
       }
     }
 
-    function createTableRow(item, key) {
-      const row = document.createElement("tr");
+    // Remove expired entries
+    async function checkAndRemoveExpiredEntries() {
+      const currentTime = Date.now();
+      const expiredEntries = allData.filter(item => currentTime >= item.expirationTime);
+
+      for (const entry of expiredEntries) {
+        try {
+          await remove(ref(database, `blacklist/${entry.id}`));
+        } catch (error) {
+          console.error("Помилка видалення запису:", error);
+        }
+      }
+
+      // Remove from local data
+      allData = allData.filter(item => currentTime < item.expirationTime);
+    }
+
+    // Update statistics
+    function updateStats() {
+      const currentTime = Date.now();
+      const active = allData.filter(item => currentTime < item.expirationTime);
+      const expired = allData.filter(item => currentTime >= item.expirationTime);
+
+      totalCount.textContent = allData.length;
+      activeCount.textContent = active.length;
+      expiredCount.textContent = expired.length;
+    }
+
+    // Handle search
+    function handleSearch() {
+      applyFiltersAndSort();
+    }
+
+    // Handle filter
+    function handleFilter() {
+      currentPage = 1;
+      applyFiltersAndSort();
+    }
+
+    // Handle sort
+    function handleSort() {
+      const value = sortBy.value;
+      currentSort = getSortConfig(value);
+      currentPage = 1;
+      applyFiltersAndSort();
+    }
+
+    // Handle items per page change
+    function handleItemsPerPageChange() {
+      itemsPerPage = parseInt(itemsPerPageSelect.value);
+      currentPage = 1;
+      renderTable();
+      renderPagination();
+    }
+
+    // Get sort configuration
+    function getSortConfig(value) {
+      switch (value) {
+        case 'newest':
+          return { field: 'createdAt', direction: 'desc' };
+        case 'oldest':
+          return { field: 'createdAt', direction: 'asc' };
+        case 'expiring':
+          return { field: 'expirationTime', direction: 'asc' };
+        case 'nickname':
+          return { field: 'nickname', direction: 'asc' };
+        default:
+          return { field: 'createdAt', direction: 'desc' };
+      }
+    }
+
+    // Apply filters and sort
+    function applyFiltersAndSort() {
+      let filtered = [...allData];
+      const searchTerm = searchInput.value.toLowerCase();
+      const status = statusFilter.value;
+      const currentTime = Date.now();
+
+      // Apply search filter
+      if (searchTerm) {
+        filtered = filtered.filter(item => 
+          item.playerId?.toString().toLowerCase().includes(searchTerm) ||
+          item.nickname?.toLowerCase().includes(searchTerm) ||
+          item.clan?.toLowerCase().includes(searchTerm)
+        );
+      }
+
+      // Apply status filter
+      if (status === 'active') {
+        filtered = filtered.filter(item => currentTime < item.expirationTime);
+      } else if (status === 'expired') {
+        filtered = filtered.filter(item => currentTime >= item.expirationTime);
+      }
+
+      // Apply sort
+      filtered.sort((a, b) => {
+        let aValue = a[currentSort.field];
+        let bValue = b[currentSort.field];
+
+        if (currentSort.field === 'nickname' || currentSort.field === 'clan') {
+          aValue = (aValue || '').toLowerCase();
+          bValue = (bValue || '').toLowerCase();
+        }
+
+        if (currentSort.direction === 'asc') {
+          return aValue > bValue ? 1 : -1;
+        } else {
+          return aValue < bValue ? 1 : -1;
+        }
+      });
+
+      filteredData = filtered;
+      currentPage = 1;
+      renderTable();
+      renderPagination();
+    }
+
+    // Render table
+    function renderTable() {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const pageData = filteredData.slice(startIndex, endIndex);
+
+      if (pageData.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="5">
+              <div class="empty-state">
+                <div class="empty-icon">
+                  <i class="fas fa-search"></i>
+                </div>
+                <p>Записів не знайдено</p>
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tableBody.innerHTML = pageData.map(item => createTableRow(item)).join('');
+      
+      // Add animation to rows
+      setTimeout(() => {
+        document.querySelectorAll('#tableBody tr').forEach((row, index) => {
+          row.style.animationDelay = `${index * 50}ms`;
+          row.classList.add('slide-in');
+        });
+      }, 10);
+    }
+
+    // Create table row
+    function createTableRow(item) {
       const currentTime = Date.now();
       const timeLeft = item.expirationTime - currentTime;
-
+      const isExpired = timeLeft <= 0;
+      
       let timeString = "Час вичерпано";
-      if (timeLeft > 0) {
+      let timeBadgeClass = "expired";
+      
+      if (!isExpired) {
         timeString = formatTimeLeft(timeLeft);
+        if (timeLeft < 24 * 60 * 60 * 1000) { // Less than 1 day
+          timeBadgeClass = "warning";
+        } else {
+          timeBadgeClass = "normal";
+        }
       }
 
-      row.innerHTML = `
-        <td>${item.playerId || "Помилка ID #124"}</td>
-        <td>${item.nickname || "Помилка NICK #121"}</td>
-        <td>${item.clan || "Помилка CLAN #404"}</td>
-        <td>${item.reason}</td>
-        <td class="time-left" id="time-${key}">${timeString}</td>
-      `;
+      const playerInitial = (item.nickname || 'U').charAt(0).toUpperCase();
+      const addedDate = new Date(item.createdAt || Date.now()).toLocaleDateString('uk-UA');
 
-      return row;
+      return `
+        <tr>
+          <td>
+            <div class="player-info">
+              <div class="player-avatar">${playerInitial}</div>
+              <div class="player-details">
+                <div class="player-name">${item.nickname || "Невідомо"}</div>
+                <div class="player-id">ID: ${item.playerId || "N/A"}</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            ${item.clan ? `<span class="clan-tag"><i class="fas fa-users"></i> ${item.clan}</span>` : '<span style="color: var(--text-muted);">Без клану</span>'}
+          </td>
+          <td>
+            <div class="reason-cell" title="${item.reason || 'Причина не вказана'}">${item.reason || 'Причина не вказана'}</div>
+          </td>
+          <td>
+            <span class="time-badge ${timeBadgeClass}">
+              <i class="fas fa-clock"></i>
+              ${timeString}
+            </span>
+          </td>
+          <td>
+            <span style="color: var(--text-muted); font-size: 13px;">${addedDate}</span>
+          </td>
+        </tr>
+      `;
     }
 
+    // Format time left
     function formatTimeLeft(timeLeft) {
       const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
       const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
 
-      let timeString = "";
       if (days > 0) {
-        if (days === 1) {
-          timeString += `${days} день. `;
-        } else if (days >= 2 && days <= 4) {
-          timeString += `${days} дня. `;
-        } else {
-          timeString += `${days} днів. `;
-        }
-      }
-      if (hours > 0 || days > 0) timeString += `${hours} год. `;
-      timeString += `${minutes} хв.`;
-
-      return timeString.trim();
-    }
-
-    async function checkAndRemoveExpiredEntries() {
-      const blacklistRef = ref(database, "blacklist");
-
-      try {
-        const snapshot = await get(blacklistRef);
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          const keys = Object.keys(data);
-
-          keys.forEach(key => {
-            const item = data[key];
-            const currentTime = Date.now();
-
-            if (currentTime >= item.expirationTime) {
-              remove(ref(database, `blacklist/${key}`));
-              const row = document.querySelector(`#time-${key}`).parentElement;
-              if (row) {
-                row.remove();
-              }
-            }
-          });
-        }
-      } catch (error) {
-        console.error("Помилка при перевірці та оновленні відліку:", error);
+        return `${days}д ${hours}г`;
+      } else if (hours > 0) {
+        return `${hours}г ${minutes}хв`;
+      } else {
+        return `${minutes}хв`;
       }
     }
 
-    function updateTimeLeft() {
-      const rows = document.querySelectorAll("tbody tr");
-      rows.forEach(row => {
-        const timeCell = row.querySelector(".time-left");
-        const timeLeftText = timeCell.textContent.trim();
+    // Render pagination
+    function renderPagination() {
+      const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+      const pageNumbers = document.getElementById('pageNumbers');
+      const paginationInfo = document.getElementById('paginationInfo');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
 
-        if (timeLeftText !== "Час вичерпано") {
-          const timeParts = timeLeftText.split(". ");
-          let totalMinutes = 0;
+      // Update buttons
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = currentPage === totalPages || totalPages === 0;
 
-          timeParts.forEach(part => {
-            const [value, unit] = part.split(" ");
-            if (unit.startsWith("день") || unit.startsWith("дня") || unit.startsWith("днів")) totalMinutes += parseInt(value) * 24 * 60;
-            else if (unit.startsWith("год")) totalMinutes += parseInt(value) * 60;
-            else if (unit.startsWith("хв")) totalMinutes += parseInt(value);
-          });
+      // Update info
+      const startItem = (currentPage - 1) * itemsPerPage + 1;
+      const endItem = Math.min(currentPage * itemsPerPage, filteredData.length);
+      paginationInfo.textContent = `${startItem}-${endItem} з ${filteredData.length}`;
 
-          totalMinutes -= 1;
-
-          if (totalMinutes <= 0) {
-            timeCell.textContent = "Час вичерпано";
-          } else {
-            const newTimeLeft = totalMinutes * 60 * 1000;
-            timeCell.textContent = formatTimeLeft(newTimeLeft);
-          }
-        }
-      });
-    }
-
-    function filterTable() {
-      const filter = searchInput.value.toLowerCase();
-      const rows = tableBody.getElementsByTagName("tr");
-
-      for (let i = 0; i < rows.length; i++) {
-        const playerId = rows[i].getElementsByTagName("td")[0];
-        const nickname = rows[i].getElementsByTagName("td")[1];
-        const clan = rows[i].getElementsByTagName("td")[2];
-        if (playerId && nickname && clan) {
-          const playerIdText = playerId.textContent || playerId.innerText;
-          const nicknameText = nickname.textContent || nickname.innerText;
-          const clanText = clan.textContent || clan.innerText;
-          if (playerIdText.toLowerCase().indexOf(filter) > -1 || 
-              nicknameText.toLowerCase().indexOf(filter) > -1 ||
-              clanText.toLowerCase().indexOf(filter) > -1) {
-            rows[i].style.display = "";
-          } else {
-            rows[i].style.display = "none";
-          }
-        }
+      // Generate page numbers
+      let pages = [];
+      const maxVisiblePages = 5;
+      
+      if (totalPages <= maxVisiblePages) {
+        pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+      } else {
+        const start = Math.max(1, currentPage - 2);
+        const end = Math.min(totalPages, start + maxVisiblePages - 1);
+        pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
       }
+
+      pageNumbers.innerHTML = pages.map(page => `
+        <button class="pagination-btn ${page === currentPage ? 'active' : ''}" onclick="goToPage(${page})">
+          ${page}
+        </button>
+      `).join('');
     }
 
-    searchInput.addEventListener('input', filterTable);
+    // Change page
+    window.changePage = function(direction) {
+      const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+      const newPage = currentPage + direction;
+      
+      if (newPage >= 1 && newPage <= totalPages) {
+        currentPage = newPage;
+        renderTable();
+        renderPagination();
+      }
+    };
 
+    // Go to specific page
+    window.goToPage = function(page) {
+      currentPage = page;
+      renderTable();
+      renderPagination();
+    };
+
+    // Sort table by column
+    window.sortTable = function(field) {
+      const headers = document.querySelectorAll('th.sortable');
+      headers.forEach(h => h.classList.remove('sorted'));
+      
+      if (currentSort.field === field) {
+        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+      } else {
+        currentSort = { field, direction: 'asc' };
+      }
+      
+      // Update visual indicator
+      const clickedHeader = event.target.closest('th');
+      clickedHeader.classList.add('sorted');
+      const icon = clickedHeader.querySelector('.sort-icon');
+      icon.className = `fas fa-sort-${currentSort.direction === 'asc' ? 'up' : 'down'} sort-icon`;
+      
+      applyFiltersAndSort();
+    };
+
+    // Export data
+    window.exportData = function() {
+      const csvContent = "data:text/csv;charset=utf-8," 
+        + "ID,Нікнейм,Клан,Причина,Залишилось часу,Додано\n"
+        + filteredData.map(item => {
+          const timeLeft = item.expirationTime - Date.now();
+          const timeString = timeLeft > 0 ? formatTimeLeft(timeLeft) : "Час вичерпано";
+          const addedDate = new Date(item.createdAt || Date.now()).toLocaleDateString('uk-UA');
+          
+          return [
+            item.playerId || "N/A",
+            item.nickname || "Невідомо",
+            item.clan || "Без клану",
+            `"${item.reason || 'Причина не вказана'}"`,
+            timeString,
+            addedDate
+          ].join(",");
+        }).join("\n");
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `blacklist_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
+    // Refresh data
+    window.refreshData = function() {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="5">
+            <div class="loading">
+              <div class="spinner"></div>
+              <span>Оновлення даних...</span>
+            </div>
+          </td>
+        </tr>
+      `;
+      fetchBlacklistData();
+    };
+
+    // Show error
+    function showError() {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="5">
+            <div class="empty-state">
+              <div class="empty-icon" style="color: var(--accent-red);">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <p>Помилка завантаження даних</p>
+              <button class="action-btn" onclick="refreshData()" style="margin-top: 12px;">
+                Спробувати знову
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }
+
+    // Initialize
     window.onload = () => {
       fetchBlacklistData();
-      setInterval(fetchBlacklistData, 3000);
-      setInterval(updateTimeLeft, 60000);
+      
+      // Auto-refresh every 30 seconds
+      setInterval(fetchBlacklistData, 30000);
+      
+      // Update time left every minute
+      setInterval(() => {
+        if (filteredData.length > 0) {
+          renderTable();
+        }
+      }, 60000);
     };
   </script>
 </body>
