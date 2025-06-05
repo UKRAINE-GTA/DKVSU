@@ -42,6 +42,17 @@ const sidebarToggle = document.getElementById('sidebarToggle');
 const sidebar = document.getElementById('sidebar');
 const logoutBtn = document.getElementById('logoutBtn');
 
+// Функція для форматування email для відображення з переносом
+function formatEmailForDisplay(email) {
+    // Розділяємо email на частини до і після @
+    const parts = email.split('@');
+    if (parts.length === 2) {
+        // Повертаємо відформатований email з переносом рядка
+        return `${parts[0]}@\n${parts[1]}`;
+    }
+    return email;
+}
+
 // Ініціалізація
 document.addEventListener('DOMContentLoaded', () => {
     initializeApp();
@@ -1284,9 +1295,13 @@ async function loadStaff() {
                 actionsCell = '<td>—</td>';
             }
 
+            // Обрізаємо email якщо він довший за 25 символів
+            const displayEmail = user.email.length > 25 ? user.email.substring(0, 25) + '...' : user.email;
+            const formattedEmail = formatEmailForDisplay(user.email);
+
             row.innerHTML = `
                 <td>${user.name}</td>
-                <td>${user.email}</td>
+                <td class="email-cell" data-full-email="${formattedEmail}">${displayEmail}</td>
                 <td><span class="badge role-${user.role}">${roleNames[user.role] || 'Працівник'}</span></td>
                 <td>
                     <span class="status-badge ${isOnline ? 'status-online' : 'status-offline'}">
@@ -1303,10 +1318,29 @@ async function loadStaff() {
         if (users.length === 0) {
             tableBody.innerHTML = `<tr><td colspan="${colSpan}" style="text-align: center; color: var(--text-muted);">Немає персоналу</td></tr>`;
         }
+
+        // Додаємо обробники подій для hover ефекту
+        setupEmailHoverEffects();
     } catch (error) {
         console.error('Помилка завантаження персоналу:', error);
         tableBody.innerHTML = `<tr><td colspan="${colSpan}" style="text-align: center; color: var(--accent-red);">Помилка завантаження</td></tr>`;
     }
+}
+
+// Функція для налаштування hover ефектів для email
+function setupEmailHoverEffects() {
+    document.querySelectorAll('.email-cell').forEach(cell => {
+        const originalText = cell.textContent;
+        const fullEmail = cell.dataset.fullEmail;
+        
+        cell.addEventListener('mouseenter', () => {
+            cell.textContent = fullEmail;
+        });
+        
+        cell.addEventListener('mouseleave', () => {
+            cell.textContent = originalText;
+        });
+    });
 }
 
 function canDeleteUser(user) {
@@ -1455,10 +1489,14 @@ async function loadUsersForSettings() {
         users.forEach(user => {
             const isOnline = viewers[user.id] && (Date.now() - viewers[user.id].lastActive < 5 * 60 * 1000);
 
+            // Обрізаємо email якщо він довший за 25 символів
+            const displayEmail = user.email.length > 25 ? user.email.substring(0, 25) + '...' : user.email;
+            const formattedEmail = formatEmailForDisplay(user.email);
+
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${user.name}</td>
-                <td>${user.email}</td>
+                <td class="email-cell" data-full-email="${formattedEmail}">${displayEmail}</td>
                 <td><span class="badge role-${user.role}">${roleNames[user.role] || 'Працівник'}</span></td>
                 <td>
                     <span class="status-badge ${isOnline ? 'status-online' : 'status-offline'}">
@@ -1480,6 +1518,9 @@ async function loadUsersForSettings() {
         if (users.length === 0) {
             tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">Немає користувачів</td></tr>';
         }
+
+        // Додаємо обробники подій для hover ефекту
+        setupEmailHoverEffects();
     } catch (error) {
         console.error('Помилка завантаження користувачів:', error);
         tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--accent-red);">Помилка завантаження</td></tr>';
@@ -1504,10 +1545,14 @@ async function loadRolesForSettings() {
         tableBody.innerHTML = '';
 
         users.forEach(user => {
+            // Обрізаємо email якщо він довший за 25 символів
+            const displayEmail = user.email.length > 25 ? user.email.substring(0, 25) + '...' : user.email;
+            const formattedEmail = formatEmailForDisplay(user.email);
+
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${user.name}</td>
-                <td>${user.email}</td>
+                <td class="email-cell" data-full-email="${formattedEmail}">${displayEmail}</td>
                 <td><span class="badge role-${user.role}">${roleNames[user.role] || 'Працівник'}</span></td>
                 <td>
                     <select class="form-input role-select" onchange="updateUserRole('${user.id}', this.value)">
@@ -1524,6 +1569,9 @@ async function loadRolesForSettings() {
         if (users.length === 0) {
             tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Немає користувачів</td></tr>';
         }
+
+        // Додаємо обробники подій для hover ефекту
+        setupEmailHoverEffects();
     } catch (error) {
         console.error('Помилка завантаження користувачів:', error);
         tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--accent-red);">Помилка завантаження</td></tr>';
