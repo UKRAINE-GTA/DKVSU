@@ -1667,3 +1667,40 @@ select {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--accent-bg);
 }
+
+
+
+
+
+
+
+
+
+
+/* Стилі для обрізання email та розгортання */
+.email-cell {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.email-cell:hover {
+    white-space: pre-wrap;
+    word-break: break-all;
+    overflow: visible;
+    text-overflow: unset;
+    background-color: var(--hover-bg, rgba(0, 0, 0, 0.05));
+    padding: 8px;
+    border-radius: 4px;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Для темної теми */
+[data-theme="dark"] .email-cell:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
