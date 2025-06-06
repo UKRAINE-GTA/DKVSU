@@ -532,15 +532,16 @@ select {
     overflow: hidden;
 }
 
-/* Бічна панель - СТАТИЧНА */
+/* Бічна панель - ВИПРАВЛЕНО ПРОКРУТКУ */
 .sidebar {
     width: 280px;
     background: var(--card-bg);
     border-right: 1px solid var(--border-color);
     padding: 24px;
-    overflow: visible; /* Змінено з overflow-y: auto */
+    overflow-y: auto; /* ВИПРАВЛЕНО: додано прокрутку */
     transition: var(--transition);
     flex-shrink: 0;
+    max-height: calc(100vh - 70px); /* ВИПРАВЛЕНО: обмежена висота */
 }
 
 .nav-section {
@@ -765,15 +766,88 @@ select {
     background: var(--accent-bg);
 }
 
+/* Прості іконки активностей як на зображенні */
 .activity-icon {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: var(--accent-bg);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 16px;
+    flex-shrink: 0;
+    border: none;
+    box-shadow: none;
+}
+
+/* Прості кольори для різних типів */
+.activity-icon.convoy {
+    background: #3b82f6;
+    color: white;
+}
+
+.activity-icon.blacklist {
+    background: #ef4444;
+    color: white;
+}
+
+.activity-icon.otz {
+    background: #10b981;
+    color: white;
+}
+
+.activity-icon.system {
+    background: #8b5cf6;
+    color: white;
+}
+
+.activity-icon.user {
+    background: #f59e0b;
+    color: white;
+}
+
+.activity-icon.default {
+    background: #6b7280;
+    color: white;
+}
+
+/* Простий контейнер активності */
+.activity-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: var(--transition);
+}
+
+.activity-item:hover {
+    background: var(--accent-bg);
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-text {
+    color: var(--text-primary);
+    font-weight: 500;
+    margin-bottom: 4px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.activity-time {
+    color: var(--text-muted);
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.activity-time::before {
+    content: '•';
+    color: var(--accent-blue);
 }
 
 .activity-content {
@@ -1444,6 +1518,370 @@ select {
     margin-right: 12px;
 }
 
+/* Стилі для завантаження файлів */
+.file-upload-container {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.file-input {
+    display: none;
+}
+
+.file-upload-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px;
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    background: var(--accent-bg);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+    min-height: 80px;
+}
+
+.file-upload-label:hover {
+    border-color: var(--accent-blue);
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--accent-blue);
+}
+
+.file-upload-label i {
+    font-size: 24px;
+}
+
+.file-preview {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.file-preview-item {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid var(--border-color);
+}
+
+.file-preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.file-preview-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: var(--accent-red);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+/* Вкладки ОТЗ */
+.otz-management-tabs {
+    display: flex;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    margin-bottom: 24px;
+    overflow: hidden;
+}
+
+.otz-tab {
+    flex: 1;
+    padding: 16px 20px;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 500;
+    border-right: 1px solid var(--border-color);
+    position: relative;
+}
+
+.otz-tab:last-child {
+    border-right: none;
+}
+
+.otz-tab.active {
+    background: var(--accent-blue);
+    color: white;
+}
+
+.otz-tab:hover:not(.active) {
+    background: var(--accent-bg);
+    color: var(--text-primary);
+}
+
+.tab-badge {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    min-width: 18px;
+    text-align: center;
+}
+
+.otz-tab:not(.active) .tab-badge {
+    background: var(--accent-blue);
+    color: white;
+}
+
+.otz-content {
+    display: none;
+}
+
+.otz-content.active {
+    display: block;
+}
+
+/* Сітка ОТЗ - ЗМЕНШЕНІ РОЗМІРИ */
+.otz-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* ЗМЕНШЕНО з 350px */
+    gap: 20px; /* ЗМЕНШЕНО з 24px */
+    padding: 20px 0;
+}
+
+.otz-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    transition: var(--transition);
+    position: relative;
+}
+
+.otz-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.otz-card-header {
+    padding: 16px; /* ЗМЕНШЕНО з 20px */
+    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+    color: white;
+}
+
+.otz-card-title {
+    font-size: 16px; /* ЗМЕНШЕНО з 18px */
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.otz-card-subtitle {
+    font-size: 13px; /* ЗМЕНШЕНО з 14px */
+    opacity: 0.9;
+}
+
+.otz-card-body {
+    padding: 16px; /* ЗМЕНШЕНО з 20px */
+}
+
+.otz-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px; /* ЗМЕНШЕНО з 16px */
+    margin-bottom: 16px; /* ЗМЕНШЕНО з 20px */
+}
+
+.otz-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px; /* ЗМЕНШЕНО з 4px */
+}
+
+.otz-info-label {
+    font-size: 11px; /* ЗМЕНШЕНО з 12px */
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.otz-info-value {
+    font-size: 13px; /* ЗМЕНШЕНО з 14px */
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.otz-photos-preview {
+    display: flex;
+    gap: 6px; /* ЗМЕНШЕНО з 8px */
+    overflow-x: auto;
+    padding: 6px 0; /* ЗМЕНШЕНО з 8px */
+    margin-bottom: 12px; /* ЗМЕНШЕНО з 16px */
+}
+
+.otz-photo-thumb {
+    width: 50px; /* ЗМЕНШЕНО з 60px */
+    height: 50px; /* ЗМЕНШЕНО з 60px */
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+    cursor: pointer;
+    border: 2px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.otz-photo-thumb:hover {
+    border-color: var(--accent-blue);
+}
+
+.otz-photo-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.otz-card-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    padding-top: 12px; /* ЗМЕНШЕНО з 16px */
+    border-top: 1px solid var(--border-color);
+}
+
+.otz-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px; /* ЗМЕНШЕНО з 6px */
+    padding: 4px 8px; /* ЗМЕНШЕНО з 6px 12px */
+    border-radius: 16px; /* ЗМЕНШЕНО з 20px */
+    font-size: 11px; /* ЗМЕНШЕНО з 12px */
+    font-weight: 500;
+    margin-bottom: 10px; /* ЗМЕНШЕНО з 12px */
+}
+
+.otz-status-pending {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--accent-yellow);
+}
+
+.otz-status-approved {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--accent-green);
+}
+
+.otz-status-rejected {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--accent-red);
+}
+
+/* Деталі ОТЗ в модальному вікні */
+.otz-details {
+    display: grid;
+    gap: 24px;
+}
+
+.otz-details-section {
+    background: var(--accent-bg);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.otz-details-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.otz-details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.otz-detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.otz-detail-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.otz-detail-value {
+    font-size: 14px;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.otz-photos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.otz-photo-item {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    aspect-ratio: 1;
+    cursor: pointer;
+    border: 2px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.otz-photo-item:hover {
+    border-color: var(--accent-blue);
+    transform: scale(1.02);
+}
+
+.otz-photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.otz-photo-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: white;
+    padding: 8px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
 /* Анімації */
 @keyframes fadeInUp {
     from {
@@ -1627,6 +2065,35 @@ select {
         margin: 20px;
         width: calc(100% - 40px);
     }
+
+    .otz-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .otz-management-tabs {
+        flex-direction: column;
+    }
+    
+    .otz-tab {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .otz-tab:last-child {
+        border-bottom: none;
+    }
+    
+    .otz-info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .otz-details-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .otz-photos-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
 }
 
 /* Утиліти */
@@ -1668,15 +2135,6 @@ select {
     background: var(--accent-bg);
 }
 
-
-
-
-
-
-
-
-
-
 /* Стилі для обрізання email та розгортання */
 .email-cell {
     max-width: 200px;
@@ -1703,4 +2161,19 @@ select {
 /* Для темної теми */
 [data-theme="dark"] .email-cell:hover {
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+
+/* Приховуємо кнопку меню на десктопі, але залишаємо на мобільних */
+@media (min-width: 769px) {
+    #sidebarToggle {
+        display: none !important;
+    }
+}
+
+/* На мобільних пристроях кнопка залишається видимою */
+@media (max-width: 768px) {
+    #sidebarToggle {
+        display: flex !important;
+    }
 }
