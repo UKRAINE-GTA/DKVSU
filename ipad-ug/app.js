@@ -26,7 +26,7 @@ let realTimeListeners = [];
 // Ролі та їх права
 const rolePermissions = {
     worker: ['dashboard', 'convoy-form', 'convoy-archive', 'blacklist', 'activities', 'staff', 'otz-register', 'otz-registered'],
-    deputy: ['dashboard', 'convoy-form', 'convoy-archive', 'blacklist', 'activities', 'staff', 'otz-register', 'otz-management', 'otz-registered'],
+    deputy: ['dashboard', 'convoy-form', 'convoy-archive', 'blacklist', 'add-blacklist', 'activities', 'staff', 'otz-register', 'otz-management', 'otz-registered'],
     leader: ['dashboard', 'convoy-form', 'convoy-archive', 'blacklist', 'add-blacklist', 'activities', 'staff', 'otz-register', 'otz-management', 'otz-registered'],
     admin: ['dashboard', 'convoy-form', 'convoy-archive', 'blacklist', 'add-blacklist', 'activities', 'staff', 'otz-register', 'otz-management', 'otz-registered', 'settings']
 };
