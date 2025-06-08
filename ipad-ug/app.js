@@ -551,7 +551,7 @@ function updateBlacklistTableRealTime(blacklist) {
     activeItems.forEach(item => {
         const timeLeft = item.expirationTime - Date.now();
         const timeString = formatTimeLeft(timeLeft);
-        const canManageBlacklist = ['deputy', 'leader', 'admin'].includes(userRole);
+        const canManageBlacklist = ['leader', 'admin'].includes(userRole);
         
         const row = document.createElement('tr');
         let actionsCell = '';
