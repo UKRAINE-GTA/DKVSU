@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="ipad-ug/img/logo.svg" type="image/png">
+    <link rel="icon" href="ipad-ug/img/logo.svg" type="image/svg+xml">
     <title>Тимчасово заявки не працюють</title>
     <style>
         :root {
@@ -65,6 +65,11 @@
             font-weight: bold;
             font-size: 1.5rem;
             color: var(--primary-color);
+        }
+
+        .logo-inner img {
+            max-width: 80%;
+            max-height: 80%;
         }
 
         h1 {
@@ -320,19 +325,18 @@
         <li></li>
     </div>
 
-               <div class="container">
-              <div class="logo pulse">
-                <div class="logo-inner">
-                  <img src="ipad-ug/img/logo.svg" alt="Логотип">
-                </div>
-              </div>
+    <div class="container">
+        <div class="logo pulse">
+            <div class="logo-inner">
+                <img src="ipad-ug/img/logo.svg" alt="Логотип">
+            </div>
+        </div>
         <h1>Важливе повідомлення</h1>
         <p class="message">
             На жаль, <span class="highlight">тимчасово заявки на вступ не працюють</span>. Ми працюємо над усуненням технічних проблем та поверненням функціоналу в найкоротші терміни.
         </p>
         <p class="message">
             Будь ласка, спробуйте повторити спробу пізніше або зв'яжіться з нами для отримання додаткової інформації.
-        </p>
         </p>
         <a href="https://ukraine-gta.github.io/DKVSU/index" class="btn" id="notifyBtn">Повернутися</a>
     </div>
@@ -345,9 +349,14 @@
                 e.preventDefault();
                 
                 // Анімація кнопки
-                btn.textContent = 'Дякуємо!';
+                btn.textContent = 'Перенаправлення...';
                 btn.style.background = 'linear-gradient(90deg, #4CAF50, #8BC34A)';
                 
+                // Перенаправлення через 1 секунду
+                setTimeout(() => {
+                    window.location.href = btn.href;
+                }, 1000);
+            });
             
             // Додаткові анімації для елементів при скролі
             window.addEventListener('scroll', function() {
