@@ -3,99 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://i.imgur.com/PRjTNqr.png" type="image/png">
-    <title>Ваш пристрій заблоковано</title>
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Тимчасово заявки не працюють</title>
     <style>
-        body {
-            font-family: 'Comfortaa', sans-serif;
+        :root {
+            --primary-color: #4a6bff;
+            --secondary-color: #ff0000;
+            --text-color: #333;
+            --bg-color: #f9f9ff;
+        }
+
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background: #000000 url('https://i.imgur.com/ezSjQn5.png');
-            background-size: cover;
-            background-position: center center;
-            background-attachment: fixed;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(74, 107, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 20%);
+            overflow: hidden;
         }
 
         .container {
-            background-color: rgba(21, 21, 29, 0.9);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
-            color: white;
-            width: 80%;
-            max-width: 600px;
             text-align: center;
+            max-width: 800px;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(74, 107, 255, 0.2);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .logo-inner {
+            width: 100px;
+            height: 100px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: var(--primary-color);
         }
 
         h1 {
-            font-size: 36px;
-            color: #e74c3c;
-            margin-bottom: 20px;
-            font-weight: bold;
-            text-transform: uppercase;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
         }
 
-        p {
-            font-size: 20px;
-            margin-bottom: 20px;
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+        }
+
+        .message {
+            font-size: 1.2rem;
             line-height: 1.6;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.5s forwards;
         }
 
-        .reason {
-            background-color: #e74c3c;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            font-size: 18px;
+        .highlight {
             font-weight: bold;
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        .contact {
+            margin-top: 2rem;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1s forwards;
+        }
+
+        .circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .circles li {
+            position: absolute;
+            display: block;
+            list-style: none;
+            width: 20px;
+            height: 20px;
+            background: rgba(74, 107, 255, 0.1);
+            animation: animate 25s linear infinite;
+            bottom: -150px;
+            border-radius: 50%;
+        }
+
+        .circles li:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+
+        .circles li:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+
+        .circles li:nth-child(3) {
+            left: 70%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 4s;
+        }
+
+        .circles li:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+
+        .circles li:nth-child(5) {
+            left: 65%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 0s;
+        }
+
+        .circles li:nth-child(6) {
+            left: 75%;
+            width: 110px;
+            height: 110px;
+            animation-delay: 3s;
+        }
+
+        .circles li:nth-child(7) {
+            left: 35%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 7s;
+        }
+
+        .circles li:nth-child(8) {
+            left: 50%;
+            width: 25px;
+            height: 25px;
+            animation-delay: 15s;
+            animation-duration: 45s;
+        }
+
+        .circles li:nth-child(9) {
+            left: 20%;
+            width: 15px;
+            height: 15px;
+            animation-delay: 2s;
+            animation-duration: 35s;
+        }
+
+        .circles li:nth-child(10) {
+            left: 85%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 0s;
+            animation-duration: 11s;
+        }
+
+        @keyframes animate {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 15px rgba(255, 107, 107, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 107, 107, 0);
+            }
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
             color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1.5s forwards;
+            box-shadow: 0 5px 15px rgba(74, 107, 255, 0.3);
         }
 
-        .ip-address {
-            font-size: 22px;
-            font-weight: bold;
-            color: #f39c12;
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(74, 107, 255, 0.4);
         }
 
-        .alert {
-            color: #e74c3c;
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 30px;
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .message {
+                font-size: 1rem;
+            }
+            .logo {
+                width: 100px;
+                height: 100px;
+            }
+            .logo-inner {
+                width: 80px;
+                height: 80px;
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </div>
 
     <div class="container">
-        <h1>Ваш пристрій заблоковано!</h1>
-        <p>Ви більше не можете отримати доступ до цього пристрою.</p>
-        <div class="reason">
-            Причина блокування: <span>Незаконна активність або порушення безпеки</span>
+        <div class="logo pulse">
+            <div class="logo-inner"><img="ipag-ug/img/1.svg"></div>
         </div>
-        <p>Ваш IP-адреса: <span class="ip-address" id="user-ip">Завантаження...</span></p>
-        <p class="alert">Всі спроби доступу будуть зафіксовані та передані відповідним органам.</p>
+        <h1>Важливе повідомлення</h1>
+        <p class="message">
+            На жаль, <span class="highlight">тимчасово заявки на вступ не працюють</span>. Ми працюємо над усуненням технічних проблем та поверненням функціоналу в найкоротші терміни.
+        </p>
+        <p class="message">
+            Будь ласка, спробуйте повторити спробу пізніше або зв'яжіться з нами для отримання додаткової інформації.
+        </p>
+        </p>
+        <a href="https://ukraine-gta.github.io/DKVSU/index" class="btn" id="notifyBtn">Повернутися</a>
     </div>
 
     <script>
-        // Отримуємо IP-адресу користувача через API
-        fetch('https://api.ipify.org?format=json')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('user-ip').textContent = data.ip;
-            })
-            .catch(error => {
-                console.error('Помилка при отриманні IP-адреси:', error);
-                document.getElementById('user-ip').textContent = 'Невідомо';
+        document.addEventListener('DOMContentLoaded', function() {
+            const btn = document.getElementById('notifyBtn');
+            
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Анімація кнопки
+                btn.textContent = 'Дякуємо!';
+                btn.style.background = 'linear-gradient(90deg, #4CAF50, #8BC34A)';
+                
+            
+            // Додаткові анімації для елементів при скролі
+            window.addEventListener('scroll', function() {
+                const scrollPosition = window.scrollY;
+                const logo = document.querySelector('.logo');
+                
+                // Паралакс ефект для логотипу
+                logo.style.transform = `translateY(${scrollPosition * 0.2}px)`;
             });
+        });
     </script>
-
 </body>
 </html>
- 
