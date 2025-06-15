@@ -49,7 +49,7 @@ body {
     max-width: 1200px;
     height: 100vh;
     max-height: 800px;
-    background: var(--secondary-bg);
+    background: src="logo.svg";
     border-radius: 24px;
     position: relative;
     overflow: hidden;
