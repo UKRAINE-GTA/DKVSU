@@ -2184,3 +2184,46 @@ select {
         display: flex !important;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+.error {
+  margin-top: 20px;
+  text-align: center;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: 2rem;
+  color: #ff0000;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  text-shadow:
+    0 0 5px #ff0000,
+    0 0 10px #ff0000,
+    0 0 20px #8b0000;
+  animation: hackerBlink 1.2s infinite;
+  user-select: none;
+}
+
+@keyframes hackerBlink {
+  0%, 100% {
+    opacity: 1;
+    text-shadow:
+      0 0 5px #ff0000,
+      0 0 10px #ff0000,
+      0 0 20px #8b0000;
+  }
+  50% {
+    opacity: 0.4;
+    text-shadow:
+      none;
+  }
+}
+
