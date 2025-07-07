@@ -2210,6 +2210,8 @@ select {
     0 0 20px #8b0000;
   animation: hackerBlink 1.2s infinite;
   user-select: none;
+ position: relative;
+  z-index: 2000; /* більше ніж у .auth-screen */
 }
 
 @keyframes hackerBlink {
