@@ -4,19 +4,17 @@ const firebaseConfig = {
     authDomain: "dkvs-1ec88.firebaseapp.com",
     databaseURL: "https://dkvs-1ec88-default-rtdb.firebaseio.com",
     projectId: "dkvs-1ec88",
-    storageBucket: "dkvs-1ec88.appspot.com",
+    storageBucket: "dkvs-1ec88.firebasestorage.app",
     messagingSenderId: "167430647129",
     appId: "1:167430647129:web:ab209fec7735f20b597048"
 };
-
-// Imgur API клієнт ID
-const IMGUR_CLIENT_ID = 'cc7bda6e0fd7c98';
 
 // Ініціалізація Firebase
 const firebase = window.firebase;
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 const auth = firebase.auth();
+const storage = firebase.storage();
 
 // Глобальні змінні
 let currentUser = null;
@@ -25,10 +23,10 @@ let realTimeListeners = [];
 
 // Ролі та їх права
 const rolePermissions = {
-    worker: ['dashboard', 'convoy-form', 'convoy-archive', 'blacklist', 'activities', 'staff', 'otz-register', 'otz-registered'],
-    deputy: ['dashboard', 'convoy-form', 'convoy-archive', 'blacklist', 'add-blacklist', 'activities', 'staff', 'otz-register', 'otz-management', 'otz-registered'],
-    leader: ['dashboard', 'convoy-form', 'convoy-archive', 'blacklist', 'add-blacklist', 'activities', 'staff', 'otz-register', 'otz-management', 'otz-registered'],
-    admin: ['dashboard', 'convoy-form', 'convoy-archive', 'blacklist', 'add-blacklist', 'activities', 'staff', 'otz-register', 'otz-management', 'otz-registered', 'settings']
+     worker: ['dashboard', 'convoy-form', 'convoy-archive', 'blacklist', 'activities', 'staff', 'otz-register', 'otz-registered', 'briefing-register', 'briefing-archive'],
+    deputy: ['dashboard', 'convoy-form', 'convoy-archive', 'blacklist', 'add-blacklist', 'activities', 'staff', 'otz-register', 'otz-management', 'otz-registered', 'briefing-register', 'briefing-archive'],
+    leader: ['dashboard', 'convoy-form', 'convoy-archive', 'blacklist', 'add-blacklist', 'activities', 'staff', 'otz-register', 'otz-management', 'otz-registered', 'briefing-register', 'briefing-archive'],
+    admin: ['dashboard', 'convoy-form', 'convoy-archive', 'blacklist', 'add-blacklist', 'activities', 'staff', 'otz-register', 'otz-management', 'otz-registered', 'settings', 'briefing-register', 'briefing-archive']
 };
 
 const roleNames = {
@@ -128,6 +126,12 @@ function setupEventListeners() {
     // Вихід
     logoutBtn.addEventListener('click', handleLogout);
 
+    // Кнопка профілю
+    const userProfileBtn = document.getElementById('userProfileBtn');
+    if (userProfileBtn) {
+        userProfileBtn.addEventListener('click', openProfileSettings);
+    }
+
     // Форми
     setupForms();
 
@@ -166,6 +170,12 @@ function setupForms() {
         otzForm.addEventListener('submit', handleOtzSubmit);
     }
 
+    // Форма інструктажу
+    const briefingForm = document.getElementById('briefingForm');
+    if (briefingForm) {
+        briefingForm.addEventListener('submit', handleBriefingSubmit);
+    }
+
     // Пошук
     const convoySearch = document.getElementById('convoySearch');
     if (convoySearch) {
@@ -182,10 +192,26 @@ function setupForms() {
         staffSearch.addEventListener('input', handleStaffSearch);
     }
 
+        const briefingSearch = document.getElementById('briefingSearch');
+    if (briefingSearch) {
+        briefingSearch.addEventListener('input', handleBriefingSearch);
+    }
+
     // Пошук для зареєстрованих ОТЗ
     const registeredOtzSearch = document.getElementById('registeredOtzSearch');
     if (registeredOtzSearch) {
         registeredOtzSearch.addEventListener('input', handleRegisteredOtzSearch);
+    }
+
+    // Форми налаштувань профілю
+    const changeNameForm = document.getElementById('changeNameForm');
+    if (changeNameForm) {
+        changeNameForm.addEventListener('submit', handleChangeNickname);
+    }
+
+    const changePasswordForm = document.getElementById('changePasswordForm');
+    if (changePasswordForm) {
+        changePasswordForm.addEventListener('submit', handleChangePassword);
     }
 }
 
@@ -476,6 +502,16 @@ function setupRealTimeListeners() {
     });
     realTimeListeners.push(() => database.ref('activities').off('value', activitiesListener));
 }
+    // 7. Слухач для інструктажів
+    const briefingsListener = database.ref('briefings').on('value', (snapshot) => {
+        const briefings = snapshot.val() || {};
+        
+        // Оновлюємо архів інструктажів якщо він відкритий
+        if (!document.getElementById('briefing-archive').classList.contains('hidden')) {
+            updateBriefingArchiveRealTime(briefings);
+        }
+    });
+    realTimeListeners.push(() => database.ref('briefings').off('value', briefingsListener));
 
 // ФУНКЦІЇ ДЛЯ АНІМАЦІЇ ЧИСЕЛ
 function animateNumberChange(element, newValue) {
@@ -601,25 +637,38 @@ function updateStaffTableRealTime(users) {
     const tableBody = document.getElementById('staffTableBody');
     const actionsHeader = document.getElementById('staffActionsHeader');
     if (!tableBody) return;
-    
+
     // Приховуємо колонку дій для працівників
     if (userRole === 'worker') {
         if (actionsHeader) actionsHeader.style.display = 'none';
     } else {
         if (actionsHeader) actionsHeader.style.display = 'table-cell';
     }
-    
+
     const usersArray = Object.entries(users).map(([id, user]) => ({ id, ...user }));
-    
+
+    // Ієрархія ролей
+    const roleHierarchy = {
+        'admin': 1,
+        'leader': 2,
+        'deputy': 3,
+        'worker': 4
+    };
+
+    // Сортування по ієрархії
+    usersArray.sort((a, b) => {
+        return (roleHierarchy[a.role] || 99) - (roleHierarchy[b.role] || 99);
+    });
+
     tableBody.innerHTML = '';
-    
+
     usersArray.forEach(user => {
         const isOnline = user.lastLogin && (Date.now() - user.lastLogin < 5 * 60 * 1000);
         const canDeleteUser = ['deputy', 'leader', 'admin'].includes(userRole);
-        
+
         const row = document.createElement('tr');
         let actionsCell = '';
-        
+
         if (userRole === 'worker') {
             actionsCell = '';
         } else if (canDeleteUser && user.id !== currentUser.uid) {
@@ -635,7 +684,7 @@ function updateStaffTableRealTime(users) {
         } else {
             actionsCell = '<td>—</td>';
         }
-        
+
         row.innerHTML = `
             <td>${user.name}</td>
             <td class="email-cell">${user.email}</td>
@@ -651,12 +700,13 @@ function updateStaffTableRealTime(users) {
         `;
         tableBody.appendChild(row);
     });
-    
+
     if (usersArray.length === 0) {
         const colspan = userRole === 'worker' ? '5' : '6';
         tableBody.innerHTML = `<tr><td colspan="${colspan}" style="text-align: center; color: var(--text-muted);">Немає даних</td></tr>`;
     }
 }
+
 
 // Оновлення керування ОТЗ в реальному часі
 function updateOtzManagementRealTime(tabName, otz) {
@@ -917,7 +967,6 @@ function updateRecentActivitiesRealTime(snapshot) {
         container.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Немає активностей</div>';
     }
 }
-
 // Оновлення налаштувань в реальному часі
 function updateSettingsRealTime(tabName, users) {
     switch (tabName) {
@@ -933,17 +982,27 @@ function updateSettingsRealTime(tabName, users) {
     }
 }
 
+// Ієрархія ролей для сортування
+const roleHierarchy = {
+    'admin': 1,
+    'leader': 2,
+    'deputy': 3,
+    'worker': 4
+};
+
 function updateUsersSettingsRealTime(users) {
     const tableBody = document.getElementById('usersTableBody');
     if (!tableBody) return;
-    
-    const usersArray = Object.entries(users).map(([id, user]) => ({ id, ...user }));
-    
+
+    const usersArray = Object.entries(users)
+        .map(([id, user]) => ({ id, ...user }))
+        .sort((a, b) => (roleHierarchy[a.role] || 99) - (roleHierarchy[b.role] || 99)); // сортування по ролі
+
     tableBody.innerHTML = '';
-    
+
     usersArray.forEach(user => {
         const isOnline = user.lastLogin && (Date.now() - user.lastLogin < 5 * 60 * 1000);
-        
+
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${user.name}</td>
@@ -970,11 +1029,13 @@ function updateUsersSettingsRealTime(users) {
 function updateRolesSettingsRealTime(users) {
     const tableBody = document.getElementById('rolesTableBody');
     if (!tableBody) return;
-    
-    const usersArray = Object.entries(users).map(([id, user]) => ({ id, ...user }));
-    
+
+    const usersArray = Object.entries(users)
+        .map(([id, user]) => ({ id, ...user }))
+        .sort((a, b) => (roleHierarchy[a.role] || 99) - (roleHierarchy[b.role] || 99)); // сортування по ролі
+
     tableBody.innerHTML = '';
-    
+
     usersArray.forEach(user => {
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -996,13 +1057,12 @@ function updateRolesSettingsRealTime(users) {
 
 function updateSystemInfoRealTime(users) {
     const totalUsers = Object.keys(users).length;
-    
-    // Оновлюємо системну інформацію
+
     const totalUsersElement = document.getElementById('totalUsers');
     if (totalUsersElement) {
         totalUsersElement.textContent = totalUsers;
     }
-    
+
     const lastUpdateElement = document.getElementById('lastUpdate');
     if (lastUpdateElement) {
         lastUpdateElement.textContent = new Date().toLocaleString('uk-UA');
@@ -1014,48 +1074,33 @@ function clearRealTimeListeners() {
     realTimeListeners = [];
 }
 
-// Решта коду залишається без змін...
-// [Тут йде весь інший код з попереднього файлу - авторизація, форми, модальні вікна тощо]
-
-// Imgur API функції
-async function uploadImageToImgur(file) {
+// Firebase Storage функції
+async function uploadImageToFirebaseStorage(file, path) {
     try {
-        const formData = new FormData();
-        formData.append('image', file);
-
-        const response = await fetch('https://api.imgur.com/3/image', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Client-ID ${IMGUR_CLIENT_ID}`
-            },
-            body: formData
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            return data.data.link;
-        } else {
-            throw new Error(data.data.error || 'Помилка завантаження на Imgur');
-        }
+        const fileName = `${Date.now()}-${file.name}`;
+        const storageRef = storage.ref(`${path}/${fileName}`);
+        const snapshot = await storageRef.put(file);
+        const downloadURL = await snapshot.ref.getDownloadURL();
+        return downloadURL;
     } catch (error) {
-        console.error('Помилка завантаження на Imgur:', error);
+        console.error(`Помилка завантаження файлу в ${path}:`, error);
         throw error;
     }
 }
 
-async function uploadMultipleImagesToImgur(files) {
+
+async function uploadMultipleImagesToFirebaseStorage(files, path) {
     const uploadPromises = [];
     
     for (let i = 0; i < files.length; i++) {
-        uploadPromises.push(uploadImageToImgur(files[i]));
+         uploadPromises.push(uploadImageToFirebaseStorage(files[i], path));
     }
 
     try {
         const urls = await Promise.all(uploadPromises);
         return urls;
     } catch (error) {
-        console.error('Помилка завантаження декількох зображень:', error);
+        console.error('Помилка завантаження декількох зображень в Firebase Storage:', error);
         throw error;
     }
 }
@@ -1391,6 +1436,17 @@ async function loadPageData(viewName) {
             break;
         case 'otz-registered':
             loadRegisteredOtz();
+            break;
+        
+                case 'briefing-register':
+            // Автоматично заповнюємо ім'я інструктора
+            const instructorNameInput = document.getElementById('instructorName');
+            if (instructorNameInput && currentUser) {
+                instructorNameInput.value = currentUser.displayName;
+            }
+            break;
+        case 'briefing-archive':
+            loadBriefingArchive();
             break;
     }
 }
@@ -1770,7 +1826,7 @@ async function handleBlacklistSubmit(e) {
     }
 }
 
-// Обробка форми ОТЗ з Imgur API
+// Обробка форми ОТЗ з Firebase Storage
 async function handleOtzSubmit(e) {
     e.preventDefault();
 
@@ -1793,15 +1849,16 @@ async function handleOtzSubmit(e) {
         showLoadingState(e.target.querySelector('button[type="submit"]'));
         
         // Показуємо прогрес завантаження
-        showNotification('Інформація', 'Завантаження фото на Imgur...', 'info');
+        showNotification('Інформація', 'Завантаження фото у сховище...', 'info');
 
-        // Завантажуємо файли на Imgur
-        const techPassportUrl = await uploadImageToImgur(techPassportFile);
-        const driverLicenseUrl = await uploadImageToImgur(driverLicenseFile);
-        const staffIdUrl = await uploadImageToImgur(staffIdFile);
+        // Завантажуємо файли на Firebase Storage
+        const techPassportUrl = await uploadImageToFirebaseStorage(techPassportFile, 'otz_documents');
+        const driverLicenseUrl = await uploadImageToFirebaseStorage(driverLicenseFile, 'otz_documents');
+        const staffIdUrl = await uploadImageToFirebaseStorage(staffIdFile, 'otz_documents');
+        
         
         // Завантажуємо фото автомобіля
-        const carPhotoUrls = await uploadMultipleImagesToImgur(carPhotosFiles);
+          const carPhotoUrls = await uploadMultipleImagesToFirebaseStorage(carPhotosFiles, 'otz_car_photos');
 
         // Зберігаємо дані ОТЗ в базу
         const otzData = {
@@ -2636,6 +2693,212 @@ async function clearOldData() {
         }
     }
 }
+
+// Функції для Інструктажу
+
+async function handleBriefingSubmit(e) {
+    e.preventDefault();
+
+    const formData = {
+        instructorName: document.getElementById('instructorName').value,
+        recruitName: document.getElementById('recruitName').value,
+        inTelegram: document.getElementById('inTelegram').checked,
+        hasDiscordRole: document.getElementById('hasDiscordRole').checked,
+        knowsRules: document.getElementById('knowsRules').checked,
+        timestamp: Date.now(),
+        createdBy: currentUser.uid,
+        createdByName: currentUser.displayName
+    };
+
+    if (!formData.instructorName || !formData.recruitName) {
+        showNotification('Помилка', 'Заповніть імена інструктора та новобранця', 'error');
+        return;
+    }
+
+    try {
+        showLoadingState(e.target.querySelector('button[type="submit"]'));
+
+        const briefingRef = database.ref('briefings');
+        await briefingRef.push(formData);
+
+        await addActivity('user', `Проведено інструктаж для: ${formData.recruitName}`, formData.instructorName);
+
+        showNotification('Успіх', 'Інструктаж успішно зареєстровано!', 'success');
+
+        e.target.reset();
+                const instructorNameInput = document.getElementById('instructorName');
+        if (instructorNameInput && currentUser) {
+            instructorNameInput.value = currentUser.displayName;
+        }
+    } catch (error) {
+        console.error('Помилка реєстрації інструктажу:', error);
+        showNotification('Помилка', 'Не вдалося зареєструвати інструктаж', 'error');
+    } finally {
+        hideLoadingState(e.target.querySelector('button[type="submit"]'));
+    }
+}
+
+async function loadBriefingArchive() {
+    const tableBody = document.getElementById('briefingTableBody');
+    tableBody.innerHTML = '<tr><td colspan="6" class="loading-cell"><div class="loading"><div class="spinner"></div><span>Завантаження...</span></div></td></tr>';
+
+    try {
+        const snapshot = await database.ref('briefings').orderByChild('timestamp').once('value');
+        updateBriefingArchiveRealTime(snapshot.val() || {});
+    } catch (error) {
+        console.error('Помилка завантаження архіву інструктажів:', error);
+        tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--accent-red);">Помилка завантаження</td></tr>';
+    }
+}
+
+function updateBriefingArchiveRealTime(briefings) {
+    const tableBody = document.getElementById('briefingTableBody');
+    if (!tableBody) return;
+
+    const briefingsArray = Object.entries(briefings).map(([id, briefing]) => ({
+        id,
+        ...briefing
+    })).sort((a, b) => b.timestamp - a.timestamp);
+
+    tableBody.innerHTML = '';
+
+    const renderCheckmark = (value) => {
+        return value 
+            ? '<i class="fas fa-check-circle" style="color: var(--accent-green);"></i>' 
+            : '<i class="fas fa-times-circle" style="color: var(--accent-red);"></i>';
+    };
+
+    briefingsArray.forEach(briefing => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${new Date(briefing.timestamp).toLocaleString('uk-UA')}</td>
+            <td>${briefing.instructorName}</td>
+            <td>${briefing.recruitName}</td>
+            <td style="text-align: center;">${renderCheckmark(briefing.inTelegram)}</td>
+            <td style="text-align: center;">${renderCheckmark(briefing.hasDiscordRole)}</td>
+            <td style="text-align: center;">${renderCheckmark(briefing.knowsRules)}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+
+    if (briefingsArray.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Немає даних</td></tr>';
+    }
+}
+
+function handleBriefingSearch(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const rows = document.querySelectorAll('#briefingTableBody tr');
+
+    rows.forEach(row => {
+        if (row.cells.length > 1) { // Перевірка, чи це рядок з даними
+            const instructorName = row.cells[1].textContent.toLowerCase();
+            const recruitName = row.cells[2].textContent.toLowerCase();
+            if (instructorName.includes(searchTerm) || recruitName.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+}
+
+
+// Функції налаштування профілю
+
+function openProfileSettings() {
+    const modal = document.getElementById('profileSettingsModal');
+    if (modal) {
+        // Заповнюємо поточний нікнейм
+        document.getElementById('newNickname').value = currentUser.displayName;
+        modal.classList.add('active');
+    }
+}
+
+function closeProfileSettings() {
+    const modal = document.getElementById('profileSettingsModal');
+    if (modal) {
+        modal.classList.remove('active');
+        // Очищуємо поля паролів при закритті
+        document.getElementById('changePasswordForm').reset();
+    }
+}
+
+async function handleChangeNickname(e) {
+    e.preventDefault();
+    const newName = document.getElementById('newNickname').value.trim();
+    const button = e.target.querySelector('button[type="submit"]');
+
+    if (!newName) {
+        showNotification('Помилка', 'Nick Name не може бути порожнім', 'error');
+        return;
+    }
+
+    if (newName === currentUser.displayName) {
+        showNotification('Інформація', 'Ви не змінили свій Nick Name', 'info');
+        return;
+    }
+
+    try {
+        showLoadingState(button);
+        await currentUser.updateProfile({ displayName: newName });
+        await database.ref('users').child(currentUser.uid).update({ name: newName });
+
+        await addActivity('user', `Змінив свій Nick Name на: ${newName}`, newName);
+        
+        updateUserInterface(); // Оновити UI
+        showNotification('Успіх', 'Ваш Nick Name успішно змінено!', 'success');
+        closeProfileSettings();
+    } catch (error) {
+        console.error('Помилка зміни нікнейму:', error);
+        showNotification('Помилка', 'Не вдалося змінити Nick Name', 'error');
+    } finally {
+        hideLoadingState(button);
+    }
+}
+
+async function handleChangePassword(e) {
+    e.preventDefault();
+    const currentPassword = document.getElementById('currentPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+    const button = e.target.querySelector('button[type="submit"]');
+
+    if (!currentPassword || !newPassword || !confirmNewPassword) {
+        showNotification('Помилка', 'Заповніть всі поля для зміни пароля', 'error');
+        return;
+    }
+
+    if (newPassword.length < 6) {
+        showNotification('Помилка', 'Новий пароль повинен містити мінімум 6 символів', 'error');
+        return;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+        showNotification('Помилка', 'Нові паролі не співпадають', 'error');
+        return;
+    }
+
+    try {
+        showLoadingState(button);
+        // Повторна автентифікація користувача - це обов'язковий крок безпеки
+        const credential = firebase.auth.EmailAuthProvider.credential(currentUser.email, currentPassword);
+        await currentUser.reauthenticateWithCredential(credential);
+
+        // Якщо автентифікація успішна, змінюємо пароль
+        await currentUser.updatePassword(newPassword);
+
+        showNotification('Успіх', 'Пароль успішно змінено!', 'success');
+        closeProfileSettings();
+    } catch (error) {
+        console.error('Помилка зміни пароля:', error);
+        const errorMessage = error.code === 'auth/wrong-password' ? 'Невірний поточний пароль' : 'Не вдалося змінити пароль';
+        showNotification('Помилка', errorMessage, 'error');
+    } finally {
+        hideLoadingState(button);
+    }
+}
+
 
 // Сповіщення
 function showNotification(title, message, type = 'info') {
