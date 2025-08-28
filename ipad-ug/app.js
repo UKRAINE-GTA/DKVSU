@@ -52,6 +52,29 @@ function formatEmailForDisplay(email) {
     return email;
 }
 
+/**
+ * Formats a UID string to a shorter, more readable version.
+ * @param {string} uid The full UID.
+ * @returns {string} The formatted UID (e.g., "abcde...12345").
+ */
+function formatUID(uid) {
+    if (!uid || uid.length < 12) return uid;
+    return `${uid.substring(0, 5)}...${uid.substring(uid.length - 5)}`;
+}
+
+/**
+ * Handles click events on copy icons within tables.
+ * @param {Event} e The click event.
+ */
+function handleTableCopyClick(e) {
+    if (e.target.classList.contains('copy-icon') && e.target.dataset.uid) {
+        const uidToCopy = e.target.dataset.uid;
+        navigator.clipboard.writeText(uidToCopy).then(() => {
+            showNotification('UID скопійовано!', 'success');
+        }).catch(err => showNotification('Помилка копіювання UID', 'error'));
+    }
+}
+
 // Ініціалізація
 document.addEventListener('DOMContentLoaded', () => {
     initializeApp();
@@ -146,6 +169,11 @@ function setupEventListeners() {
 
     // Модальні вікна
     setupModals();
+
+    // Делегування подій для копіювання UID
+    document.getElementById('staffTableBody').addEventListener('click', handleTableCopyClick);
+    document.getElementById('usersTableBody').addEventListener('click', handleTableCopyClick);
+    document.getElementById('rolesTableBody').addEventListener('click', handleTableCopyClick);
 
     // Завантаження файлів
     setupFileUploads();
@@ -687,7 +715,12 @@ function updateStaffTableRealTime(users) {
 
         row.innerHTML = `
             <td>${user.name}</td>
-            <td class="email-cell">${user.email}</td>
+            <td>
+                <div class="uid-cell" title="${user.id}">
+                    <span>${user.id}</span>
+                    <i class="fas fa-copy copy-icon" data-uid="${user.id}" title="Скопіювати UID"></i>
+                </div>
+            </td>
             <td><span class="badge role-${user.role}">${roleNames[user.role] || 'Працівник'}</span></td>
             <td>
                 <span class="status-badge ${isOnline ? 'status-online' : 'status-offline'}">
@@ -1006,7 +1039,12 @@ function updateUsersSettingsRealTime(users) {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${user.name}</td>
-            <td class="email-cell">${user.email}</td>
+            <td>
+                <div class="uid-cell" title="${user.id}">
+                    <span>${user.id}</span>
+                    <i class="fas fa-copy copy-icon" data-uid="${user.id}" title="Скопіювати UID"></i>
+                </div>
+            </td>
             <td><span class="badge role-${user.role}">${roleNames[user.role] || 'Працівник'}</span></td>
             <td>
                 <span class="status-badge ${isOnline ? 'status-online' : 'status-offline'}">
@@ -1040,7 +1078,12 @@ function updateRolesSettingsRealTime(users) {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${user.name}</td>
-            <td class="email-cell">${user.email}</td>
+            <td>
+                <div class="uid-cell" title="${user.id}">
+                    <span>${user.id}</span>
+                    <i class="fas fa-copy copy-icon" data-uid="${user.id}" title="Скопіювати UID"></i>
+                </div>
+            </td>
             <td><span class="badge role-${user.role}">${roleNames[user.role] || 'Працівник'}</span></td>
             <td>
                 <select class="role-select" onchange="changeUserRole('${user.id}', this.value)">
