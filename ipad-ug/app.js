@@ -19,20 +19,25 @@ const auth = firebase.auth();
 let currentUser = null;
 let userRole = null;
 let realTimeListeners = [];
+let allActivitiesData = []; // Зберігаємо всі завантажені активності
+let currentActivityFilter = 'all';
+let currentActivitySearch = '';
 
 // Ролі та їх права
 const rolePermissions = {
      worker: ['dashboard', 'convoy-form', 'convoy-archive', 'blacklist', 'activities', 'staff', 'otz-register', 'otz-registered', 'briefing-register', 'briefing-archive'],
     deputy: ['dashboard', 'convoy-form', 'convoy-archive', 'blacklist', 'add-blacklist', 'activities', 'staff', 'otz-register', 'otz-management', 'otz-registered', 'briefing-register', 'briefing-archive'],
     leader: ['dashboard', 'convoy-form', 'convoy-archive', 'blacklist', 'add-blacklist', 'activities', 'staff', 'otz-register', 'otz-management', 'otz-registered', 'briefing-register', 'briefing-archive'],
-    admin: ['dashboard', 'convoy-form', 'convoy-archive', 'blacklist', 'add-blacklist', 'activities', 'staff', 'otz-register', 'otz-management', 'otz-registered', 'settings', 'briefing-register', 'briefing-archive']
+    admin: ['dashboard', 'convoy-form', 'convoy-archive', 'blacklist', 'add-blacklist', 'activities', 'staff', 'otz-register', 'otz-management', 'otz-registered', 'settings', 'briefing-register', 'briefing-archive'],
+    blocked: [] // Заблоковані користувачі не мають прав
 };
 
 const roleNames = {
     worker: 'Працівник',
     deputy: 'Заступник',
     leader: 'Лідер',
-    admin: 'Адміністратор'
+    admin: 'Адміністратор',
+    blocked: 'Заблокований'
 };
 
 // Елементи DOM
@@ -79,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeApp();
     setupEventListeners();
     checkRememberedLogin();
+    checkIpBlockStatus(); // Перевірка IP при завантаженні
 });
 
 function initializeApp() {
@@ -98,6 +104,43 @@ function initializeApp() {
 
     handleResize();
     window.addEventListener('resize', handleResize);
+}
+
+// Отримання IP адреси клієнта
+async function getClientIP() {
+    try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        return data.ip;
+    } catch (error) {
+        console.error('Error fetching IP:', error);
+        return null;
+    }
+}
+
+// Санітизація IP для використання в ключах Firebase (заміна . на _)
+function sanitizeIp(ip) {
+    if (!ip) return 'unknown';
+    return ip.replace(/\./g, '_').replace(/:/g, '_');
+}
+
+// Перевірка чи заблокований IP
+async function checkIpBlockStatus() {
+    const ip = await getClientIP();
+    if (!ip) return;
+
+    const sanitizedIp = sanitizeIp(ip);
+    const snapshot = await database.ref('blocked_ips').child(sanitizedIp).once('value');
+    
+    if (snapshot.exists()) {
+        // IP заблоковано
+        document.getElementById('blockedMessage').classList.remove('hidden');
+        document.querySelector('.auth-tabs').style.display = 'none';
+        document.querySelectorAll('.auth-form').forEach(form => form.style.display = 'none');
+        
+        // Якщо користувач залогінений - виходимо
+        if (auth.currentUser) auth.signOut();
+    }
 }
 
 function checkRememberedLogin() {
@@ -176,6 +219,9 @@ function setupEventListeners() {
 
     // Завантаження файлів
     setupFileUploads();
+
+    // Фільтри активностей
+    setupActivityFilters();
 }
 
 function setupForms() {
@@ -368,6 +414,30 @@ function removeFilePreview(button, inputId, index) {
     }
 }
 
+function setupActivityFilters() {
+    // Кнопки фільтрів
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Оновлюємо активний клас
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Оновлюємо фільтр і перемальовуємо
+            currentActivityFilter = btn.dataset.filter;
+            renderActivitiesList();
+        });
+    });
+
+    // Пошук
+    const searchInput = document.getElementById('activitiesSearch');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            currentActivitySearch = e.target.value.toLowerCase();
+            renderActivitiesList();
+        });
+    }
+}
+
 // ПОВНІСТЮ ОНОВЛЕНА СИСТЕМА REAL-TIME СЛУХАЧІВ
 function setupRealTimeListeners() {
     clearRealTimeListeners();
@@ -382,6 +452,11 @@ function setupRealTimeListeners() {
         const activeUsersElement = document.getElementById('activeUsers');
         if (activeUsersElement) {
             animateNumberChange(activeUsersElement, activeViewers.length);
+            
+            // Оновлюємо тренд (відсоток від загального персоналу)
+            const totalWorkers = parseInt(document.getElementById('totalWorkers').textContent) || 1;
+            const percent = Math.round((activeViewers.length / totalWorkers) * 100) || 0;
+            updateStatTrend('activeUsers', true, `${percent}% від персоналу`);
         }
     });
     realTimeListeners.push(() => database.ref('viewers').off('value', viewersListener));
@@ -389,25 +464,40 @@ function setupRealTimeListeners() {
     // 2. Слухач для конвоїв - ПОВНЕ ОНОВЛЕННЯ
     const convoysListener = database.ref('convoys').on('value', (snapshot) => {
         const convoys = snapshot.val() || {};
-        const today = new Date().toDateString();
+        const now = new Date();
+        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+        const startOfYesterday = startOfToday - 86400000;
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+        const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1).getTime();
         
         // Конвої за сьогодні
-        const convoysToday = Object.values(convoys).filter(convoy => {
-            return new Date(convoy.timestamp).toDateString() === today;
-        }).length;
+        const convoysToday = Object.values(convoys).filter(c => c.timestamp >= startOfToday).length;
+        const convoysYesterday = Object.values(convoys).filter(c => c.timestamp >= startOfYesterday && c.timestamp < startOfToday).length;
+        const dailyChange = convoysToday - convoysYesterday;
         
         // Загальна кількість конвоїв
         const totalConvoys = Object.keys(convoys).length;
+        const convoysThisMonth = Object.values(convoys).filter(c => c.timestamp >= startOfMonth).length;
+        const convoysLastMonth = Object.values(convoys).filter(c => c.timestamp >= startOfLastMonth && c.timestamp < startOfMonth).length;
+        
+        let monthChangePercent = 0;
+        if (convoysLastMonth > 0) {
+            monthChangePercent = Math.round(((convoysThisMonth - convoysLastMonth) / convoysLastMonth) * 100);
+        } else if (convoysThisMonth > 0) {
+            monthChangePercent = 100;
+        }
         
         // Оновлюємо елементи з анімацією
         const convoysTodayElement = document.getElementById('convoysToday');
         if (convoysTodayElement) {
             animateNumberChange(convoysTodayElement, convoysToday);
+            updateStatTrend('convoysToday', dailyChange >= 0, `${dailyChange > 0 ? '+' : ''}${dailyChange} за день`);
         }
         
         const totalConvoysElement = document.getElementById('totalConvoys');
         if (totalConvoysElement) {
             animateNumberChange(totalConvoysElement, totalConvoys);
+            updateStatTrend('totalConvoys', monthChangePercent >= 0, `${monthChangePercent > 0 ? '+' : ''}${monthChangePercent}% за місяць`);
         }
         
         // Оновлюємо архів конвоїв якщо він відкритий
@@ -433,10 +523,21 @@ function setupRealTimeListeners() {
         
         const activeCount = activeItems.length;
         
+        // Тренд (додано за останній тиждень)
+        const now = Date.now();
+        const oneWeekAgo = now - (7 * 24 * 60 * 60 * 1000);
+        const twoWeeksAgo = now - (14 * 24 * 60 * 60 * 1000);
+        
+        const addedLastWeek = Object.values(blacklist).filter(i => i.timestamp >= oneWeekAgo).length;
+        const addedPrevWeek = Object.values(blacklist).filter(i => i.timestamp >= twoWeeksAgo && i.timestamp < oneWeekAgo).length;
+        const weeklyChange = addedLastWeek - addedPrevWeek;
+
         // Оновлюємо лічильник
         const blacklistCountElement = document.getElementById('blacklistCount');
         if (blacklistCountElement) {
             animateNumberChange(blacklistCountElement, activeCount);
+            // Якщо кількість порушників росте - це погано (червоний), якщо падає - добре (зелений)
+            updateStatTrend('blacklistCount', weeklyChange <= 0, `${weeklyChange > 0 ? '+' : ''}${weeklyChange} за тиждень`);
         }
         
         // Оновлюємо таблицю чорного списку якщо вона відкрита
@@ -455,10 +556,16 @@ function setupRealTimeListeners() {
             user.role === 'worker' || user.role === 'leader' || user.role === 'deputy'
         ).length;
         
+        // Тренд (нові за місяць)
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+        const newUsersThisMonth = Object.values(users).filter(u => u.createdAt >= startOfMonth).length;
+
         // Оновлюємо лічильник працівників
         const totalWorkersElement = document.getElementById('totalWorkers');
         if (totalWorkersElement) {
             animateNumberChange(totalWorkersElement, totalWorkers);
+            updateStatTrend('totalWorkers', true, `+${newUsersThisMonth} нових за місяць`);
         }
         
         // Оновлюємо таблицю персоналу якщо вона відкрита
@@ -484,10 +591,20 @@ function setupRealTimeListeners() {
         const approvedCount = Object.values(otz).filter(item => item.status === 'approved').length;
         const pendingCount = Object.values(otz).filter(item => item.status === 'pending').length;
         
+        // Тренд (схвалено за місяць)
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+        const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1).getTime();
+        
+        const approvedThisMonth = Object.values(otz).filter(i => i.status === 'approved' && (i.approvedAt || i.submittedAt) >= startOfMonth).length;
+        const approvedLastMonth = Object.values(otz).filter(i => i.status === 'approved' && (i.approvedAt || i.submittedAt) >= startOfLastMonth && (i.approvedAt || i.submittedAt) < startOfMonth).length;
+        const monthChange = approvedThisMonth - approvedLastMonth;
+
         // Оновлюємо основний лічильник
         const otzCountElement = document.getElementById('otzCount');
         if (otzCountElement) {
             animateNumberChange(otzCountElement, approvedCount);
+            updateStatTrend('otzCount', monthChange >= 0, `${monthChange > 0 ? '+' : ''}${monthChange} за місяць`);
         }
         
         // Оновлюємо лічильники в вкладках керування ОТЗ
@@ -566,6 +683,32 @@ function animateNumberChange(element, newValue) {
     }
     
     requestAnimationFrame(updateNumber);
+}
+
+// Оновлення тренду статистики (стрілочки)
+function updateStatTrend(elementId, isGood, text) {
+    const valueElement = document.getElementById(elementId);
+    if (!valueElement) return;
+    
+    const card = valueElement.closest('.stat-card');
+    if (!card) return;
+    
+    const changeElement = card.querySelector('.stat-change');
+    if (!changeElement) return;
+    
+    // Скидаємо класи
+    changeElement.className = 'stat-change';
+    
+    // Додаємо клас кольору
+    if (isGood) changeElement.classList.add('positive');
+    else changeElement.classList.add('negative');
+    
+    // Визначаємо іконку
+    let iconClass = 'fa-minus';
+    if (text.includes('+')) iconClass = 'fa-arrow-up';
+    else if (text.includes('-')) iconClass = 'fa-arrow-down';
+    
+    changeElement.innerHTML = `<i class="fas ${iconClass}"></i> <span>${text}</span>`;
 }
 
 // REAL-TIME ОНОВЛЕННЯ ТАБЛИЦЬ ТА СПИСКІВ
@@ -679,7 +822,8 @@ function updateStaffTableRealTime(users) {
         'admin': 1,
         'leader': 2,
         'deputy': 3,
-        'worker': 4
+        'worker': 4,
+        'blocked': 5 // Заблоковані в самому низу
     };
 
     // Сортування по ієрархії
@@ -691,17 +835,30 @@ function updateStaffTableRealTime(users) {
 
     usersArray.forEach(user => {
         const isOnline = user.lastLogin && (Date.now() - user.lastLogin < 5 * 60 * 1000);
-        const canDeleteUser = ['deputy', 'leader', 'admin'].includes(userRole);
+        const canManageUsers = ['deputy', 'leader', 'admin'].includes(userRole);
+        const isBlocked = user.role === 'blocked';
 
         const row = document.createElement('tr');
         let actionsCell = '';
 
         if (userRole === 'worker') {
             actionsCell = '';
-        } else if (canDeleteUser && user.id !== currentUser.uid) {
+        } else if (canManageUsers && user.id !== currentUser.uid) {
+            // Кнопки дій
+            const blockBtn = !isBlocked ? `
+                <button class="btn action-btn btn-danger" onclick="confirmBlockUser('${user.id}', '${user.name}')" title="Заблокувати (IP + Акаунт)">
+                    <i class="fas fa-ban"></i>
+                </button>
+            ` : `
+                <button class="btn action-btn btn-success" onclick="confirmUnblockUser('${user.id}', '${user.name}')" title="Розблокувати">
+                    <i class="fas fa-unlock"></i>
+                </button>
+            `;
+
             actionsCell = `
                 <td>
                     <div style="display: flex; gap: 4px;">
+                        ${blockBtn}
                         <button class="btn action-btn btn-danger" onclick="confirmDeleteUser('${user.id}')" title="Видалити користувача">
                             <i class="fas fa-trash"></i>
                         </button>
@@ -925,17 +1082,38 @@ function updateActivitiesRealTime(snapshot) {
     const container = document.getElementById('activitiesList');
     if (!container) return;
     
+    // Оновлюємо глобальний масив даних
     const activities = [];
     snapshot.forEach(childSnapshot => {
         activities.unshift(childSnapshot.val());
     });
+    allActivitiesData = activities;
     
-    // Обмежуємо до останніх 50 активностей
-    const limitedActivities = activities.slice(0, 50);
+    renderActivitiesList();
+}
+
+function renderActivitiesList() {
+    const container = document.getElementById('activitiesList');
+    if (!container) return;
+
+    let filtered = allActivitiesData;
+
+    // Фільтрація за типом
+    if (currentActivityFilter !== 'all') {
+        filtered = filtered.filter(item => item.type === currentActivityFilter);
+    }
+
+    // Фільтрація за пошуком
+    if (currentActivitySearch) {
+        filtered = filtered.filter(item => 
+            (item.description && item.description.toLowerCase().includes(currentActivitySearch)) ||
+            (item.user && item.user.toLowerCase().includes(currentActivitySearch))
+        );
+    }
     
     container.innerHTML = '';
     
-    limitedActivities.forEach(activity => {
+    filtered.forEach(activity => {
         const activityElement = document.createElement('div');
         activityElement.className = 'activity-item';
         
@@ -955,8 +1133,8 @@ function updateActivitiesRealTime(snapshot) {
         container.appendChild(activityElement);
     });
     
-    if (limitedActivities.length === 0) {
-        container.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 40px;">Немає активностей</div>';
+    if (filtered.length === 0) {
+        container.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 40px;">Записів не знайдено</div>';
     }
 }
 
@@ -1186,6 +1364,14 @@ async function handleLogin(e) {
     try {
         showLoadingState(e.target.querySelector('button[type="submit"]'));
 
+        // Отримуємо та перевіряємо IP
+        const ip = await getClientIP();
+        if (ip) {
+            const sanitizedIp = sanitizeIp(ip);
+            const blockSnapshot = await database.ref('blocked_ips').child(sanitizedIp).once('value');
+            if (blockSnapshot.exists()) throw new Error('Ваш IP заблоковано адміністратором.');
+        }
+
         await auth.signInWithEmailAndPassword(email, password);
         
         if (rememberMe) {
@@ -1197,6 +1383,19 @@ async function handleLogin(e) {
             localStorage.removeItem('savedEmail');
             localStorage.removeItem('savedPassword');
         }
+
+        // Перевіряємо роль користувача після входу
+        const user = auth.currentUser;
+        const userSnapshot = await database.ref('users').child(user.uid).once('value');
+        const userData = userSnapshot.val();
+
+        if (userData && userData.role === 'blocked') {
+            await auth.signOut();
+            throw new Error('Ваш акаунт заблоковано.');
+        }
+
+        // Оновлюємо IP в базі
+        if (ip) await database.ref('users').child(user.uid).update({ ip: ip });
 
         showNotification('Успіх', 'Ви успішно увійшли в систему!', 'success');
 
@@ -1219,6 +1418,9 @@ async function handleLogin(e) {
                 break;
             case 'auth/too-many-requests':
                 errorMessage = 'Забагато спроб входу. Спробуйте пізніше';
+                break;
+            default:
+                errorMessage = error.message;
                 break;
         }
 
@@ -1254,6 +1456,14 @@ async function handleRegister(e) {
     try {
         showLoadingState(e.target.querySelector('button[type="submit"]'));
 
+        // Отримуємо та перевіряємо IP
+        const ip = await getClientIP();
+        if (ip) {
+            const sanitizedIp = sanitizeIp(ip);
+            const blockSnapshot = await database.ref('blocked_ips').child(sanitizedIp).once('value');
+            if (blockSnapshot.exists()) throw new Error('Ваш IP заблоковано адміністратором.');
+        }
+
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
         const user = userCredential.user;
 
@@ -1267,7 +1477,8 @@ async function handleRegister(e) {
             role: 'worker',
             createdAt: firebase.database.ServerValue.TIMESTAMP,
             approved: true,
-            lastLogin: firebase.database.ServerValue.TIMESTAMP
+            lastLogin: firebase.database.ServerValue.TIMESTAMP,
+            ip: ip || 'unknown'
         });
 
         showNotification('Успіх', 'Реєстрація пройшла успішно! Ви зареєстровані як Працівник.', 'success');
@@ -1287,6 +1498,9 @@ async function handleRegister(e) {
                 break;
             case 'auth/weak-password':
                 errorMessage = 'Пароль занадто слабкий';
+                break;
+            default:
+                errorMessage = error.message;
                 break;
         }
 
@@ -1337,6 +1551,13 @@ async function loadUserData() {
     try {
         const snapshot = await database.ref('users').child(currentUser.uid).once('value');
         const userData = snapshot.val();
+
+        // Додаткова перевірка на блокування
+        if (userData && userData.role === 'blocked') {
+            await auth.signOut();
+            showNotification('Помилка', 'Ваш акаунт заблоковано', 'error');
+            return;
+        }
 
         if (userData) {
             userRole = userData.role || 'worker';
@@ -2285,7 +2506,8 @@ async function loadActivities() {
     container.innerHTML = '<div class="loading"><div class="spinner"></div><span>Завантаження...</span></div>';
 
     try {
-        const snapshot = await database.ref('activities').orderByChild('timestamp').limitToLast(50).once('value');
+        // Збільшуємо ліміт завантаження до 500 записів для кращої історії
+        const snapshot = await database.ref('activities').orderByChild('timestamp').limitToLast(500).once('value');
         updateActivitiesRealTime(snapshot);
     } catch (error) {
         console.error('Помилка завантаження активностей:', error);
@@ -2554,6 +2776,66 @@ async function confirmRemoveFromBlacklist(itemId) {
         } catch (error) {
             console.error('Помилка видалення з чорного списку:', error);
             showNotification('Помилка', 'Не вдалося видалити з чорного списку', 'error');
+        }
+    }
+}
+
+// Функція блокування користувача
+async function confirmBlockUser(userId, userName) {
+    const confirmed = await showModal(
+        'Підтвердження блокування',
+        `Ви впевнені, що хочете ЗАБЛОКУВАТИ користувача ${userName}? Це заблокує акаунт та IP-адресу.`,
+        'Заблокувати',
+        'Скасувати'
+    );
+
+    if (confirmed) {
+        try {
+            // Отримуємо дані користувача щоб знайти IP
+            const snapshot = await database.ref('users').child(userId).once('value');
+            const userData = snapshot.val();
+            
+            // Блокуємо акаунт (зміна ролі)
+            await database.ref('users').child(userId).update({ role: 'blocked' });
+
+            // Блокуємо IP якщо він є
+            if (userData && userData.ip && userData.ip !== 'unknown') {
+                const sanitizedIp = sanitizeIp(userData.ip);
+                await database.ref('blocked_ips').child(sanitizedIp).set({
+                    uid: userId,
+                    timestamp: Date.now(),
+                    blockedBy: currentUser.displayName
+                });
+            }
+
+            await addActivity('system', `Заблоковано користувача ${userName} (UID: ${userId}) та його IP`, currentUser.displayName);
+            showNotification('Успіх', 'Користувача та IP заблоковано', 'success');
+        } catch (error) {
+            console.error('Помилка блокування:', error);
+            showNotification('Помилка', 'Не вдалося заблокувати користувача', 'error');
+        }
+    }
+}
+
+// Функція розблокування користувача
+async function confirmUnblockUser(userId, userName) {
+    const confirmed = await showModal(
+        'Підтвердження розблокування',
+        `Розблокувати користувача ${userName}?`,
+        'Розблокувати',
+        'Скасувати'
+    );
+
+    if (confirmed) {
+        try {
+            // Повертаємо роль працівника
+            await database.ref('users').child(userId).update({ role: 'worker' });
+            
+            await addActivity('system', `Розблоковано користувача ${userName} (UID: ${userId})`, currentUser.displayName);
+            showNotification('Успіх', 'Користувача розблоковано', 'success');
+        } catch (error) {
+            console.error('Помилка розблокування:', error);
+            showNotification('Помилка', 'Не вдалося розблокувати користувача', 'error');
         }
     }
 }
