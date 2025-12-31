@@ -14,7 +14,6 @@ const firebase = window.firebase;
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 const auth = firebase.auth();
-const storage = firebase.storage();
 
 // Глобальні змінні
 let currentUser = null;
@@ -1117,33 +1116,44 @@ function clearRealTimeListeners() {
     realTimeListeners = [];
 }
 
-// Firebase Storage функції
-async function uploadImageToFirebaseStorage(file, path) {
+// ImgBB Storage функції
+async function uploadImageToImgBB(file) {
+    const apiKey = "a41187ad48629547ef7e40083f1459fb";
+    const formData = new FormData();
+    formData.append("image", file);
+
     try {
-        const fileName = `${Date.now()}-${file.name}`;
-        const storageRef = storage.ref(`${path}/${fileName}`);
-        const snapshot = await storageRef.put(file);
-        const downloadURL = await snapshot.ref.getDownloadURL();
-        return downloadURL;
+        const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            return data.data.url;
+        } else {
+            throw new Error(data.error ? data.error.message : "ImgBB upload failed");
+        }
     } catch (error) {
-        console.error(`Помилка завантаження файлу в ${path}:`, error);
+        console.error("Помилка завантаження файлу на ImgBB:", error);
         throw error;
     }
 }
 
 
-async function uploadMultipleImagesToFirebaseStorage(files, path) {
+async function uploadMultipleImagesToImgBB(files) {
     const uploadPromises = [];
     
     for (let i = 0; i < files.length; i++) {
-         uploadPromises.push(uploadImageToFirebaseStorage(files[i], path));
+         uploadPromises.push(uploadImageToImgBB(files[i]));
     }
 
     try {
         const urls = await Promise.all(uploadPromises);
         return urls;
     } catch (error) {
-        console.error('Помилка завантаження декількох зображень в Firebase Storage:', error);
+        console.error('Помилка завантаження декількох зображень на ImgBB:', error);
         throw error;
     }
 }
@@ -1869,7 +1879,7 @@ async function handleBlacklistSubmit(e) {
     }
 }
 
-// Обробка форми ОТЗ з Firebase Storage
+// Обробка форми ОТЗ (ImgBB)
 async function handleOtzSubmit(e) {
     e.preventDefault();
 
@@ -1894,14 +1904,14 @@ async function handleOtzSubmit(e) {
         // Показуємо прогрес завантаження
         showNotification('Інформація', 'Завантаження фото у сховище...', 'info');
 
-        // Завантажуємо файли на Firebase Storage
-        const techPassportUrl = await uploadImageToFirebaseStorage(techPassportFile, 'otz_documents');
-        const driverLicenseUrl = await uploadImageToFirebaseStorage(driverLicenseFile, 'otz_documents');
-        const staffIdUrl = await uploadImageToFirebaseStorage(staffIdFile, 'otz_documents');
+        // Завантажуємо файли на ImgBB
+        const techPassportUrl = await uploadImageToImgBB(techPassportFile);
+        const driverLicenseUrl = await uploadImageToImgBB(driverLicenseFile);
+        const staffIdUrl = await uploadImageToImgBB(staffIdFile);
         
         
         // Завантажуємо фото автомобіля
-          const carPhotoUrls = await uploadMultipleImagesToFirebaseStorage(carPhotosFiles, 'otz_car_photos');
+          const carPhotoUrls = await uploadMultipleImagesToImgBB(carPhotosFiles);
 
         // Зберігаємо дані ОТЗ в базу
         const otzData = {
