@@ -22,6 +22,12 @@
                     <img src="img/logo.svg" alt="ДКВС Лого">
                 </div>
                 
+                <!-- Повідомлення про блокування -->
+                <div id="blockedMessage" class="blocked-alert hidden">
+                    <i class="fas fa-ban"></i>
+                    <p>Доступ до системи заблоковано адміністратором.</p>
+                </div>
+
                 <div class="auth-tabs">
                     <button class="auth-tab active" data-tab="login">Вхід</button>
                     <button class="auth-tab" data-tab="register">Реєстрація</button>
@@ -953,6 +959,21 @@
                         <div class="page-header">
                             <h1 class="page-title">Журнал подій</h1>
                             <p class="page-subtitle">Історія всіх дій в системі</p>
+                        </div>
+
+                        <div class="activities-controls">
+                            <div class="activities-filters">
+                                <button class="filter-btn active" data-filter="all">Всі</button>
+                                <button class="filter-btn" data-filter="convoy">Конвої</button>
+                                <button class="filter-btn" data-filter="blacklist">ЧС</button>
+                                <button class="filter-btn" data-filter="otz">ОТЗ</button>
+                                <button class="filter-btn" data-filter="user">Персонал</button>
+                                <button class="filter-btn" data-filter="system">Система</button>
+                            </div>
+                            <div class="search-container">
+                                <i class="fas fa-search search-icon"></i>
+                                <input type="text" class="search-input no-resize" id="activitiesSearch" placeholder="Пошук подій...">
+                            </div>
                         </div>
 
                         <div class="card activities-full-card">
