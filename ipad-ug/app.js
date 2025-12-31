@@ -1763,7 +1763,7 @@ async function saveDiscordSettings() {
         };
 
         await database.ref('config/discord').set(discordConfig);
-        await addActivity('system', 'Оновлено налаштування Discord webhook', currentUser.displayName);
+        await addActivity('system', `Оновлено налаштування Discord: Webhook ${webhookUrl ? 'активний' : 'вимкнено'} | Сповіщення: Конвої [${notifyConvoys ? '+' : '-'}], ЧС [${notifyBlacklist ? '+' : '-'}]`, currentUser.displayName);
         showNotification('Успіх', 'Налаштування Discord збережено', 'success');
     } catch (error) {
         console.error('Помилка збереження Discord налаштувань:', error);
@@ -1820,7 +1820,7 @@ async function handleConvoySubmit(e) {
         const currentCount = await counterRef.once('value');
         await counterRef.set((currentCount.val() || 0) + 1);
 
-        await addActivity('convoy', `Новий конвой: ${formData.convoy1}`, currentUser.displayName);
+        await addActivity('convoy', `Новий конвой: ${formData.convoy1}${formData.convoy2 ? ' та ' + formData.convoy2 : ''} | В'язні: ${formData.prisoner1}${formData.prisoner2 ? ', ' + formData.prisoner2 : ''}`, currentUser.displayName);
 
         await sendDiscordWebhook('convoy', formData);
 
@@ -1863,7 +1863,7 @@ async function handleBlacklistSubmit(e) {
         const blacklistRef = database.ref('blacklist');
         await blacklistRef.push(formData);
 
-        await addActivity('blacklist', `Додано до ЧС: ${formData.nickname} (${formData.playerId})`, currentUser.displayName);
+        await addActivity('blacklist', `Додано до ЧС: ${formData.nickname} (ID: ${formData.playerId}) | Клан: ${formData.clan || 'Немає'} | Термін: ${formData.days} дн. | Причина: ${formData.reason}`, currentUser.displayName);
 
         await sendDiscordWebhook('blacklist', formData);
 
@@ -1932,7 +1932,7 @@ async function handleOtzSubmit(e) {
         const otzRef = database.ref('otz');
         await otzRef.push(otzData);
 
-        await addActivity('otz', `Подано заявку на реєстрацію ОТЗ: ${nickname}`, currentUser.displayName);
+        await addActivity('otz', `Подано заявку на ОТЗ: ${nickname} | Авто: ${color} (Номери: ${plates}) | Тонування: ${tinted === 'yes' ? 'Так' : 'Ні'}`, currentUser.displayName);
 
         showNotification('Успіх', 'Заявку на реєстрацію ОТЗ подано успішно!', 'success');
 
@@ -2051,6 +2051,10 @@ async function approveOtz(otzId) {
 
     if (confirmed) {
         try {
+            const snapshot = await database.ref('otz').child(otzId).once('value');
+            const otzData = snapshot.val();
+            const otzInfo = otzData ? `${otzData.nickname} | Авто: ${otzData.color} (${otzData.plates})` : 'Невідомо';
+
             await database.ref('otz').child(otzId).update({
                 status: 'approved',
                 approvedAt: Date.now(),
@@ -2058,7 +2062,7 @@ async function approveOtz(otzId) {
                 approvedByName: currentUser.displayName
             });
 
-            await addActivity('otz', 'Схвалено заявку на реєстрацію ОТЗ', currentUser.displayName);
+            await addActivity('otz', `Схвалено заявку на реєстрацію ОТЗ: ${otzInfo}`, currentUser.displayName);
             showNotification('Успіх', 'Заявку на ОТЗ схвалено', 'success');
         } catch (error) {
             console.error('Помилка схвалення ОТЗ:', error);
@@ -2082,8 +2086,12 @@ async function rejectOtz(otzId) {
 
     if (confirmed) {
         try {
+            const snapshot = await database.ref('otz').child(otzId).once('value');
+            const otzData = snapshot.val();
+            const otzInfo = otzData ? `${otzData.nickname} | Авто: ${otzData.color} (${otzData.plates})` : 'Невідомо';
+
             await database.ref('otz').child(otzId).remove();
-            await addActivity('otz', 'Відхилено заявку на реєстрацію ОТЗ', currentUser.displayName);
+            await addActivity('otz', `Відхилено заявку на реєстрацію ОТЗ: ${otzInfo}`, currentUser.displayName);
             showNotification('Успіх', 'Заявку на ОТЗ відхилено', 'success');
         } catch (error) {
             console.error('Помилка відхилення ОТЗ:', error);
@@ -2107,8 +2115,12 @@ async function deleteOtz(otzId) {
 
     if (confirmed) {
         try {
+            const snapshot = await database.ref('otz').child(otzId).once('value');
+            const otzData = snapshot.val();
+            const otzInfo = otzData ? `${otzData.nickname} | Авто: ${otzData.color} (${otzData.plates})` : 'Невідомо';
+
             await database.ref('otz').child(otzId).remove();
-            await addActivity('otz', 'Видалено зареєстрований ОТЗ', currentUser.displayName);
+            await addActivity('otz', `Видалено зареєстрований ОТЗ: ${otzInfo}`, currentUser.displayName);
             showNotification('Успіх', 'ОТЗ видалено', 'success');
         } catch (error) {
             console.error('Помилка видалення ОТЗ:', error);
@@ -2532,8 +2544,12 @@ async function confirmRemoveFromBlacklist(itemId) {
 
     if (confirmed) {
         try {
+            const snapshot = await database.ref('blacklist').child(itemId).once('value');
+            const item = snapshot.val();
+            const itemInfo = item ? `${item.nickname} (ID: ${item.playerId}) | Причина блокування: ${item.reason}` : 'Невідомо';
+
             await database.ref('blacklist').child(itemId).remove();
-            await addActivity('blacklist', 'Видалено з чорного списку', currentUser.displayName);
+            await addActivity('blacklist', `Видалено з чорного списку: ${itemInfo}`, currentUser.displayName);
             showNotification('Успіх', 'Особу видалено з чорного списку', 'success');
         } catch (error) {
             console.error('Помилка видалення з чорного списку:', error);
@@ -2553,8 +2569,12 @@ async function confirmDeleteUser(userId) {
 
     if (confirmed) {
         try {
+            const snapshot = await database.ref('users').child(userId).once('value');
+            const userData = snapshot.val();
+            const userInfo = userData ? `${userData.name} (Email: ${userData.email}, Роль: ${roleNames[userData.role] || userData.role}, UID: ${userId})` : 'Невідомо';
+
             await database.ref('users').child(userId).remove();
-            await addActivity('user', 'Видалено користувача', currentUser.displayName);
+            await addActivity('user', `Видалено користувача: ${userInfo}`, currentUser.displayName);
             showNotification('Успіх', 'Користувача видалено', 'success');
         } catch (error) {
             console.error('Помилка видалення користувача:', error);
@@ -2576,8 +2596,12 @@ async function changeUserRole(userId, newRole) {
     }
 
     try {
+        const snapshot = await database.ref('users').child(userId).once('value');
+        const userData = snapshot.val();
+        const userName = userData ? userData.name : 'Невідомо';
+
         await database.ref('users').child(userId).update({ role: newRole });
-        await addActivity('user', `Змінено роль користувача на ${roleNames[newRole]}`, currentUser.displayName);
+        await addActivity('user', `Змінено роль користувача ${userName} (UID: ${userId}) з ${roleNames[userData.role] || userData.role} на ${roleNames[newRole]}`, currentUser.displayName);
         showNotification('Успіх', 'Роль користувача змінено', 'success');
     } catch (error) {
         console.error('Помилка зміни ролі:', error);
@@ -2665,8 +2689,12 @@ async function deleteUser(userId) {
 
     if (confirmed) {
         try {
+            const snapshot = await database.ref('users').child(userId).once('value');
+            const userData = snapshot.val();
+            const userInfo = userData ? `${userData.name} (Email: ${userData.email}, Роль: ${roleNames[userData.role] || userData.role}, UID: ${userId})` : 'Невідомо';
+
             await database.ref('users').child(userId).remove();
-            await addActivity('user', 'Видалено користувача', currentUser.displayName);
+            await addActivity('user', `Видалено користувача: ${userInfo}`, currentUser.displayName);
             showNotification('Успіх', 'Користувача видалено', 'success');
         } catch (error) {
             console.error('Помилка видалення користувача:', error);
@@ -2738,7 +2766,7 @@ async function clearOldData() {
                 }
             });
 
-            await addActivity('system', 'Очищено старі дані', currentUser.displayName);
+            await addActivity('system', 'Очищено системні дані старіші за 30 днів', currentUser.displayName);
             showNotification('Успіх', 'Старі дані очищено', 'success');
         } catch (error) {
             console.error('Помилка очищення даних:', error);
@@ -2774,7 +2802,7 @@ async function handleBriefingSubmit(e) {
         const briefingRef = database.ref('briefings');
         await briefingRef.push(formData);
 
-        await addActivity('user', `Проведено інструктаж для: ${formData.recruitName}`, formData.instructorName);
+        await addActivity('user', `Проведено інструктаж: Інструктор ${formData.instructorName} -> Новобранець ${formData.recruitName} | Telegram: ${formData.inTelegram ? '+' : '-'}, Discord: ${formData.hasDiscordRole ? '+' : '-'}, Правила: ${formData.knowsRules ? '+' : '-'}`, formData.instructorName);
 
         showNotification('Успіх', 'Інструктаж успішно зареєстровано!', 'success');
 
@@ -2894,10 +2922,11 @@ async function handleChangeNickname(e) {
 
     try {
         showLoadingState(button);
+        const oldName = currentUser.displayName;
         await currentUser.updateProfile({ displayName: newName });
         await database.ref('users').child(currentUser.uid).update({ name: newName });
 
-        await addActivity('user', `Змінив свій Nick Name на: ${newName}`, newName);
+        await addActivity('user', `Змінив Nick Name: ${oldName} -> ${newName}`, newName);
         
         updateUserInterface(); // Оновити UI
         showNotification('Успіх', 'Ваш Nick Name успішно змінено!', 'success');
