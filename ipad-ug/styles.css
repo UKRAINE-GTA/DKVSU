@@ -373,6 +373,21 @@ select {
     text-align: left;
 }
 
+/* Повідомлення про блокування */
+.blocked-alert {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid var(--accent-red);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
+    color: #fca5a5;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    animation: pulse 2s infinite;
+}
+
 .logo-text2{
     color: rgba(255, 255, 255, 0.6);
     font-size: 12px;
@@ -532,6 +547,7 @@ select {
 .role-leader { color: var(--accent-purple); }
 .role-deputy { color: var(--accent-blue); }
 .role-worker { color: var(--accent-green); }
+.role-blocked { color: var(--text-muted); text-decoration: line-through; }
 
 .main-content {
     display: flex;
@@ -1460,6 +1476,11 @@ select {
     color: var(--accent-green);
 }
 
+.badge.role-blocked {
+    background: rgba(107, 107, 123, 0.2);
+    color: var(--text-muted);
+}
+
 /* Статус онлайн/офлайн */
 .status-badge {
     display: inline-flex;
@@ -1943,6 +1964,41 @@ select {
     }
 }
 
+/* Фільтри активностей */
+.activities-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.activities-filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--accent-bg);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: var(--accent-blue);
+    color: white;
+    border-color: var(--accent-blue);
+}
+
 /* Адаптивність */
 @media (max-width: 1024px) {
     .dashboard-grid {
@@ -2196,46 +2252,3 @@ select {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-.error {
-  margin-top: 20px;
-  text-align: center;
-  font-family: 'Arial Black', Arial, sans-serif;
-  font-size: 2rem;
-  color: #ff0000;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  text-shadow:
-    0 0 5px #ff0000,
-    0 0 10px #ff0000,
-    0 0 20px #8b0000;
-  animation: hackerBlink 1.2s infinite;
-  user-select: none;
- position: relative;
-  z-index: 2000; /* більше ніж у .auth-screen */
-}
-
-@keyframes hackerBlink {
-  0%, 100% {
-    opacity: 1;
-    text-shadow:
-      0 0 5px #ff0000,
-      0 0 10px #ff0000,
-      0 0 20px #8b0000;
-  }
-  50% {
-    opacity: 0.4;
-    text-shadow:
-      none;
-  }
-}
